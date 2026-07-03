@@ -10,7 +10,6 @@
 			systems = [
 				"x86_64-linux"
 				"aarch64-linux"
-				"x86_64-darwin"
 				"aarch64-darwin"
 			];
 
@@ -32,11 +31,6 @@
 						aarch64-linux = {
 							os = "linux";
 							cpu = "arm64";
-							hash = lib.fakeHash;
-						};
-						x86_64-darwin = {
-							os = "darwin";
-							cpu = "x64";
 							hash = lib.fakeHash;
 						};
 						aarch64-darwin = {
