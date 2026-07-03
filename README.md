@@ -1,46 +1,47 @@
-# Astro Starter Kit: Basics
+# Dev with Min
+
+Personal developer blog for <https://blog.ridewithmin.com>.
+
+This site is built with Astro and is intended to become a long-term record of developer experience: light notes, field logs, deep dives, projects, CV, setup, and timeline.
+
+## Structure
+
+- `/writing` - writing overview
+- `/notes` - light notes
+- `/logs` - field logs
+- `/deep-dives` - long-form heavy writing
+- `/series` - connected writing tracks
+- `/archive` - full post index
+- `/projects` - portfolio records
+- `/profile` - developer profile
+- `/cv` - formal career page
+- `/timeline` - developer history
+- `/uses` - hardware, software, and homelab setup
+
+## Writing
+
+Posts live in `src/content/writing`.
+
+Required frontmatter:
+
+```yaml
+title: Opening Dev with Min
+description: A short post summary.
+publishedAt: 2026-07-03
+section: field-logs # light-notes | field-logs | deep-dives
+intensity: medium # light | medium | heavy
+tags:
+  - astro
+draft: false
+```
+
+## Commands
 
 ```sh
-bun create astro@latest -- --template basics
+bun install
+bun run dev
+bun run build
+bun run preview
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
-
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `bun install`             | Installs dependencies                            |
-| `bun dev`             | Starts local dev server at `localhost:4321`      |
-| `bun build`           | Build your production site to `./dist/`          |
-| `bun preview`         | Preview your build locally, before deploying     |
-| `bun astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `bun astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+RSS is available at `/rss.xml`. Sitemap generation is configured for `https://blog.ridewithmin.com`.

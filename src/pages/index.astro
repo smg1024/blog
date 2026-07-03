@@ -1,11 +1,105 @@
 ---
-import Welcome from '../components/Welcome.astro';
+import Intro from '../components/Intro.astro';
+import PostCard from '../components/PostCard.astro';
+import { identitySections, SITE, writingSections, writingUtilities } from '../data/site';
 import Layout from '../layouts/Layout.astro';
+import { getPublishedWriting } from '../lib/content';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const recentWriting = (await getPublishedWriting()).slice(0, 3);
 ---
 
-<Layout>
-	<Welcome />
+<Layout title={SITE.name} description={SITE.description}>
+	<section class="home-hero" aria-labelledby="home-title">
+		<img
+			class="home-hero__media"
+			src="/images/dev-with-min-journal.png"
+			alt="A developer workspace with a laptop, notebook, keyboard, and homelab equipment."
+			fetchpriority="high"
+		/>
+		<div class="home-hero__content">
+			<div>
+				<p class="eyebrow">Personal developer journal</p>
+				<h1 id="home-title">Dev with Min</h1>
+			</div>
+			<p>
+				A living archive of what I learn, build, operate, and rethink as a developer, from
+				keyboards and daily tools to DevOps, NixOS, AI agents, and computer science philosophy.
+			</p>
+			<div class="hero-actions">
+				<a class="button" href="/writing">Read writing</a>
+				<a class="button button--ghost" href="/projects">View projects</a>
+			</div>
+		</div>
+	</section>
+
+	<Intro />
+
+	<section class="page-section" aria-labelledby="writing-title">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">Writing model</p>
+				<h2 id="writing-title">Organized by intensity</h2>
+				<p>Light notes, field logs, and deep dives keep casual setup posts separate from heavier technical essays.</p>
+			</div>
+			<a href="/writing">Writing overview</a>
+		</div>
+
+		<div class="card-grid">
+			{writingSections.map((section) => (
+				<a class="section-card" href={section.href}>
+					<div class="card-meta">{section.intensity}</div>
+					<h3>{section.title}</h3>
+					<p>{section.description}</p>
+					<ul class="example-list" aria-label={`${section.title} examples`}>
+						{section.examples.map((example) => <li>{example}</li>)}
+					</ul>
+				</a>
+			))}
+		</div>
+	</section>
+
+	<section class="page-section" aria-labelledby="recent-title">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">Latest</p>
+				<h2 id="recent-title">Recent writing</h2>
+			</div>
+			<a href="/archive">Archive</a>
+		</div>
+
+		{
+			recentWriting.length > 0 ? (
+				<div class="post-grid">
+					{recentWriting.map((post) => <PostCard post={post} />)}
+				</div>
+			) : (
+				<p class="empty-state">No writing has been published yet.</p>
+			)
+		}
+	</section>
+
+	<section class="page-section" aria-labelledby="identity-title">
+		<div class="section-heading">
+			<div>
+				<p class="eyebrow">Developer record</p>
+				<h2 id="identity-title">Profile, work, and history</h2>
+				<p>The blog also keeps the professional side visible: portfolio, CV, setup, and timeline.</p>
+			</div>
+		</div>
+
+		<div class="card-grid">
+			{identitySections.map((section) => (
+				<a class="section-card" href={section.href}>
+					<h3>{section.title}</h3>
+					<p>{section.description}</p>
+				</a>
+			))}
+			{writingUtilities.map((section) => (
+				<a class="section-card" href={section.href}>
+					<h3>{section.title}</h3>
+					<p>{section.description}</p>
+				</a>
+			))}
+		</div>
+	</section>
 </Layout>

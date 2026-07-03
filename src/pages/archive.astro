@@ -1,0 +1,39 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { formatDate, getPublishedWriting, getSectionLabel, getWritingUrl } from '../lib/content';
+
+const posts = await getPublishedWriting();
+---
+
+<Layout title="Archive" description="The complete Dev with Min writing archive.">
+	<header class="page-header">
+		<p class="eyebrow">Writing index</p>
+		<h1>Archive</h1>
+		<p>Everything published on Dev with Min, newest first.</p>
+	</header>
+
+	<section class="page-section" aria-labelledby="archive-list-title">
+		<div class="section-heading">
+			<div>
+				<h2 id="archive-list-title">All posts</h2>
+			</div>
+		</div>
+		{
+			posts.length > 0 ? (
+				<ul class="archive-list">
+					{posts.map((post) => (
+						<li>
+							<a href={getWritingUrl(post)}>
+								<span>{formatDate(post.data.publishedAt)}</span>
+								<strong>{post.data.title}</strong>
+								<span>{getSectionLabel(post.data.section)}</span>
+							</a>
+						</li>
+					))}
+				</ul>
+			) : (
+				<p class="empty-state">No posts have been published yet.</p>
+			)
+		}
+	</section>
+</Layout>

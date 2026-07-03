@@ -1,23 +1,53 @@
+---
+import SiteFooter from '../components/SiteFooter.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import { SITE } from '../data/site';
+import '../styles/global.css';
+
+interface Props {
+	title?: string;
+	description?: string;
+	type?: 'website' | 'article';
+}
+
+const {
+	title = SITE.name,
+	description = SITE.description,
+	type = 'website',
+} = Astro.props;
+
+const pageTitle = title === SITE.name ? SITE.name : `${title} | ${SITE.name}`;
+const canonicalUrl = new URL(Astro.url.pathname, SITE.url).toString();
+---
+
 <!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
+		<link rel="alternate" type="application/rss+xml" title={`${SITE.name} RSS`} href="/rss.xml" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<meta name="description" content={description} />
+		<meta name="author" content={SITE.author} />
+		<link rel="canonical" href={canonicalUrl} />
+		<meta property="og:site_name" content={SITE.name} />
+		<meta property="og:title" content={pageTitle} />
+		<meta property="og:description" content={description} />
+		<meta property="og:type" content={type} />
+		<meta property="og:url" content={canonicalUrl} />
+		<meta property="og:image" content={new URL('/images/dev-with-min-journal.png', SITE.url).toString()} />
+		<meta name="twitter:card" content="summary_large_image" />
+		<title>{pageTitle}</title>
 	</head>
 	<body>
-		<slot />
+		<a class="skip-link" href="#content">Skip to content</a>
+		<div class="site-shell">
+			<SiteHeader currentPath={Astro.url.pathname} />
+			<main id="content">
+				<slot />
+			</main>
+			<SiteFooter />
+		</div>
 	</body>
 </html>
-
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>

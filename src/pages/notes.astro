@@ -1,0 +1,34 @@
+---
+import PostCard from '../components/PostCard.astro';
+import { writingSections } from '../data/site';
+import Layout from '../layouts/Layout.astro';
+import { getWritingBySection } from '../lib/content';
+
+const section = writingSections.find((item) => item.key === 'light-notes')!;
+const posts = await getWritingBySection('light-notes');
+---
+
+<Layout title={section.title} description={section.description}>
+	<header class="page-header">
+		<p class="eyebrow">{section.intensity} intensity</p>
+		<h1>{section.title}</h1>
+		<p>{section.description}</p>
+	</header>
+
+	<section class="page-section" aria-labelledby="notes-list-title">
+		<div class="section-heading">
+			<div>
+				<h2 id="notes-list-title">Published notes</h2>
+			</div>
+		</div>
+		{
+			posts.length > 0 ? (
+				<div class="post-list">
+					{posts.map((post) => <PostCard post={post} />)}
+				</div>
+			) : (
+				<p class="empty-state">Light notes will collect quick setup posts, tool notes, and small lessons.</p>
+			)
+		}
+	</section>
+</Layout>

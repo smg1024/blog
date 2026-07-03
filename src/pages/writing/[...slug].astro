@@ -1,0 +1,38 @@
+---
+import { render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import { formatDate, getPublishedWriting, getSectionLabel, type WritingEntry } from '../../lib/content';
+
+export async function getStaticPaths() {
+	const posts = await getPublishedWriting();
+
+	return posts.map((post) => ({
+		params: { slug: post.id },
+		props: { post },
+	}));
+}
+
+interface Props {
+	post: WritingEntry;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<Layout title={post.data.title} description={post.data.description} type="article">
+	<header class="article-header">
+		<p class="eyebrow">{getSectionLabel(post.data.section)}</p>
+		<h1>{post.data.title}</h1>
+		<p>{post.data.description}</p>
+		<div class="article-meta">
+			<span>{formatDate(post.data.publishedAt)}</span>
+			<span>{post.data.intensity} intensity</span>
+			{post.data.series && <span>{post.data.series}</span>}
+		</div>
+	</header>
+
+	<article class="article-body prose">
+		<Content />
+	</article>
+</Layout>

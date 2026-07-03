@@ -1,0 +1,76 @@
+---
+import PostCard from '../components/PostCard.astro';
+import { writingSections, writingUtilities } from '../data/site';
+import Layout from '../layouts/Layout.astro';
+import { getPublishedWriting } from '../lib/content';
+
+const posts = await getPublishedWriting();
+---
+
+<Layout
+	title="Writing"
+	description="Writing from Dev with Min, organized by intensity: light notes, field logs, and deep dives."
+>
+	<header class="page-header">
+		<p class="eyebrow">Writing</p>
+		<h1>Notes, logs, and deep dives.</h1>
+		<p>
+			The writing archive is split by intensity so a quick tool note does not compete with a long
+			DevOps or computer science essay.
+		</p>
+	</header>
+
+	<section class="page-section" aria-labelledby="tracks-title">
+		<div class="section-heading">
+			<div>
+				<h2 id="tracks-title">Tracks</h2>
+				<p>Start from the amount of focus a post asks from you.</p>
+			</div>
+		</div>
+		<div class="card-grid">
+			{writingSections.map((section) => (
+				<a class="section-card" href={section.href}>
+					<div class="card-meta">{section.intensity}</div>
+					<h3>{section.title}</h3>
+					<p>{section.description}</p>
+					<ul class="example-list" aria-label={`${section.title} examples`}>
+						{section.examples.map((example) => <li>{example}</li>)}
+					</ul>
+				</a>
+			))}
+		</div>
+	</section>
+
+	<section class="page-section" aria-labelledby="indexes-title">
+		<div class="section-heading">
+			<div>
+				<h2 id="indexes-title">Indexes</h2>
+			</div>
+		</div>
+		<div class="card-grid card-grid--two">
+			{writingUtilities.map((section) => (
+				<a class="section-card" href={section.href}>
+					<h3>{section.title}</h3>
+					<p>{section.description}</p>
+				</a>
+			))}
+		</div>
+	</section>
+
+	<section class="page-section" aria-labelledby="all-writing-title">
+		<div class="section-heading">
+			<div>
+				<h2 id="all-writing-title">All writing</h2>
+			</div>
+		</div>
+		{
+			posts.length > 0 ? (
+				<div class="post-list">
+					{posts.map((post) => <PostCard post={post} />)}
+				</div>
+			) : (
+				<p class="empty-state">No writing has been published yet.</p>
+			)
+		}
+	</section>
+</Layout>

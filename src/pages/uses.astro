@@ -1,0 +1,33 @@
+---
+import { usesCategories } from '../data/site';
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Uses" description="Hardware, software, homelab, and daily tools used by Min.">
+	<header class="page-header">
+		<p class="eyebrow">Setup</p>
+		<h1>Uses</h1>
+		<p>
+			Laptop, keyboards, editor, terminal, homelab hardware, NixOS, and the practical tools behind
+			the work.
+		</p>
+	</header>
+
+	<section class="page-section" aria-labelledby="uses-list-title">
+		<div class="section-heading">
+			<div>
+				<h2 id="uses-list-title">Setup categories</h2>
+			</div>
+		</div>
+		<div class="card-grid">
+			{usesCategories.map((category) => (
+				<article class="uses-card">
+					<h2>{category.title}</h2>
+					<ul class="example-list">
+						{category.items.map((item) => <li>{item}</li>)}
+					</ul>
+				</article>
+			))}
+		</div>
+	</section>
+</Layout>

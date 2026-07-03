@@ -1,0 +1,46 @@
+---
+import PostCard from '../components/PostCard.astro';
+import Layout from '../layouts/Layout.astro';
+import { getPublishedWriting } from '../lib/content';
+
+const posts = await getPublishedWriting();
+const postsWithSeries = posts.filter((post) => post.data.series);
+const seriesNames = Array.from(new Set(postsWithSeries.map((post) => post.data.series)));
+---
+
+<Layout title="Series" description="Connected long-running topics on Dev with Min.">
+	<header class="page-header">
+		<p class="eyebrow">Writing index</p>
+		<h1>Series</h1>
+		<p>Long-running topics and study paths will live here as the archive grows.</p>
+	</header>
+
+	<section class="page-section" aria-labelledby="series-list-title">
+		<div class="section-heading">
+			<div>
+				<h2 id="series-list-title">Published series</h2>
+			</div>
+		</div>
+		{
+			seriesNames.length > 0 ? (
+				<div class="post-list">
+					{seriesNames.map((series) => (
+						<section>
+							<h3>{series}</h3>
+							<div class="post-list">
+								{postsWithSeries
+									.filter((post) => post.data.series === series)
+									.map((post) => <PostCard post={post} />)}
+							</div>
+						</section>
+					))}
+				</div>
+			) : (
+				<p class="empty-state">
+					No series has started yet. Likely first candidates: Building My Homelab, AI Agent Workflow,
+					NixOS Notes, and DevOps From Experience.
+				</p>
+			)
+		}
+	</section>
+</Layout>

@@ -1,0 +1,34 @@
+---
+import PostCard from '../components/PostCard.astro';
+import { writingSections } from '../data/site';
+import Layout from '../layouts/Layout.astro';
+import { getWritingBySection } from '../lib/content';
+
+const section = writingSections.find((item) => item.key === 'deep-dives')!;
+const posts = await getWritingBySection('deep-dives');
+---
+
+<Layout title={section.title} description={section.description}>
+	<header class="page-header">
+		<p class="eyebrow">{section.intensity} intensity</p>
+		<h1>{section.title}</h1>
+		<p>{section.description}</p>
+	</header>
+
+	<section class="page-section" aria-labelledby="deep-dives-list-title">
+		<div class="section-heading">
+			<div>
+				<h2 id="deep-dives-list-title">Published deep dives</h2>
+			</div>
+		</div>
+		{
+			posts.length > 0 ? (
+				<div class="post-list">
+					{posts.map((post) => <PostCard post={post} />)}
+				</div>
+			) : (
+				<p class="empty-state">Deep dives will collect long-form technical and philosophical writing.</p>
+			)
+		}
+	</section>
+</Layout>
