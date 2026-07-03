@@ -1,28 +1,26 @@
 ---
-import type { WritingEntry } from '../lib/content';
-import { formatDate, getSectionLabel, getWritingUrl } from '../lib/content';
+import type { WritingEntry } from "../lib/content";
+import { formatDate, getSectionLabel, getWritingUrl } from "../lib/content";
 
 interface Props {
-	post: WritingEntry;
+  post: WritingEntry;
 }
 
 const { post } = Astro.props;
 ---
 
 <a class="post-card" href={getWritingUrl(post)}>
-	<article class="post-card__inner">
-		<div class="post-meta">
-			<span>{formatDate(post.data.publishedAt)}</span>
-			<span>{getSectionLabel(post.data.section)}</span>
-		</div>
-		<h3>{post.data.title}</h3>
-		<p>{post.data.description}</p>
-		{
-			post.data.tags.length > 0 && (
+  <article class="post-card__inner">
+    <div class="post-meta">
+      <span>{formatDate(post.data.publishedAt)}</span>
+      <span>{getSectionLabel(post.data.section)}</span>
+    </div>
+    <h3>{post.data.title}</h3>
+    <p>{post.data.description}</p>
+    {post.data.tags.length > 0 && (
 				<ul class="tag-list" aria-label="Tags">
 					{post.data.tags.map((tag) => <li>{tag}</li>)}
 				</ul>
-			)
-		}
-	</article>
+			)}
+  </article>
 </a>

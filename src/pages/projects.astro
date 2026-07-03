@@ -1,27 +1,27 @@
 ---
-import { projectSeeds } from '../data/site';
-import Layout from '../layouts/Layout.astro';
+import { projectSeeds } from "../data/site";
+import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="Projects" description="Portfolio and project records from Dev with Min.">
-	<header class="page-header">
-		<p class="eyebrow">Portfolio</p>
-		<h1>Projects</h1>
-		<p>
-			Portfolio-style records of the systems, tools, experiments, and learning projects that shape
-			my developer experience.
-		</p>
-	</header>
+  <header class="page-header">
+    <p class="eyebrow">Portfolio</p>
+    <h1>Projects</h1>
+    <p>
+      Portfolio-style records of the systems, tools, experiments, and learning projects that shape my developer
+      experience.
+    </p>
+  </header>
 
-	<section class="page-section" aria-labelledby="projects-list-title">
-		<div class="section-heading">
-			<div>
-				<h2 id="projects-list-title">Project seeds</h2>
-				<p>These placeholders define the first project lanes before detailed case studies are written.</p>
-			</div>
-		</div>
-		<div class="card-grid">
-			{projectSeeds.map((project) => (
+  <section class="page-section" aria-labelledby="projects-list-title">
+    <div class="section-heading">
+      <div>
+        <h2 id="projects-list-title">Project seeds</h2>
+        <p>These placeholders define the first project lanes before detailed case studies are written.</p>
+      </div>
+    </div>
+    <div class="card-grid">
+      {projectSeeds.map((project) => (
 				<article class="project-card">
 					<div class="card-meta">{project.status}</div>
 					<h2>{project.title}</h2>
@@ -31,6 +31,6 @@ import Layout from '../layouts/Layout.astro';
 					</ul>
 				</article>
 			))}
-		</div>
-	</section>
+    </div>
+  </section>
 </Layout>

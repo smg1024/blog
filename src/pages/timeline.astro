@@ -1,32 +1,31 @@
 ---
-import { timelineSeeds } from '../data/site';
-import Layout from '../layouts/Layout.astro';
+import { timelineSeeds } from "../data/site";
+import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="Timeline" description="A chronological history of Min's developer experience.">
-	<header class="page-header">
-		<p class="eyebrow">Developer history</p>
-		<h1>Timeline</h1>
-		<p>
-			A living chronology for projects, tools adopted, migrations, jobs, failures, lessons, and
-			major learning moments.
-		</p>
-	</header>
+  <header class="page-header">
+    <p class="eyebrow">Developer history</p>
+    <h1>Timeline</h1>
+    <p>
+      A living chronology for projects, tools adopted, migrations, jobs, failures, lessons, and major learning moments.
+    </p>
+  </header>
 
-	<section class="page-section" aria-labelledby="timeline-list-title">
-		<div class="section-heading">
-			<div>
-				<h2 id="timeline-list-title">Starting points</h2>
-			</div>
-		</div>
-		<div class="post-list">
-			{timelineSeeds.map((item) => (
+  <section class="page-section" aria-labelledby="timeline-list-title">
+    <div class="section-heading">
+      <div>
+        <h2 id="timeline-list-title">Starting points</h2>
+      </div>
+    </div>
+    <div class="post-list">
+      {timelineSeeds.map((item) => (
 				<article class="timeline-item">
 					<div class="timeline-period">{item.period}</div>
 					<h2>{item.title}</h2>
 					<p>{item.description}</p>
 				</article>
 			))}
-		</div>
-	</section>
+    </div>
+  </section>
 </Layout>

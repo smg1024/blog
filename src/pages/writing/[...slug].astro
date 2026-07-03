@@ -1,19 +1,19 @@
 ---
-import { render } from 'astro:content';
-import Layout from '../../layouts/Layout.astro';
-import { formatDate, getPublishedWriting, getSectionLabel, type WritingEntry } from '../../lib/content';
+import { render } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import { formatDate, getPublishedWriting, getSectionLabel, type WritingEntry } from "../../lib/content";
 
 export async function getStaticPaths() {
-	const posts = await getPublishedWriting();
+  const posts = await getPublishedWriting();
 
-	return posts.map((post) => ({
-		params: { slug: post.id },
-		props: { post },
-	}));
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
 }
 
 interface Props {
-	post: WritingEntry;
+  post: WritingEntry;
 }
 
 const { post } = Astro.props;
@@ -21,24 +21,22 @@ const { Content } = await render(post);
 ---
 
 <Layout title={post.data.title} description={post.data.description} type="article">
-	<header class="article-header">
-		<p class="eyebrow">{getSectionLabel(post.data.section)}</p>
-		<h1>{post.data.title}</h1>
-		<p>{post.data.description}</p>
-		<div class="article-meta">
-			<span>{formatDate(post.data.publishedAt)}</span>
-			{post.data.series && <span>{post.data.series}</span>}
-			{
-				post.data.tags.length > 0 && (
+  <header class="article-header">
+    <p class="eyebrow">{getSectionLabel(post.data.section)}</p>
+    <h1>{post.data.title}</h1>
+    <p>{post.data.description}</p>
+    <div class="article-meta">
+      <span>{formatDate(post.data.publishedAt)}</span>
+      {post.data.series && <span>{post.data.series}</span>}
+      {post.data.tags.length > 0 && (
 					<ul class="article-tags tag-list" aria-label="Tags">
 						{post.data.tags.map((tag) => <li>{tag}</li>)}
 					</ul>
-				)
-			}
-		</div>
-	</header>
+				)}
+    </div>
+  </header>
 
-	<article class="article-body prose">
-		<Content />
-	</article>
+  <article class="article-body prose">
+    <Content />
+  </article>
 </Layout>
