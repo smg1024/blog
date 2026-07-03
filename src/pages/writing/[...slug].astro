@@ -29,6 +29,13 @@ const { Content } = await render(post);
 			<span>{formatDate(post.data.publishedAt)}</span>
 			{post.data.series && <span>{post.data.series}</span>}
 		</div>
+		{
+			post.data.tags.length > 0 && (
+				<ul class="article-tags tag-list" aria-label="Tags">
+					{post.data.tags.map((tag) => <li>{tag}</li>)}
+				</ul>
+			)
+		}
 	</header>
 
 	<article class="article-body prose">

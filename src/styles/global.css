@@ -643,6 +643,10 @@ main {
 	font-size: 0.92rem;
 }
 
+.article-tags {
+	margin-top: 1rem;
+}
+
 .article-body {
 	max-width: var(--reading-width);
 	padding: 0 0 4rem;
