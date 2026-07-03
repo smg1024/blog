@@ -25,10 +25,6 @@ const { Content } = await render(post);
 		<p class="eyebrow">{getSectionLabel(post.data.section)}</p>
 		<h1>{post.data.title}</h1>
 		<p>{post.data.description}</p>
-		<div class="article-meta">
-			<span>{formatDate(post.data.publishedAt)}</span>
-			{post.data.series && <span>{post.data.series}</span>}
-		</div>
 		{
 			post.data.tags.length > 0 && (
 				<ul class="article-tags tag-list" aria-label="Tags">
@@ -36,6 +32,10 @@ const { Content } = await render(post);
 				</ul>
 			)
 		}
+		<div class="article-meta">
+			<span>{formatDate(post.data.publishedAt)}</span>
+			{post.data.series && <span>{post.data.series}</span>}
+		</div>
 	</header>
 
 	<article class="article-body prose">
