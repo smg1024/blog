@@ -631,6 +631,7 @@ main {
 }
 
 .article-header {
+	max-width: var(--reading-width);
 	padding: 3.5rem 0 2rem;
 }
 
