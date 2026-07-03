@@ -29,7 +29,6 @@ title: Opening Dev with Min
 description: A short post summary.
 publishedAt: 2026-07-03
 section: field-logs # light-notes | field-logs | deep-dives
-intensity: medium # light | medium | heavy
 tags:
   - astro
 draft: false

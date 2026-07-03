@@ -9,7 +9,6 @@ const writing = defineCollection({
 		publishedAt: z.coerce.date(),
 		updatedAt: z.coerce.date().optional(),
 		section: z.enum(['light-notes', 'field-logs', 'deep-dives']),
-		intensity: z.enum(['light', 'medium', 'heavy']),
 		tags: z.array(z.string()).default([]),
 		series: z.string().optional(),
 		draft: z.boolean().default(false),

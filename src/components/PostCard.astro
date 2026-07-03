@@ -14,7 +14,6 @@ const { post } = Astro.props;
 		<div class="post-meta">
 			<span>{formatDate(post.data.publishedAt)}</span>
 			<span>{getSectionLabel(post.data.section)}</span>
-			<span>{post.data.intensity}</span>
 		</div>
 		<h3>{post.data.title}</h3>
 		<p>{post.data.description}</p>

@@ -3,7 +3,6 @@ title: Opening Dev with Min
 description: A first marker for the blog, why this place exists, and how the writing will be organized.
 publishedAt: 2026-07-03
 section: field-logs
-intensity: medium
 tags:
   - meta
   - astro

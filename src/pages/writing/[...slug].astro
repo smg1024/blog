@@ -27,7 +27,6 @@ const { Content } = await render(post);
 		<p>{post.data.description}</p>
 		<div class="article-meta">
 			<span>{formatDate(post.data.publishedAt)}</span>
-			<span>{post.data.intensity} intensity</span>
 			{post.data.series && <span>{post.data.series}</span>}
 		</div>
 	</header>
