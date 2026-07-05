@@ -49,6 +49,7 @@ export const writingSections = [
 ] as const;
 
 export const writingUtilities = [
+  { title: "Tags", href: "/tags", description: "Browse posts by recurring tools, topics, and ideas." },
   { title: "Series", href: "/series", description: "Long-running connected topics and study paths." },
   { title: "Archive", href: "/archive", description: "A complete index by date, type, intensity, and tag." },
 ] as const;

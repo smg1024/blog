@@ -10,6 +10,7 @@ This site is built with Astro and is intended to become a long-term record of de
 - `/notes` - light notes
 - `/logs` - field logs
 - `/deep-dives` - long-form heavy writing
+- `/tags` - posts grouped by tag
 - `/series` - connected writing tracks
 - `/archive` - full post index
 - `/projects` - portfolio records
