@@ -22,6 +22,14 @@ This site is built with Astro and is intended to become a long-term record of de
 
 Posts live in `src/content/writing`.
 
+Create a draft from one of the writing templates:
+
+```sh
+bun run new:post -- --section field-logs --title "Deploying the blog" --tags astro,nix,homelab
+```
+
+The script writes a Markdown draft with `draft: true`. Pass `--publish` only when the new post should be immediately public. Templates live in `templates/writing`.
+
 Required frontmatter:
 
 ```yaml
