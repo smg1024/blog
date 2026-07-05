@@ -1,22 +1,35 @@
 ---
 import { render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
-import { formatDate, getPublishedWriting, getSectionLabel, type WritingEntry } from "../../lib/content";
+import {
+  formatDate,
+  getPublishedWriting,
+  getSectionLabel,
+  getTagUrl,
+  getWritingUrl,
+  type WritingEntry,
+} from "../../lib/content";
 
 export async function getStaticPaths() {
   const posts = await getPublishedWriting();
 
-  return posts.map((post) => ({
+  return posts.map((post, index) => ({
     params: { slug: post.id },
-    props: { post },
+    props: {
+      post,
+      newerPost: posts[index - 1] ?? null,
+      olderPost: posts[index + 1] ?? null,
+    },
   }));
 }
 
 interface Props {
   post: WritingEntry;
+  newerPost: WritingEntry | null;
+  olderPost: WritingEntry | null;
 }
 
-const { post } = Astro.props;
+const { post, newerPost, olderPost } = Astro.props;
 const { Content } = await render(post);
 ---
 
@@ -30,7 +43,11 @@ const { Content } = await render(post);
       {post.data.series && <span>{post.data.series}</span>}
       {post.data.tags.length > 0 && (
 					<ul class="article-tags tag-list" aria-label="Tags">
-						{post.data.tags.map((tag) => <li>{tag}</li>)}
+						{post.data.tags.map((tag) => (
+							<li>
+								<a href={getTagUrl(tag)}>{tag}</a>
+							</li>
+						))}
 					</ul>
 				)}
     </div>
@@ -39,4 +56,21 @@ const { Content } = await render(post);
   <article class="article-body prose">
     <Content />
   </article>
+
+  {(newerPost || olderPost) && (
+		<nav class="article-nav" aria-label="Writing navigation">
+			{newerPost ? (
+				<a href={getWritingUrl(newerPost)}>
+					<span>Newer</span>
+					<strong>{newerPost.data.title}</strong>
+				</a>
+			) : null}
+			{olderPost ? (
+				<a class="article-nav__older" href={getWritingUrl(olderPost)}>
+					<span>Older</span>
+					<strong>{olderPost.data.title}</strong>
+				</a>
+			) : null}
+		</nav>
+	)}
 </Layout>
