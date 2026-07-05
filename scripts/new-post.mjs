@@ -5,6 +5,7 @@ import process from "node:process";
 const root = process.cwd();
 const contentDir = path.join(root, "src", "content", "writing");
 const templatesDir = path.join(root, "templates", "writing");
+const defaultTags = ["tag1", "tag2", "tag3"];
 
 const sectionAliases = new Map([
   ["light", "light-notes"],
@@ -32,7 +33,7 @@ Options:
   --section <section>      light-notes | field-logs | deep-dives
   --title <title>          Post title
   --description <text>     Frontmatter description
-  --tags <tag,tag>         Comma-separated tags
+  --tags <tag,tag>         Comma-separated tags. Defaults to tag1,tag2,tag3
   --series <name>          Optional series name
   --slug <slug>            Override generated slug
   --date <YYYY-MM-DD>      Override publishedAt date
@@ -118,15 +119,21 @@ function yamlString(value) {
   return JSON.stringify(value);
 }
 
+function yamlTag(value) {
+  return /^[a-z0-9][a-z0-9 -]*$/i.test(value) ? value : yamlString(value);
+}
+
 function parseTags(value) {
   if (!value) {
-    return [];
+    return defaultTags;
   }
 
-  return value
+  const tags = value
     .split(",")
     .map((tag) => tag.trim())
     .filter(Boolean);
+
+  return tags.length > 0 ? tags : defaultTags;
 }
 
 function buildFrontmatter({ title, description, date, section, tags, series, publish }) {
@@ -139,7 +146,7 @@ function buildFrontmatter({ title, description, date, section, tags, series, pub
   ];
 
   if (tags.length > 0) {
-    lines.push("tags:", ...tags.map((tag) => `  - ${yamlString(tag)}`));
+    lines.push("tags:", ...tags.map((tag) => `  - ${yamlTag(tag)}`));
   } else {
     lines.push("tags: []");
   }
