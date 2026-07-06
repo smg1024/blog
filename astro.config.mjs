@@ -22,7 +22,7 @@ export default defineConfig({
         codeFontSize: "0.92rem",
         codeLineHeight: "1.65",
         codePaddingBlock: "1.1rem",
-        codePaddingInline: "1.1rem",
+        codePaddingInline: "2.4rem",
         codeSelectionBackground: "rgba(45, 212, 191, 0.22)",
         uiFontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
         uiFontSize: "0.78rem",
