@@ -7,16 +7,20 @@
 
 	outputs = { nixpkgs, ... }:
 		let
-			systems = [
+			packageSystems = [
+				"x86_64-linux"
+			];
+			devShellSystems = [
 				"x86_64-linux"
 				"aarch64-linux"
 				"aarch64-darwin"
 			];
 
-			forAllSystems = nixpkgs.lib.genAttrs systems;
+			forAllPackageSystems = nixpkgs.lib.genAttrs packageSystems;
+			forAllDevShellSystems = nixpkgs.lib.genAttrs devShellSystems;
 		in
 		{
-			packages = forAllSystems (system:
+			packages = forAllPackageSystems (system:
 				let
 					pkgs = import nixpkgs { inherit system; };
 					lib = pkgs.lib;
@@ -26,17 +30,7 @@
 						x86_64-linux = {
 							os = "linux";
 							cpu = "x64";
-							hash = "sha256-9selkS5j/WkUsOzFe/FCvWR0LXYZ9fhC+nGOIw/0CsA=";
-						};
-						aarch64-linux = {
-							os = "linux";
-							cpu = "arm64";
-							hash = lib.fakeHash;
-						};
-						aarch64-darwin = {
-							os = "darwin";
-							cpu = "arm64";
-							hash = "sha256-JSFeBd2YqK+wHJlRkiRDxIWTLMpsEJ3Biw3Chs+rlVY=";
+							hash = "sha256-kl01MZUa04q/KX5g7mtxzSblAInFAoXhvp9baZ3+CFo=";
 						};
 					}.${system};
 					bunPlatformFlags = "--os=${bunPlatform.os} --cpu=${bunPlatform.cpu}";
@@ -130,12 +124,12 @@
 						meta = {
 							description = "Static Astro build of the Dev with Min personal developer blog";
 							homepage = "https://blog.ridewithmin.com";
-							platforms = systems;
+							platforms = packageSystems;
 						};
 					};
 				});
 
-			devShells = forAllSystems (system:
+			devShells = forAllDevShellSystems (system:
 				let
 					pkgs = import nixpkgs { inherit system; };
 				in
