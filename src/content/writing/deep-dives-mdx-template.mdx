@@ -10,13 +10,21 @@ tags:
 draft: true
 ---
 import Decision from "../../components/writing/Decision.astro";
+import Danger from "../../components/writing/Danger.astro";
 import Note from "../../components/writing/Note.astro";
+import Question from "../../components/writing/Question.astro";
 import Reference from "../../components/writing/Reference.astro";
+import Todo from "../../components/writing/Todo.astro";
 import Warning from "../../components/writing/Warning.astro";
+import Callout from "../../components/writing/Callout.astro";
 
 ## Question
 
 What is the main technical or philosophical question?
+
+<Question title="Open question">
+  Use this to name the uncertainty, hypothesis, or design question the post is trying to answer.
+</Question>
 
 <Note title="Use this for context">
   Put a short aside here when the reader needs setup, vocabulary, or a reminder before the deeper explanation.
@@ -42,8 +50,6 @@ What is the main technical or philosophical question?
 }
 ```
 
-> This is a template for deep dive posts that explore technical or philosophical questions in detail.
-
 ## Model
 
 Explain the mental model, architecture, or principle.
@@ -55,6 +61,10 @@ Explain the mental model, architecture, or principle.
 ## Details
 
 Break down the implementation, examples, diagrams, or references.
+
+<Callout variant="tip" title="Tip">
+  Use the base `Callout` component directly when you want to choose the variant inline.
+</Callout>
 
 <Reference title="Useful reference">
   Link to docs, papers, source code, or earlier posts that support the explanation.
@@ -68,6 +78,14 @@ What does this approach make easier, and what does it make harder?
   Use this when a shortcut, risk, operational hazard, or misconception deserves extra attention.
 </Warning>
 
+<Danger title="Failure mode">
+  Use this for data loss, security, downtime, or other high-impact risks.
+</Danger>
+
 ## Conclusion
 
 What do I believe now?
+
+<Todo title="Follow-up">
+  Capture the next experiment, missing measurement, or future post idea.
+</Todo>

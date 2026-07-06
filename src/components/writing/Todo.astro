@@ -1,0 +1,13 @@
+---
+import Callout from "./Callout.astro";
+
+interface Props {
+  title?: string;
+}
+
+const { title = "Todo" } = Astro.props;
+---
+
+<Callout variant="todo" title={title}>
+  <slot />
+</Callout>

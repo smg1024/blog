@@ -800,6 +800,22 @@ main {
   --callout-color: var(--line-strong);
 }
 
+.callout--tip {
+  --callout-color: #16a34a;
+}
+
+.callout--question {
+  --callout-color: #8b5cf6;
+}
+
+.callout--todo {
+  --callout-color: #0ea5e9;
+}
+
+.callout--danger {
+  --callout-color: #dc2626;
+}
+
 .callout__header {
   display: flex;
   gap: 0.55rem;

@@ -49,7 +49,13 @@ MDX writing blocks:
 
 ```mdx
 import Note from "../../components/writing/Note.astro";
+import Tip from "../../components/writing/Tip.astro";
+import Question from "../../components/writing/Question.astro";
 import Decision from "../../components/writing/Decision.astro";
+import Reference from "../../components/writing/Reference.astro";
+import Warning from "../../components/writing/Warning.astro";
+import Todo from "../../components/writing/Todo.astro";
+import Danger from "../../components/writing/Danger.astro";
 
 <Note title="Operational note">
   Keep quick context close to the command or diagram it explains.
@@ -58,7 +64,14 @@ import Decision from "../../components/writing/Decision.astro";
 <Decision title="Deployment choice">
   I chose the simpler deployment path until the blog needs dynamic rendering.
 </Decision>
+
+<Tip>Use this for small practical advice.</Tip>
+<Question>Use this to frame an unresolved idea.</Question>
+<Todo>Use this to capture follow-up work.</Todo>
+<Danger>Use this for high-impact risks.</Danger>
 ```
+
+Available callout wrappers: `Note`, `Tip`, `Question`, `Decision`, `Reference`, `Warning`, `Todo`, and `Danger`.
 
 Inline code, fenced code blocks, and `<kbd>` keyboard tokens are styled automatically inside article prose.
 

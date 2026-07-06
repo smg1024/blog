@@ -1,5 +1,5 @@
 ---
-type CalloutVariant = "note" | "warning" | "decision" | "reference";
+type CalloutVariant = "note" | "warning" | "decision" | "reference" | "tip" | "question" | "todo" | "danger";
 
 interface Props {
   title?: string;
@@ -11,6 +11,10 @@ const labels: Record<CalloutVariant, string> = {
   warning: "Warning",
   decision: "Decision",
   reference: "Reference",
+  tip: "Tip",
+  question: "Question",
+  todo: "Todo",
+  danger: "Danger",
 };
 
 const { title, variant = "note" } = Astro.props;
