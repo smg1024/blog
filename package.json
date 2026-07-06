@@ -28,6 +28,6 @@
   "devDependencies": {
     "@astrojs/markdown-remark": "^7.2.1",
     "@biomejs/biome": "^2.5.2",
-    "@shikijs/transformers": "^4.3.1"
+    "@shikijs/transformers": "4.3.0"
   }
 }

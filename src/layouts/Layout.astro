@@ -46,6 +46,9 @@ const canonicalUrl = new URL(Astro.url.pathname, SITE.url).toString();
       <SiteFooter />
     </div>
     <script>
+    /**
+     * @param {HTMLButtonElement} button
+     */
     const resetCopyButton = (button) => {
       window.setTimeout(() => {
         button.textContent = "Copy";
