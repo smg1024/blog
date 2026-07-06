@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   bun,
+  nodejs,
 }: let
   pname = "dev-with-min";
   version = "0.1.0";
@@ -81,7 +82,10 @@ in
   stdenvNoCC.mkDerivation {
     inherit pname version src;
 
-    nativeBuildInputs = [bun];
+    nativeBuildInputs = [
+      bun
+      nodejs
+    ];
     dontConfigure = true;
 
     ASTRO_TELEMETRY_DISABLED = "1";
@@ -91,6 +95,7 @@ in
 
       cp -R "${nodeModules}/node_modules" ./node_modules
       chmod -R u+w node_modules
+      patchShebangs node_modules/.bin node_modules/astro/bin
     '';
 
     passthru = {
