@@ -6,130 +6,20 @@
   };
 
   outputs = {nixpkgs, ...}: let
-    packageSystems = [
+    systems = [
       "x86_64-linux"
-    ];
-    devShellSystems = [
-      "x86_64-linux"
-      "aarch64-linux"
       "aarch64-darwin"
     ];
 
-    forAllPackageSystems = nixpkgs.lib.genAttrs packageSystems;
-    forAllDevShellSystems = nixpkgs.lib.genAttrs devShellSystems;
+    forAllSystems = nixpkgs.lib.genAttrs systems;
   in {
-    packages = forAllPackageSystems (system: let
+    packages = forAllSystems (system: let
       pkgs = import nixpkgs {inherit system;};
-      lib = pkgs.lib;
-      pname = "dev-with-min";
-      version = "0.1.0";
-      bunPlatform =
-        {
-          x86_64-linux = {
-            os = "linux";
-            cpu = "x64";
-            hash = "sha256-30KsLPkXFGrVzks6Jevs9uQhhqNTnpc4eR/FQOwqo0A=";
-          };
-        }.${
-          system
-        };
-      bunPlatformFlags = "--os=${bunPlatform.os} --cpu=${bunPlatform.cpu}";
-
-      src = lib.cleanSourceWith {
-        src = ./.;
-        filter = path: type: let
-          name = baseNameOf path;
-        in
-          !(builtins.elem name [
-            ".astro"
-            ".direnv"
-            "dist"
-            "node_modules"
-            "result"
-          ]);
-      };
-
-      nodeModules = pkgs.stdenvNoCC.mkDerivation {
-        pname = "${pname}-node-modules";
-        inherit version src;
-
-        nativeBuildInputs = [pkgs.bun];
-        dontConfigure = true;
-        dontFixup = true;
-
-        buildPhase = ''
-          runHook preBuild
-
-          export HOME="$TMPDIR"
-          export BUN_INSTALL_CACHE_DIR="$TMPDIR/bun-cache"
-          mkdir -p "$BUN_INSTALL_CACHE_DIR"
-
-          bun install \
-          	--frozen-lockfile \
-          	--ignore-scripts \
-          	--no-progress \
-          	--backend=copyfile \
-          	${bunPlatformFlags}
-
-          runHook postBuild
-        '';
-
-        installPhase = ''
-          runHook preInstall
-
-          mkdir -p "$out"
-          cp -R node_modules "$out/node_modules"
-
-          runHook postInstall
-        '';
-
-        outputHashAlgo = "sha256";
-        outputHashMode = "recursive";
-        outputHash = bunPlatform.hash;
-      };
     in {
-      default = pkgs.stdenvNoCC.mkDerivation {
-        inherit pname version src;
-
-        nativeBuildInputs = [pkgs.bun];
-        dontConfigure = true;
-
-        buildPhase = ''
-          runHook preBuild
-
-          export HOME="$TMPDIR"
-          export ASTRO_TELEMETRY_DISABLED=1
-
-          cp -R "${nodeModules}/node_modules" ./node_modules
-          chmod -R u+w node_modules
-
-          bun run build
-
-          runHook postBuild
-        '';
-
-        installPhase = ''
-          runHook preInstall
-
-          mkdir -p "$out/share/dev-with-min" "$out/nix-support"
-          cp -R dist/. "$out/share/dev-with-min/"
-          ln -s "$out/share/dev-with-min" "$out/public"
-          printf 'siteRoot=%s\n' "$out/share/dev-with-min" > "$out/nix-support/site-root"
-
-          runHook postInstall
-        '';
-
-        passthru.sitePath = "share/dev-with-min";
-
-        meta = {
-          description = "Static Astro build of the Dev with Min personal developer blog";
-          homepage = "https://blog.ridewithmin.com";
-          platforms = packageSystems;
-        };
-      };
+      default = pkgs.callPackage ./package.nix {};
     });
 
-    formatter = forAllDevShellSystems (system: let
+    formatter = forAllSystems (system: let
       pkgs = import nixpkgs {inherit system;};
     in
       pkgs.writeShellApplication {
@@ -144,7 +34,7 @@
         '';
       });
 
-    devShells = forAllDevShellSystems (system: let
+    devShells = forAllSystems (system: let
       pkgs = import nixpkgs {inherit system;};
     in {
       default = pkgs.mkShell {

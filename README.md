@@ -95,6 +95,8 @@ bun run dev
 bun run build
 bun run check:public
 bun run preview
+make deps
+make
 ```
 
 RSS is available at `/rss.xml`. Sitemap generation is configured for `https://blog.ridewithmin.com`.
@@ -104,5 +106,6 @@ RSS is available at `/rss.xml`. Sitemap generation is configured for `https://bl
 Use `bun run check:public` before publishing. It builds the site and checks the generated `dist/` output for the
 expected public files, production metadata, sitemap/robots links, RSS metadata, and draft-content leaks.
 
-Use `nix build .#` to verify the static site package that the homelab can import. The built site is available inside
-the package at `share/dev-with-min`, with a convenience `public` symlink.
+Use `nix build .#` to verify the static site package that the homelab can import. The flake calls `package.nix`,
+which uses the `Makefile` build and install targets. The built site is available inside the package at
+`share/dev-with-min`, with a convenience `public` symlink.
