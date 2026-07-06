@@ -29,9 +29,11 @@ Usage:
   bun run new:post -- --section field-logs --title "Deploying the blog"
   bun run new:post -- notes "Keyboard setup notes" --tags keyboard,setup
 
-Options:
+Required flags:
   --section <section>      light-notes | field-logs | deep-dives
   --title <title>          Post title
+
+Optional flags:
   --description <text>     Frontmatter description
   --tags <tag,tag>         Comma-separated tags. Defaults to tag1,tag2,tag3
   --series <name>          Optional series name
@@ -40,6 +42,7 @@ Options:
   --mdx                    Create a .mdx draft. This is the default
   --md                     Create a plain .md draft
   --publish                Set draft: false
+  --help                   Show this help message
 `);
 }
 
