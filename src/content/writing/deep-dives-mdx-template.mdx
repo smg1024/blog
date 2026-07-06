@@ -1,0 +1,73 @@
+---
+title: "Deep Dives MDX Template"
+description: "TODO: Write a short summary."
+publishedAt: 2026-07-06
+section: deep-dives
+tags:
+  - tag1
+  - tag2
+  - tag3
+draft: true
+---
+import Decision from "../../components/writing/Decision.astro";
+import Note from "../../components/writing/Note.astro";
+import Reference from "../../components/writing/Reference.astro";
+import Warning from "../../components/writing/Warning.astro";
+
+## Question
+
+What is the main technical or philosophical question?
+
+<Note title="Use this for context">
+  Put a short aside here when the reader needs setup, vocabulary, or a reminder before the deeper explanation.
+</Note>
+
+```nix
+{...}: {
+  description = "TODO: Write a short summary.";
+  inputs = {
+    title = "Deep Dives MDX Template";
+    publishedAt = "2026-07-06";
+    section = "deep-dives";
+    tags = [ "tag1" "tag2" "tag3" ];
+    draft = true;
+  };
+  outputs = {
+    question = "What is the main technical or philosophical question?";
+    model = "Explain the mental model, architecture, or principle.";
+    details = "Break down the implementation, examples, diagrams, or references.";
+    tradeoffs = "What does this approach make easier, and what does it make harder?";
+    conclusion = "What do I believe now?";
+  };
+}
+```
+
+> This is a template for deep dive posts that explore technical or philosophical questions in detail.
+
+## Model
+
+Explain the mental model, architecture, or principle.
+
+<Decision title="Current position">
+  State the technical choice or belief you are committing to in this post, then explain the reason.
+</Decision>
+
+## Details
+
+Break down the implementation, examples, diagrams, or references.
+
+<Reference title="Useful reference">
+  Link to docs, papers, source code, or earlier posts that support the explanation.
+</Reference>
+
+## Tradeoffs
+
+What does this approach make easier, and what does it make harder?
+
+<Warning title="Important tradeoff">
+  Use this when a shortcut, risk, operational hazard, or misconception deserves extra attention.
+</Warning>
+
+## Conclusion
+
+What do I believe now?
