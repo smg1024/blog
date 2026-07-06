@@ -56,6 +56,7 @@ import Reference from "../../components/writing/Reference.astro";
 import Warning from "../../components/writing/Warning.astro";
 import Todo from "../../components/writing/Todo.astro";
 import Danger from "../../components/writing/Danger.astro";
+import Mermaid from "../../components/writing/Mermaid.astro";
 
 <Note title="Operational note">
   Keep quick context close to the command or diagram it explains.
@@ -69,9 +70,20 @@ import Danger from "../../components/writing/Danger.astro";
 <Question>Use this to frame an unresolved idea.</Question>
 <Todo>Use this to capture follow-up work.</Todo>
 <Danger>Use this for high-impact risks.</Danger>
+
+<Mermaid
+  title="Publishing path"
+  chart={`
+flowchart LR
+  Draft[MDX draft] --> Build[Astro build]
+  Build --> Package[Nix package]
+  Package --> Homelab[Homelab deploy]
+`}
+/>
 ```
 
 Available callout wrappers: `Note`, `Tip`, `Question`, `Decision`, `Reference`, `Warning`, `Todo`, and `Danger`.
+Use `Mermaid` for architecture, flow, sequence, and systems diagrams in MDX posts.
 
 Inline code, fenced code blocks, and `<kbd>` keyboard tokens are styled automatically inside article prose.
 

@@ -12,6 +12,7 @@ draft: true
 
 import Decision from "../../components/writing/Decision.astro";
 import Danger from "../../components/writing/Danger.astro";
+import Mermaid from "../../components/writing/Mermaid.astro";
 import Note from "../../components/writing/Note.astro";
 import Question from "../../components/writing/Question.astro";
 import Reference from "../../components/writing/Reference.astro";
@@ -46,6 +47,15 @@ Explain the mental model, architecture, or principle.
 ## Details
 
 Break down the implementation, examples, diagrams, or references.
+
+<Mermaid
+  title="System flow"
+  chart={`
+flowchart LR
+  Input[Input] --> Process[Process]
+  Process --> Output[Output]
+`}
+/>
 
 <Callout variant="tip" title="Tip">
   Use the base `Callout` component directly when you want to choose the variant

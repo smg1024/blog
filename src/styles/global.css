@@ -776,6 +776,60 @@ main {
   font-weight: 650;
 }
 
+.mermaid-figure {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  margin: 1.6rem 0;
+}
+
+.mermaid-figure__title,
+.mermaid-figure__caption {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.mermaid-figure__title {
+  border-bottom: 1px solid var(--line);
+  padding: 0.75rem 1rem;
+  color: var(--ink);
+  font-weight: 720;
+}
+
+.mermaid-figure__canvas {
+  overflow-x: auto;
+  background: color-mix(in srgb, var(--surface-alt) 42%, var(--surface));
+  padding: 1rem;
+}
+
+.prose pre.mermaid {
+  min-width: 100%;
+  margin: 0;
+  background: transparent;
+  color: var(--ink);
+  text-align: center;
+}
+
+.prose pre.mermaid svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+
+.prose pre.mermaid[data-mermaid-error="true"] {
+  color: var(--accent-warm);
+  text-align: left;
+}
+
+.mermaid-figure__caption {
+  border-top: 1px solid var(--line);
+  padding: 0.7rem 1rem;
+}
+
 .callout {
   --callout-color: var(--accent);
   --callout-bg: color-mix(in srgb, var(--surface-alt) 68%, transparent);

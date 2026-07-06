@@ -1,0 +1,80 @@
+---
+interface Props {
+  title?: string;
+  caption?: string;
+  chart?: string;
+}
+
+const { title, caption, chart } = Astro.props;
+const diagram = chart?.trim();
+---
+
+<figure class="mermaid-figure">
+  {title && <div class="mermaid-figure__title">{title}</div>}
+  <div class="mermaid-figure__canvas">
+    <pre class="mermaid" data-mermaid-diagram>{diagram}<slot /></pre>
+  </div>
+  {caption && <figcaption class="mermaid-figure__caption">{caption}</figcaption>}
+</figure>
+
+<script>
+import mermaid from "mermaid";
+
+const readCssVar = (name: string, fallback: string) => {
+  const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+  return value || fallback;
+};
+
+const renderMermaid = async () => {
+  const diagrams = document.querySelectorAll<HTMLElement>("[data-mermaid-diagram]:not([data-processed='true'])");
+
+  if (diagrams.length === 0) {
+    return;
+  }
+
+  mermaid.initialize({
+    startOnLoad: false,
+    securityLevel: "strict",
+    theme: "base",
+    themeVariables: {
+      background: readCssVar("--surface", "#ffffff"),
+      fontFamily: getComputedStyle(document.documentElement).fontFamily,
+      lineColor: readCssVar("--muted", "#5f697a"),
+      primaryBorderColor: readCssVar("--line-strong", "#bfccd8"),
+      primaryColor: readCssVar("--surface-alt", "#eef4f0"),
+      primaryTextColor: readCssVar("--ink", "#172033"),
+      secondaryColor: readCssVar("--surface", "#ffffff"),
+      tertiaryColor: readCssVar("--bg", "#f8fafc"),
+    },
+    flowchart: {
+      htmlLabels: false,
+      useMaxWidth: true,
+    },
+    sequence: {
+      useMaxWidth: true,
+    },
+  });
+
+  try {
+    await mermaid.run({
+      nodes: diagrams,
+    });
+  } catch (error) {
+    diagrams.forEach((diagram) => {
+      if (!diagram.querySelector("svg")) {
+        diagram.dataset.mermaidError = "true";
+      }
+    });
+    console.error("Mermaid render failed", error);
+  }
+};
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", () => void renderMermaid(), { once: true });
+} else {
+  void renderMermaid();
+}
+
+document.addEventListener("astro:page-load", () => void renderMermaid());
+</script>
