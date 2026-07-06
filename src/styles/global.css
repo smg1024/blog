@@ -60,6 +60,7 @@ pre {
 
 pre {
   overflow-x: auto;
+  margin: 0;
   padding: 1.1rem;
   border-radius: 8px;
   background: var(--code-bg);
@@ -730,6 +731,48 @@ main {
 
 .prose a {
   color: var(--accent-strong);
+  font-weight: 650;
+}
+
+.prose :not(pre) > code {
+  border: 1px solid color-mix(in srgb, var(--line) 78%, transparent);
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--surface-alt) 78%, transparent);
+  color: var(--accent-strong);
+  padding: 0.12rem 0.32rem;
+  font-size: 0.9em;
+  overflow-wrap: anywhere;
+}
+
+.prose pre {
+  border: 1px solid color-mix(in srgb, var(--line-strong) 72%, transparent);
+  margin: 1.35rem 0;
+  box-shadow: 0 14px 34px rgba(17, 24, 39, 0.12);
+  font-size: 0.92rem;
+  line-height: 1.65;
+  scrollbar-color: var(--line-strong) transparent;
+}
+
+.prose pre code {
+  display: block;
+  min-width: 100%;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font-size: inherit;
+  overflow-wrap: normal;
+  white-space: pre;
+}
+
+.prose kbd {
+  border: 1px solid var(--line-strong);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  background: var(--surface);
+  padding: 0.1rem 0.34rem;
+  color: var(--ink);
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, ui-monospace, monospace;
+  font-size: 0.86em;
   font-weight: 650;
 }
 

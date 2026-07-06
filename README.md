@@ -60,6 +60,8 @@ import Decision from "../../components/writing/Decision.astro";
 </Decision>
 ```
 
+Inline code, fenced code blocks, and `<kbd>` keyboard tokens are styled automatically inside article prose.
+
 ## Commands
 
 ```sh
