@@ -11,6 +11,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "new:post": "bun scripts/new-post.mjs",
+    "check:public": "bun run build && bun scripts/check-public-build.mjs",
     "format": "biome format --write .",
     "format:check": "biome format .",
     "lint": "biome lint .",

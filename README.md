@@ -93,7 +93,16 @@ Inline code, fenced code blocks, and `<kbd>` keyboard tokens are styled automati
 bun install
 bun run dev
 bun run build
+bun run check:public
 bun run preview
 ```
 
 RSS is available at `/rss.xml`. Sitemap generation is configured for `https://blog.ridewithmin.com`.
+
+## Publishing checks
+
+Use `bun run check:public` before publishing. It builds the site and checks the generated `dist/` output for the
+expected public files, production metadata, sitemap/robots links, RSS metadata, and draft-content leaks.
+
+Use `nix build .#` to verify the static site package that the homelab can import. The built site is available inside
+the package at `share/dev-with-min`, with a convenience `public` symlink.
