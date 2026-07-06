@@ -28,7 +28,7 @@
           x86_64-linux = {
             os = "linux";
             cpu = "x64";
-            hash = "sha256-RtnuB2SLgjY9PpHSQW9IKPf2LsmUVsfrH8lJqAgQHVs=";
+            hash = "sha256-30KsLPkXFGrVzks6Jevs9uQhhqNTnpc4eR/FQOwqo0A=";
           };
         }.${
           system
