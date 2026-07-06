@@ -57,6 +57,31 @@ flowchart LR
 `}
 />
 
+<Mermaid
+  title="Data model"
+  chart={`
+erDiagram
+  AUTHOR ||--o{ POST : writes
+  POST ||--o{ COMMENT : receives
+  AUTHOR {
+    string id PK
+    string name
+    string email
+  }
+  POST {
+    string id PK
+    string author_id FK
+    string title
+    datetime published_at
+  }
+  COMMENT {
+    string id PK
+    string post_id FK
+    string body
+  }
+`}
+/>
+
 <Callout variant="tip" title="Tip">
   Use the base `Callout` component directly when you want to choose the variant
   inline.
