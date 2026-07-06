@@ -1,0 +1,98 @@
+---
+title: "Opening Dev with Min"
+description: "Why this blog exists, what I plan to write here, and how I want to keep a durable record of my developer experience."
+publishedAt: 2026-07-06
+section: field-logs
+tags:
+  - meta
+  - writing
+  - blog
+  - developer-experience
+draft: false
+---
+
+import Decision from "../../components/writing/Decision.astro";
+import Mermaid from "../../components/writing/Mermaid.astro";
+import Note from "../../components/writing/Note.astro";
+import Question from "../../components/writing/Question.astro";
+import Todo from "../../components/writing/Todo.astro";
+
+## Why this blog exists
+
+This is the first real marker for Dev with Min.
+
+I want this blog to become a durable record of my developer experience: what I
+build, what breaks, what I learn, what I change my mind about, and what tools or
+ideas become part of my everyday work.
+
+<Note title="Personal first">
+  This is not meant to be a polished publication machine. It is a personal
+  developer journal that can hold rough notes, practical logs, and deeper
+  technical thinking in the same place.
+</Note>
+
+## What I plan to write
+
+The archive is organized by intensity instead of topic alone:
+
+- **Light Notes** for quick setup notes, keyboard and laptop details, tools I
+  tried, and small lessons.
+- **Field Logs** for experience-based records from real work, experiments,
+  migrations, deployments, and debugging sessions.
+- **Deep Dives** for heavier technical writing, architecture, DevOps, AI agent
+  usage, and computer science philosophy.
+
+<Question title="The core question">
+  How can I keep a useful history of my own engineering growth without turning
+  every post into a formal essay?
+</Question>
+
+## How I want the writing flow to work
+
+I want writing here to be close to the way I actually learn. Some posts will be
+short and practical. Some will be long and uncertain. Some will be records of
+things I only understand after breaking them once.
+
+<Mermaid
+  title="Publishing flow"
+  chart={`
+flowchart LR
+  Experience[Experience] --> Draft[Draft a note]
+  Draft --> Shape[Clarify the lesson]
+  Shape --> Publish[Publish]
+  Publish --> Revisit[Revisit later]
+  Revisit --> Shape
+`}
+/>
+
+<Decision title="Current direction">
+  I am starting with a small static Astro site, deployed from my homelab and
+  wrapped as a Nix flake. The blog itself should be part of the record, not just
+  the container for it.
+</Decision>
+
+## What belongs here
+
+This blog will likely include:
+
+- homelab and NixOS deployment notes
+- DevOps lessons from practical operation
+- AI agent workflow experiments
+- programming and computer science ideas
+- project portfolios and build journals
+- CV, profile, timeline, and setup records
+- honest notes about tools I use every day
+
+The shape of the site will change as the writing grows. That is intentional. I
+want the structure to stay useful, but I do not want the structure to prevent me
+from writing.
+
+## Next
+
+The next step is simple: keep publishing small records, then let patterns emerge
+from the archive.
+
+<Todo title="First writing habit">
+  Publish posts as soon as they preserve a useful piece of experience, even if
+  the post is small.
+</Todo>
