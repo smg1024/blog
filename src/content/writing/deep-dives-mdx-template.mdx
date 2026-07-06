@@ -82,6 +82,76 @@ erDiagram
 `}
 />
 
+<Mermaid
+  title="Request sequence"
+  chart={`
+sequenceDiagram
+  participant Reader
+  participant Browser
+  participant Blog
+  participant Homelab
+  Reader->>Browser: Open post URL
+  Browser->>Blog: Request static page
+  Blog-->>Browser: Return HTML, CSS, and JS
+  Browser->>Homelab: Load cached assets
+  Homelab-->>Browser: Return assets
+  Browser-->>Reader: Render post
+`}
+/>
+
+<Mermaid
+  title="Writing lifecycle"
+  chart={`
+stateDiagram
+  [*] --> Draft
+  Draft --> Review: clarify argument
+  Review --> Draft: revise
+  Review --> Published: publish
+  Published --> Updated: learn more
+  Updated --> Published: republish
+`}
+/>
+
+<Mermaid
+  title="Content types"
+  chart={`
+classDiagram
+  class WritingPost {
+    +string title
+    +string section
+    +string tags
+    +boolean draft
+  }
+  class ProjectRecord {
+    +string name
+    +string status
+    +string stack
+  }
+  class DeveloperProfile {
+    +string focus
+    +string location
+    +string links
+  }
+  WritingPost --> ProjectRecord : references
+  DeveloperProfile --> WritingPost : authors
+`}
+/>
+
+<Mermaid
+  title="Revision history"
+  chart={`
+gitGraph
+  commit id: "draft"
+  branch revise
+  checkout revise
+  commit id: "add context"
+  commit id: "tighten model"
+  checkout main
+  merge revise
+  commit id: "publish"
+`}
+/>
+
 <Callout variant="tip" title="Tip">
   Use the base `Callout` component directly when you want to choose the variant
   inline.
