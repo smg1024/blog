@@ -56,6 +56,7 @@
         nativeBuildInputs = [pkgs.bun];
         dontConfigure = true;
         dontBuild = true;
+        dontFixup = true;
 
         installPhase = ''
           runHook preInstall
