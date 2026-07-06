@@ -37,7 +37,8 @@ Options:
   --series <name>          Optional series name
   --slug <slug>            Override generated slug
   --date <YYYY-MM-DD>      Override publishedAt date
-  --mdx                    Create a .mdx draft for component-based writing
+  --mdx                    Create a .mdx draft. This is the default
+  --md                     Create a plain .md draft
   --publish                Set draft: false
 `);
 }
@@ -69,6 +70,11 @@ function parseArgs(argv) {
 
     if (key === "mdx") {
       options.mdx = true;
+      continue;
+    }
+
+    if (key === "md") {
+      options.mdx = false;
       continue;
     }
 
@@ -196,7 +202,7 @@ function main() {
   const description = options.description ?? "TODO: Write a short summary.";
   const date = options.date ?? today();
   const tags = parseTags(options.tags);
-  const extension = options.mdx ? "mdx" : "md";
+  const extension = options.mdx === false ? "md" : "mdx";
   const existingPostPath = ["md", "mdx"]
     .map((candidate) => path.join(contentDir, `${slug}.${candidate}`))
     .find((candidate) => existsSync(candidate));
