@@ -28,7 +28,7 @@
           x86_64-linux = {
             os = "linux";
             cpu = "x64";
-            hash = "sha256-CKC3lGn4Z30RlaitLjOOCG5ml4CjVOd0plm0a3sopOs=";
+            hash = "sha256-RtnuB2SLgjY9PpHSQW9IKPf2LsmUVsfrH8lJqAgQHVs=";
           };
         }.${
           system
@@ -49,27 +49,36 @@
           ]);
       };
 
-      bunDeps = pkgs.stdenvNoCC.mkDerivation {
-        pname = "${pname}-bun-deps";
+      nodeModules = pkgs.stdenvNoCC.mkDerivation {
+        pname = "${pname}-node-modules";
         inherit version src;
 
         nativeBuildInputs = [pkgs.bun];
         dontConfigure = true;
-        dontBuild = true;
         dontFixup = true;
 
-        installPhase = ''
-          runHook preInstall
+        buildPhase = ''
+          runHook preBuild
 
           export HOME="$TMPDIR"
-          mkdir -p "$out"
+          export BUN_INSTALL_CACHE_DIR="$TMPDIR/bun-cache"
+          mkdir -p "$BUN_INSTALL_CACHE_DIR"
+
           bun install \
           	--frozen-lockfile \
           	--ignore-scripts \
           	--no-progress \
           	--backend=copyfile \
-          	${bunPlatformFlags} \
-          	--cache-dir "$out"
+          	${bunPlatformFlags}
+
+          runHook postBuild
+        '';
+
+        installPhase = ''
+          runHook preInstall
+
+          mkdir -p "$out"
+          cp -R node_modules "$out/node_modules"
 
           runHook postInstall
         '';
@@ -91,17 +100,9 @@
           export HOME="$TMPDIR"
           export ASTRO_TELEMETRY_DISABLED=1
 
-          cp -R "${bunDeps}" "$TMPDIR/bun-cache"
-          chmod -R u+w "$TMPDIR/bun-cache"
+          cp -R "${nodeModules}/node_modules" ./node_modules
+          chmod -R u+w node_modules
 
-          bun install \
-          	--frozen-lockfile \
-          	--ignore-scripts \
-          	--no-progress \
-          	--offline \
-          	--backend=copyfile \
-          	${bunPlatformFlags} \
-          	--cache-dir "$TMPDIR/bun-cache"
           bun run build
 
           runHook postBuild
