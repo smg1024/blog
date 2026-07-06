@@ -152,6 +152,37 @@ gitGraph
 `}
 />
 
+```ts title="src/lib/example.ts" {3-5}
+type WritingSection = "light-notes" | "field-logs" | "deep-dives";
+
+export function getSectionLabel(section: WritingSection) {
+  return section.replace("-", " ");
+}
+```
+
+```bash title="Terminal"
+bun run check
+bun run build
+```
+
+```ts title="src/content.config.ts"
+draft: z.boolean().default(true), // [!code --]
+draft: z.boolean().default(false), // [!code ++]
+```
+
+```nix title="flake.nix"
+packages.default = pkgs.stdenvNoCC.mkDerivation {
+  pname = "dev-with-min";
+  version = "0.1.0"; # [!code highlight]
+};
+```
+
+```log title="build.log"
+10:50:26 [build] Collecting build info...
+10:50:26 [WARN] Some chunks are larger than expected
+10:50:26 [build] Complete!
+```
+
 <Callout variant="tip" title="Tip">
   Use the base `Callout` component directly when you want to choose the variant
   inline.
