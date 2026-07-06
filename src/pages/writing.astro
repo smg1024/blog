@@ -2,9 +2,10 @@
 import PostCard from "../components/PostCard.astro";
 import { writingSections, writingUtilities } from "../data/site";
 import Layout from "../layouts/Layout.astro";
-import { getPublishedWriting } from "../lib/content";
+import { getDraftWriting, getPublishedWriting } from "../lib/content";
 
 const posts = await getPublishedWriting();
+const draftPosts = await getDraftWriting();
 ---
 
 <Layout
@@ -60,7 +61,7 @@ const posts = await getPublishedWriting();
   <section class="page-section" aria-labelledby="all-writing-title">
     <div class="section-heading">
       <div>
-        <h2 id="all-writing-title">All writing</h2>
+        <h2 id="all-writing-title">Published writing</h2>
       </div>
     </div>
     {posts.length > 0 ? (
@@ -71,4 +72,18 @@ const posts = await getPublishedWriting();
 				<p class="empty-state">No writing has been published yet.</p>
 			)}
   </section>
+
+  {draftPosts.length > 0 && (
+		<section class="page-section draft-section" aria-labelledby="draft-writing-title">
+			<div class="section-heading">
+				<div>
+					<h2 id="draft-writing-title">Drafts</h2>
+					<p>Visible only during local development.</p>
+				</div>
+			</div>
+			<div class="post-list">
+				{draftPosts.map((post) => <PostCard post={post} />)}
+			</div>
+		</section>
+	)}
 </Layout>

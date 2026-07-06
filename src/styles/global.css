@@ -560,6 +560,21 @@ main {
   font-weight: 680;
 }
 
+.draft-badge {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  border: 1px solid color-mix(in srgb, var(--accent-warm) 45%, var(--line));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent-warm) 12%, var(--surface));
+  color: var(--accent-warm);
+  padding: 0.16rem 0.48rem;
+  font-size: 0.72rem;
+  font-weight: 780;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
 .section-card h3,
 .post-card h3,
 .project-card h2,
@@ -622,6 +637,11 @@ main {
   text-decoration: none;
 }
 
+.post-card--draft {
+  border-color: color-mix(in srgb, var(--accent-warm) 42%, var(--line));
+  background: color-mix(in srgb, var(--surface) 92%, var(--accent-warm));
+}
+
 .post-card__inner {
   display: grid;
   gap: 0.7rem;
@@ -642,9 +662,36 @@ main {
   color: var(--muted);
 }
 
+.draft-section {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent-warm) 6%, transparent), transparent 8rem);
+}
+
 .article-header {
   max-width: var(--reading-width);
   padding: 3.5rem 0 2rem;
+}
+
+.article-header--draft {
+  border-bottom: 1px solid color-mix(in srgb, var(--accent-warm) 30%, var(--line));
+}
+
+.article-kicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.article-kicker .eyebrow {
+  margin: 0;
+}
+
+.article-header .draft-note {
+  max-width: fit-content;
+  border-left: 3px solid var(--accent-warm);
+  padding-left: 0.75rem;
+  color: var(--accent-warm);
+  font-weight: 680;
 }
 
 .article-meta {

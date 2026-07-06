@@ -36,14 +36,42 @@ export function formatDate(date: Date) {
   }).format(date);
 }
 
+function sortWriting(entries: WritingEntry[]) {
+  return entries.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+}
+
+export function isDraft(entry: WritingEntry) {
+  return entry.data.draft;
+}
+
 export function isPublished(entry: WritingEntry) {
-  return import.meta.env.DEV || !entry.data.draft;
+  return !entry.data.draft;
+}
+
+export function isVisibleWriting(entry: WritingEntry) {
+  return import.meta.env.DEV || isPublished(entry);
 }
 
 export async function getPublishedWriting() {
   const entries = await getCollection("writing", isPublished);
 
-  return entries.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+  return sortWriting(entries);
+}
+
+export async function getVisibleWriting() {
+  const entries = await getCollection("writing", isVisibleWriting);
+
+  return sortWriting(entries);
+}
+
+export async function getDraftWriting() {
+  if (!import.meta.env.DEV) {
+    return [];
+  }
+
+  const entries = await getCollection("writing", isDraft);
+
+  return sortWriting(entries);
 }
 
 export async function getWritingBySection(section: WritingSectionKey) {

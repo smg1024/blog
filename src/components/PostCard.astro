@@ -7,13 +7,15 @@ interface Props {
 }
 
 const { post } = Astro.props;
+const isDraftPost = import.meta.env.DEV && post.data.draft;
 ---
 
-<a class="post-card" href={getWritingUrl(post)}>
+<a class:list={["post-card", { "post-card--draft": isDraftPost }]} href={getWritingUrl(post)}>
   <article class="post-card__inner">
     <div class="post-meta">
       <span>{formatDate(post.data.publishedAt)}</span>
       <span>{getSectionLabel(post.data.section)}</span>
+      {isDraftPost && <span class="draft-badge">Draft</span>}
     </div>
     <h3>{post.data.title}</h3>
     <p>{post.data.description}</p>
