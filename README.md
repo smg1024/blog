@@ -31,6 +31,7 @@ bun run new:post -- --section field-logs --title "Deploying the blog" --tags ast
 
 The script writes a Markdown draft with `draft: true`. Pass `--publish` only when the new post should be immediately public. Templates live in `templates/writing`.
 When `--tags` is omitted, the draft starts with placeholder tags `tag1`, `tag2`, and `tag3`.
+Pass `--mdx` when a post needs component-based writing blocks.
 
 Required frontmatter:
 
@@ -42,6 +43,21 @@ section: field-logs # light-notes | field-logs | deep-dives
 tags:
   - astro
 draft: false
+```
+
+MDX writing blocks:
+
+```mdx
+import Note from "../../components/writing/Note.astro";
+import Decision from "../../components/writing/Decision.astro";
+
+<Note title="Operational note">
+  Keep quick context close to the command or diagram it explains.
+</Note>
+
+<Decision title="Deployment choice">
+  I chose the simpler deployment path until the blog needs dynamic rendering.
+</Decision>
 ```
 
 ## Commands

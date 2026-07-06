@@ -1,0 +1,28 @@
+---
+type CalloutVariant = "note" | "warning" | "decision" | "reference";
+
+interface Props {
+  title?: string;
+  variant?: CalloutVariant;
+}
+
+const labels: Record<CalloutVariant, string> = {
+  note: "Note",
+  warning: "Warning",
+  decision: "Decision",
+  reference: "Reference",
+};
+
+const { title, variant = "note" } = Astro.props;
+const resolvedTitle = title ?? labels[variant];
+---
+
+<aside class={`callout callout--${variant}`}>
+  <div class="callout__header">
+    <span class="callout__marker" aria-hidden="true"></span>
+    <strong>{resolvedTitle}</strong>
+  </div>
+  <div class="callout__body">
+    <slot />
+  </div>
+</aside>

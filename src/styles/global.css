@@ -733,6 +733,57 @@ main {
   font-weight: 650;
 }
 
+.callout {
+  --callout-color: var(--accent);
+  --callout-bg: color-mix(in srgb, var(--surface-alt) 68%, transparent);
+
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--callout-color);
+  border-radius: 8px;
+  background: var(--callout-bg);
+  margin: 1.35rem 0;
+  padding: 1rem;
+}
+
+.callout--warning {
+  --callout-color: var(--accent-warm);
+}
+
+.callout--decision {
+  --callout-color: #3b82f6;
+}
+
+.callout--reference {
+  --callout-color: var(--line-strong);
+}
+
+.callout__header {
+  display: flex;
+  gap: 0.55rem;
+  align-items: center;
+  margin-bottom: 0.65rem;
+}
+
+.callout__marker {
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 999px;
+  background: var(--callout-color);
+}
+
+.callout__header strong {
+  font-size: 0.95rem;
+  line-height: 1.2;
+}
+
+.callout__body > :first-child {
+  margin-top: 0;
+}
+
+.callout__body > :last-child {
+  margin-bottom: 0;
+}
+
 .archive-list {
   display: grid;
   gap: 0.7rem;

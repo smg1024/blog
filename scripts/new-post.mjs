@@ -37,6 +37,7 @@ Options:
   --series <name>          Optional series name
   --slug <slug>            Override generated slug
   --date <YYYY-MM-DD>      Override publishedAt date
+  --mdx                    Create a .mdx draft for component-based writing
   --publish                Set draft: false
 `);
 }
@@ -63,6 +64,11 @@ function parseArgs(argv) {
 
     if (key === "publish") {
       options.publish = true;
+      continue;
+    }
+
+    if (key === "mdx") {
+      options.mdx = true;
       continue;
     }
 
@@ -190,11 +196,15 @@ function main() {
   const description = options.description ?? "TODO: Write a short summary.";
   const date = options.date ?? today();
   const tags = parseTags(options.tags);
-  const filename = `${slug}.md`;
+  const extension = options.mdx ? "mdx" : "md";
+  const existingPostPath = ["md", "mdx"]
+    .map((candidate) => path.join(contentDir, `${slug}.${candidate}`))
+    .find((candidate) => existsSync(candidate));
+  const filename = `${slug}.${extension}`;
   const postPath = path.join(contentDir, filename);
 
-  if (existsSync(postPath)) {
-    throw new Error(`Post already exists: ${path.relative(root, postPath)}`);
+  if (existingPostPath) {
+    throw new Error(`Post already exists: ${path.relative(root, existingPostPath)}`);
   }
 
   mkdirSync(contentDir, { recursive: true });
