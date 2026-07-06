@@ -1,0 +1,265 @@
+---
+title: "How Posts Render on Dev with Min"
+description: "A live guide to the Markdown, MDX callouts, Mermaid diagrams, and code block features available in Dev with Min posts."
+publishedAt: 2026-07-06
+section: field-logs
+tags:
+  - meta
+  - writing
+  - mdx
+  - astro
+  - components
+draft: false
+---
+
+import Callout from "../../components/writing/Callout.astro";
+import Danger from "../../components/writing/Danger.astro";
+import Decision from "../../components/writing/Decision.astro";
+import Mermaid from "../../components/writing/Mermaid.astro";
+import Note from "../../components/writing/Note.astro";
+import Question from "../../components/writing/Question.astro";
+import Reference from "../../components/writing/Reference.astro";
+import Tip from "../../components/writing/Tip.astro";
+import Todo from "../../components/writing/Todo.astro";
+import Warning from "../../components/writing/Warning.astro";
+
+## Purpose
+
+This post is a live rendering guide for Dev with Min. It shows how a published
+post can use Markdown, MDX components, Mermaid diagrams, and code blocks inside
+the final article layout.
+
+When I add or change rendering components later, this post should make the
+public result easy to inspect.
+
+<Note title="Live reference">
+  This page is intentionally published. It should represent how real posts look,
+  not only how draft templates behave in development.
+</Note>
+
+## Markdown baseline
+
+Normal paragraphs should be comfortable to read at article width. Inline code
+like `bun run check:public` should be visible without becoming visually noisy.
+Keyboard tokens can use HTML such as <kbd>⌘</kbd> + <kbd>K</kbd>.
+
+Blockquotes are available for quoted or emphasized prose:
+
+> A post can stay practical while still keeping context, tradeoffs, and future
+> questions close to the technical details.
+
+Lists render with normal Markdown:
+
+- short observations
+- implementation notes
+- commands worth keeping
+- follow-up questions
+
+## Callouts
+
+Callouts are MDX components for giving different kinds of information a stable
+visual shape.
+
+<Note title="Note">
+  Use notes for context, reminders, or background that supports the surrounding
+  paragraph.
+</Note>
+
+<Tip title="Tip">
+  Use tips for small practical improvements, shortcuts, or habits that are safe
+  to apply immediately.
+</Tip>
+
+<Question title="Question">
+  Use questions when the post is carrying uncertainty, a hypothesis, or a design
+  problem that is not fully resolved yet.
+</Question>
+
+<Decision title="Decision">
+  Use decisions to name the current technical position and why that choice makes
+  sense right now.
+</Decision>
+
+<Reference title="Reference">
+  Use references for docs, papers, source links, earlier posts, or external
+  material that supports the explanation.
+</Reference>
+
+<Warning title="Warning">
+  Use warnings for tradeoffs, footguns, migration hazards, or assumptions that
+  readers should not miss.
+</Warning>
+
+<Danger title="Danger">
+  Use danger callouts for high-impact risks such as data loss, downtime,
+  security exposure, or irreversible operations.
+</Danger>
+
+<Todo title="Todo">
+  Use todos for follow-up experiments, future post ideas, or checks that should
+  be revisited.
+</Todo>
+
+<Callout variant="tip" title="Base Callout">
+  The base `Callout` component can be used directly when choosing the variant
+  inline is clearer than importing a wrapper component.
+</Callout>
+
+## Mermaid diagrams
+
+Mermaid diagrams render through the local `Mermaid` component. Each diagram can
+have a title and is wrapped in a scrollable figure.
+
+<Mermaid
+  title="Writing flow"
+  chart={`
+flowchart LR
+  Experience[Experience] --> Draft[Draft]
+  Draft --> Review[Review]
+  Review --> Publish[Publish]
+  Publish --> Revisit[Revisit]
+  Revisit --> Draft
+`}
+/>
+
+<Mermaid
+  title="Request sequence"
+  chart={`
+sequenceDiagram
+  participant Reader
+  participant Browser
+  participant Blog
+  Reader->>Browser: Open post URL
+  Browser->>Blog: Request static page
+  Blog-->>Browser: Return HTML, CSS, and JS
+  Browser-->>Reader: Render post
+`}
+/>
+
+<Mermaid
+  title="Content model"
+  chart={`
+erDiagram
+  AUTHOR ||--o{ POST : writes
+  POST ||--o{ TAG : has
+  AUTHOR {
+    string id PK
+    string name
+  }
+  POST {
+    string id PK
+    string title
+    datetime published_at
+  }
+  TAG {
+    string slug PK
+    string name
+  }
+`}
+/>
+
+<Mermaid
+  title="Post lifecycle"
+  chart={`
+stateDiagram
+  [*] --> Draft
+  Draft --> Published: publish
+  Published --> Revised: learn more
+  Revised --> Published: update
+`}
+/>
+
+<Mermaid
+  title="Site records"
+  chart={`
+classDiagram
+  class WritingPost {
+    +string title
+    +string section
+    +string[] tags
+    +boolean draft
+  }
+  class ProjectRecord {
+    +string name
+    +string status
+  }
+  class DeveloperProfile {
+    +string focus
+  }
+  DeveloperProfile --> WritingPost : authors
+  WritingPost --> ProjectRecord : references
+`}
+/>
+
+<Mermaid
+  title="Revision history"
+  chart={`
+gitGraph
+  commit id: "draft"
+  branch revise
+  checkout revise
+  commit id: "clarify"
+  checkout main
+  merge revise
+  commit id: "publish"
+`}
+/>
+
+## Code blocks
+
+Code blocks use Expressive Code. Titles, terminals, line highlights, labels,
+diff markers, and logs should all render consistently.
+
+```ts title="src/lib/example.ts" {"watch this":3-6}
+type WritingSection = "light-notes" | "field-logs" | "deep-dives";
+
+
+export function getSectionLabel(section: WritingSection) {
+  return section.replace("-", " ");
+}
+```
+
+```bash title="Terminal"
+bun run check
+bun run check:public
+```
+
+```ts title="src/content.config.ts" del={1} ins={2}
+draft: z.boolean().default(true),
+draft: z.boolean().default(false),
+```
+
+```nix title="flake.nix" {3}
+packages.default = pkgs.stdenvNoCC.mkDerivation {
+  pname = "dev-with-min";
+  version = "0.1.0";
+};
+```
+
+```log title="build.log"
+14:07:39 [build] Collecting build info...
+14:07:40 [WARN] Some chunks are larger than expected
+14:07:40 [build] Complete!
+```
+
+## Frontmatter shape
+
+Published writing should use the content schema directly:
+
+```yaml title="src/content/writing/example.mdx"
+---
+title: "Example Post"
+description: "A short summary for listings, RSS, and social previews."
+publishedAt: 2026-07-06
+section: field-logs
+tags:
+  - astro
+  - mdx
+draft: false
+---
+```
+
+<Decision title="Current rendering contract">
+  A post can start as plain Markdown, then use MDX components only when the
+  surrounding explanation benefits from a stronger visual shape.
+</Decision>
