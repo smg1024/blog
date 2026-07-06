@@ -9,6 +9,7 @@ tags:
   - tag3
 draft: true
 ---
+
 import Decision from "../../components/writing/Decision.astro";
 import Danger from "../../components/writing/Danger.astro";
 import Note from "../../components/writing/Note.astro";
@@ -17,45 +18,29 @@ import Reference from "../../components/writing/Reference.astro";
 import Todo from "../../components/writing/Todo.astro";
 import Warning from "../../components/writing/Warning.astro";
 import Callout from "../../components/writing/Callout.astro";
+import Tip from "../../components/writing/Tip.astro";
 
 ## Question
 
 What is the main technical or philosophical question?
 
 <Question title="Open question">
-  Use this to name the uncertainty, hypothesis, or design question the post is trying to answer.
+  Use this to name the uncertainty, hypothesis, or design question the post is
+  trying to answer.
 </Question>
 
 <Note title="Use this for context">
-  Put a short aside here when the reader needs setup, vocabulary, or a reminder before the deeper explanation.
+  Put a short aside here when the reader needs setup, vocabulary, or a reminder
+  before the deeper explanation.
 </Note>
-
-```nix
-{...}: {
-  description = "TODO: Write a short summary.";
-  inputs = {
-    title = "Deep Dives MDX Template";
-    publishedAt = "2026-07-06";
-    section = "deep-dives";
-    tags = [ "tag1" "tag2" "tag3" ];
-    draft = true;
-  };
-  outputs = {
-    question = "What is the main technical or philosophical question?";
-    model = "Explain the mental model, architecture, or principle.";
-    details = "Break down the implementation, examples, diagrams, or references.";
-    tradeoffs = "What does this approach make easier, and what does it make harder?";
-    conclusion = "What do I believe now?";
-  };
-}
-```
 
 ## Model
 
 Explain the mental model, architecture, or principle.
 
 <Decision title="Current position">
-  State the technical choice or belief you are committing to in this post, then explain the reason.
+  State the technical choice or belief you are committing to in this post, then
+  explain the reason.
 </Decision>
 
 ## Details
@@ -63,11 +48,13 @@ Explain the mental model, architecture, or principle.
 Break down the implementation, examples, diagrams, or references.
 
 <Callout variant="tip" title="Tip">
-  Use the base `Callout` component directly when you want to choose the variant inline.
+  Use the base `Callout` component directly when you want to choose the variant
+  inline.
 </Callout>
 
 <Reference title="Useful reference">
-  Link to docs, papers, source code, or earlier posts that support the explanation.
+  Link to docs, papers, source code, or earlier posts that support the
+  explanation.
 </Reference>
 
 ## Tradeoffs
@@ -75,7 +62,8 @@ Break down the implementation, examples, diagrams, or references.
 What does this approach make easier, and what does it make harder?
 
 <Warning title="Important tradeoff">
-  Use this when a shortcut, risk, operational hazard, or misconception deserves extra attention.
+  Use this when a shortcut, risk, operational hazard, or misconception deserves
+  extra attention.
 </Warning>
 
 <Danger title="Failure mode">
