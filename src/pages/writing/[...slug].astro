@@ -35,7 +35,14 @@ const tocHeadings = headings.filter((heading) => heading.depth >= 2 && heading.d
 const isDraftPost = import.meta.env.DEV && post.data.draft;
 ---
 
-<Layout title={post.data.title} description={post.data.description} type="article">
+<Layout
+  title={post.data.title}
+  description={post.data.description}
+  noindex={post.data.draft}
+  publishedAt={post.data.publishedAt}
+  tags={post.data.tags}
+  type="article"
+>
   <header class:list={["article-header", { "article-header--draft": isDraftPost }]}>
     <div class="article-kicker">
       <p class="eyebrow">{getSectionLabel(post.data.section)}</p>
