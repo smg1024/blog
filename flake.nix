@@ -26,7 +26,7 @@
 						x86_64-linux = {
 							os = "linux";
 							cpu = "x64";
-							hash = "sha256-X8eDTCUFM897ZEb+kdS8fYBhOQZ1GDaH6ljaZBayYTE=";
+							hash = "sha256-9selkS5j/WkUsOzFe/FCvWR0LXYZ9fhC+nGOIw/0CsA=";
 						};
 						aarch64-linux = {
 							os = "linux";
@@ -36,7 +36,7 @@
 						aarch64-darwin = {
 							os = "darwin";
 							cpu = "arm64";
-							hash = "sha256-VD953ifWAl54vhS1+6OLpJQsIm9rqtsvF8Gpl45CijQ=";
+							hash = "sha256-JSFeBd2YqK+wHJlRkiRDxIWTLMpsEJ3Biw3Chs+rlVY=";
 						};
 					}.${system};
 					bunPlatformFlags = "--os=${bunPlatform.os} --cpu=${bunPlatform.cpu}";
