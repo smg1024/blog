@@ -45,42 +45,5 @@ const canonicalUrl = new URL(Astro.url.pathname, SITE.url).toString();
       </main>
       <SiteFooter />
     </div>
-    <script>
-    const resetCopyButton = (button: HTMLButtonElement) => {
-      window.setTimeout(() => {
-        button.textContent = "Copy";
-        button.removeAttribute("data-copied");
-      }, 1600);
-    };
-
-    document.addEventListener("click", async (event) => {
-      if (!(event.target instanceof Element)) {
-        return;
-      }
-
-      const button = event.target.closest("[data-code-copy]");
-
-      if (!(button instanceof HTMLButtonElement)) {
-        return;
-      }
-
-      const codeBlock = button.closest(".code-block");
-      const code = codeBlock?.querySelector("pre")?.innerText;
-
-      if (!code) {
-        return;
-      }
-
-      try {
-        await navigator.clipboard.writeText(code.trimEnd());
-        button.textContent = "Copied";
-        button.setAttribute("data-copied", "true");
-        resetCopyButton(button);
-      } catch {
-        button.textContent = "Failed";
-        resetCopyButton(button);
-      }
-    });
-    </script>
   </body>
 </html>

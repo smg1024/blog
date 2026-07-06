@@ -165,15 +165,15 @@ bun run check
 bun run build
 ```
 
-```ts title="src/content.config.ts"
-draft: z.boolean().default(true), // [!code --]
-draft: z.boolean().default(false), // [!code ++]
+```ts title="src/content.config.ts" del={1} ins={2}
+draft: z.boolean().default(true),
+draft: z.boolean().default(false),
 ```
 
-```nix title="flake.nix"
+```nix title="flake.nix" {3}
 packages.default = pkgs.stdenvNoCC.mkDerivation {
   pname = "dev-with-min";
-  version = "0.1.0"; # [!code highlight]
+  version = "0.1.0";
 };
 ```
 
