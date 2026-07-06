@@ -824,10 +824,18 @@ main {
 }
 
 .callout__marker {
-  width: 0.65rem;
-  height: 0.65rem;
-  border-radius: 999px;
-  background: var(--callout-color);
+  display: inline-flex;
+  width: 1.15rem;
+  height: 1.15rem;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  color: var(--callout-color);
+}
+
+.callout__icon {
+  width: 100%;
+  height: 100%;
 }
 
 .callout__header strong {
