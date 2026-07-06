@@ -38,12 +38,6 @@ function parseFrontmatter(filePath) {
   return match?.[1] ?? "";
 }
 
-function getScalar(frontmatter, key) {
-  const match = frontmatter.match(new RegExp(`^${key}:\\s*(.+)$`, "m"));
-
-  return match?.[1].trim().replace(/^["']|["']$/g, "") ?? "";
-}
-
 check(existsSync(distDir), "dist/ does not exist. Run `bun run build` first.");
 
 if (existsSync(distDir)) {
@@ -99,16 +93,13 @@ if (failures.length === 0) {
       .replace(/\.(md|mdx)$/i, "")
       .split(path.sep)
       .join("/");
-    const title = getScalar(frontmatter, "title");
+    const route = `/writing/${slug}/`;
 
     check(
       !existsSync(path.join(distDir, "writing", slug, "index.html")),
       `Draft post route leaked into dist/: ${slug}`,
     );
-
-    if (title) {
-      check(!publicText.includes(title), `Draft post title leaked into public output: ${title}`);
-    }
+    check(!publicText.includes(route), `Draft post URL leaked into public output: ${route}`);
   }
 }
 
