@@ -64,9 +64,7 @@ if (failures.length === 0) {
     "Homepage canonical URL is missing or incorrect.",
   );
   check(
-    home.includes(
-      `<meta property="og:image" content="${siteUrl}/images/dev-with-min-journal.png">`,
-    ),
+    home.includes(`<meta property="og:image" content="${siteUrl}/images/logo.png">`),
     "Open Graph image is missing.",
   );
   check(

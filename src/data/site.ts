@@ -3,8 +3,8 @@ export const SITE = {
   author: "Min",
   url: "https://blog.ridewithmin.com",
   locale: "en_US",
-  image: "/images/dev-with-min-journal.png",
-  imageAlt: "A developer workspace with a laptop, notebook, keyboard, and homelab equipment.",
+  image: "/images/logo.png",
+  imageAlt: "Dev with Min logo showing a bear face framed by code brackets.",
   description:
     "A personal developer journal about homelab infrastructure, DevOps, AI agent workflows, computer science ideas, projects, setup, and the lived process of learning technology.",
 } as const;
