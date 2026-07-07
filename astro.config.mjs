@@ -7,6 +7,7 @@ import expressiveCode from "astro-expressive-code";
 
 // https://astro.build/config
 export default defineConfig({
+  output: "static",
   site: "https://blog.ridewithmin.com",
   integrations: [
     expressiveCode({

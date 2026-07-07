@@ -12,7 +12,7 @@
     x86_64-linux = {
       os = "linux";
       cpu = "x64";
-      hash = "sha256-gN0XupzJYmbKtPNS3WlhLjSDEICx7LsZJblnHPCAM+A=";
+      hash = "sha256-tYtMLlXZExj1utRHKvUs68ulxCQwuMBPIECXo8KXz1Q=";
     };
     aarch64-darwin = {
       os = "darwin";
