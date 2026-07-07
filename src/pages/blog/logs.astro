@@ -1,8 +1,8 @@
 ---
-import PostCard from "../components/PostCard.astro";
-import { blogSections } from "../data/site";
-import Layout from "../layouts/Layout.astro";
-import { getBlogBySection } from "../lib/content";
+import PostCard from "../../components/PostCard.astro";
+import { blogSections } from "../../data/site";
+import Layout from "../../layouts/Layout.astro";
+import { getBlogBySection } from "../../lib/content";
 
 const section = blogSections.find((item) => item.key === "field-logs");
 if (!section) {

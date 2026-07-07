@@ -33,7 +33,7 @@ export const blogSections = [
     key: "light-notes",
     title: "Light Notes",
     navLabel: "Notes",
-    href: "/notes",
+    href: "/blog/notes",
     intensity: "Light",
     description:
       "Shorter observations, setup details, quick lessons, tools, keyboards, and low-pressure notes that are still worth keeping.",
@@ -43,7 +43,7 @@ export const blogSections = [
     key: "field-logs",
     title: "Field Logs",
     navLabel: "Logs",
-    href: "/logs",
+    href: "/blog/logs",
     intensity: "Medium",
     description:
       "Experience-based records from experiments, migrations, incidents, deployments, and learning sessions.",
@@ -53,7 +53,7 @@ export const blogSections = [
     key: "deep-dives",
     title: "Deep Dives",
     navLabel: "Deep Dives",
-    href: "/deep-dives",
+    href: "/blog/deep-dives",
     intensity: "Heavy",
     description:
       "Long-form technical and philosophical essays about DevOps, AI agents, systems, and computer science ideas.",

@@ -7,9 +7,9 @@ This site is built with Astro and is intended to become a long-term record of de
 ## Structure
 
 - `/blog` - blog overview
-- `/notes` - light notes
-- `/logs` - field logs
-- `/deep-dives` - long-form heavy blog
+- `/blog/notes` - light notes
+- `/blog/logs` - field logs
+- `/blog/deep-dives` - long-form heavy blog
 - `/tags` - posts grouped by tag
 - `/series` - connected blog tracks
 - `/archive` - full post index
