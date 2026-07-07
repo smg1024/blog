@@ -8,24 +8,18 @@ const posts = await getPublishedBlog();
 const draftPosts = await getDraftBlog();
 ---
 
-<Layout
-  title="Blog"
-  description="Blog posts from Dev with Min, organized by intensity: light notes, field logs, and deep dives."
->
+<Layout title="Blog" description="Light notes, field logs, deep dives, practical systems learning.">
   <header class="page-header">
     <p class="eyebrow">Blog</p>
     <h1>Notes, logs, and deep dives.</h1>
-    <p>
-      The blog archive is split by intensity so a quick tool note does not compete with a long
-      DevOps or computer science essay.
-    </p>
+    <p>Focus levels, quick notes, field logs, deeper essays.</p>
   </header>
 
   <section class="page-section" aria-labelledby="tracks-title">
     <div class="section-heading">
       <div>
         <h2 id="tracks-title">Tracks</h2>
-        <p>Start from the amount of focus a post asks from you.</p>
+        <p>Focus level, operational depth, reading weight.</p>
       </div>
     </div>
     <div class="card-grid">
@@ -35,11 +29,6 @@ const draftPosts = await getDraftBlog();
             <div class="card-meta">{section.intensity}</div>
             <h3>{section.title}</h3>
             <p>{section.description}</p>
-            <ul class="example-list" aria-label={`${section.title} examples`}>
-              {section.examples.map((example) => (
-                <li>{example}</li>
-              ))}
-            </ul>
           </a>
         ))
       }
@@ -78,7 +67,7 @@ const draftPosts = await getDraftBlog();
           ))}
         </div>
       ) : (
-        <p class="empty-state">No blog posts have been published yet.</p>
+        <p class="empty-state">No blog posts yet.</p>
       )
     }
   </section>
@@ -89,7 +78,7 @@ const draftPosts = await getDraftBlog();
         <div class="section-heading">
           <div>
             <h2 id="draft-blog-title">Drafts</h2>
-            <p>Visible only during local development.</p>
+            <p>Local previews, unpublished notes.</p>
           </div>
         </div>
         <div class="post-list">

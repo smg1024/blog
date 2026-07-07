@@ -6,7 +6,7 @@ export const SITE = {
   image: "/images/logo.png",
   imageAlt: "Dev with Min logo showing a bear face framed by code brackets.",
   description:
-    "A personal developer journal about homelab infrastructure, DevOps, AI agent workflows, computer science ideas, and the lived process of learning technology through blog posts.",
+    "Homelab infrastructure, DevOps practice, AI-agent workflows, systems thinking, practical learning logs.",
 } as const;
 
 // Disabled section pages are also prefixed with "_" in src/pages so Astro does not publish them.
@@ -35,9 +35,8 @@ export const blogSections = [
     navLabel: "Notes",
     href: "/blog/notes",
     intensity: "Light",
-    description:
-      "Shorter observations, setup details, quick lessons, tools, keyboards, and low-pressure notes that are still worth keeping.",
-    examples: ["laptop setup", "keyboards", "tools I tried", "small debugging notes"],
+    description: "Setup notes, quick lessons, tools, keyboards, debugging fragments.",
+    examples: ["laptop setup", "keyboard notes", "tool trials", "debugging fragments"],
   },
   {
     key: "field-logs",
@@ -45,8 +44,7 @@ export const blogSections = [
     navLabel: "Logs",
     href: "/blog/logs",
     intensity: "Medium",
-    description:
-      "Experience-based records from experiments, migrations, incidents, deployments, and learning sessions.",
+    description: "Experiments, migrations, incidents, deployments, learning records.",
     examples: ["homelab incidents", "deployment notes", "build journals", "learning records"],
   },
   {
@@ -55,8 +53,7 @@ export const blogSections = [
     navLabel: "Deep Dives",
     href: "/blog/deep-dives",
     intensity: "Heavy",
-    description:
-      "Long-form technical and philosophical essays about DevOps, AI agents, systems, and computer science ideas.",
+    description: "DevOps architecture, AI agents, systems thinking, computer science.",
     examples: [
       "DevOps architecture",
       "AI agent utilization",
@@ -70,17 +67,17 @@ export const blogUtilities = [
   {
     title: "Tags",
     href: "/tags",
-    description: "Browse posts by recurring tools, topics, and ideas.",
+    description: "Topics, tools, recurring ideas.",
   },
   {
     title: "Series",
     href: "/series",
-    description: "Long-running connected topics and study paths.",
+    description: "Connected threads, study paths, long arcs.",
   },
   {
     title: "Archive",
     href: "/archive",
-    description: "A complete index by date, type, intensity, and tag.",
+    description: "Dates, sections, intensity, tags.",
   },
 ] as const;
 
@@ -89,61 +86,51 @@ export const identitySections = [
     title: "Projects",
     href: "/projects",
     visible: sectionVisibility.projects,
-    description: "Portfolio-style records of systems, tools, and experiments I have built.",
+    description: "Systems, tools, experiments, outcomes.",
   },
   {
     title: "Profile",
     href: "/profile",
     visible: sectionVisibility.profile,
-    description: "Developer profile, interests, values, and current direction.",
+    description: "Interests, values, direction, focus.",
   },
   {
     title: "CV",
     href: "/cv",
     visible: sectionVisibility.cv,
-    description: "A more formal career and skills page for professional context.",
+    description: "Career, skills, roles, professional context.",
   },
   {
     title: "Timeline",
     href: "/timeline",
     visible: sectionVisibility.timeline,
-    description: "A chronological history of my developer experience.",
+    description: "Milestones, systems, shifts, learning history.",
   },
   {
     title: "Uses",
     href: "/uses",
     visible: sectionVisibility.uses,
-    description: "Laptop, keyboards, editor, terminal, homelab, and daily tools.",
+    description: "Laptop, keyboards, editor, terminal, homelab.",
   },
-] as const;
-
-export const currentFocus = [
-  "Homelab on NixOS",
-  "Astro content workflow",
-  "DevOps from practical experience",
-  "AI agent utilization",
 ] as const;
 
 export const projectSeeds = [
   {
     title: "Homelab",
     status: "Living system",
-    description:
-      "NixOS server infrastructure, services, deployment patterns, and the operational lessons behind them.",
+    description: "NixOS services, deployment patterns, operational lessons.",
     tags: ["NixOS", "DevOps", "self-hosting"],
   },
   {
     title: "Dev with Min",
     status: "In progress",
-    description:
-      "This blog as a durable publishing system, static site, and deployable artifact for my homelab.",
+    description: "Durable publishing system, static site, homelab artifact.",
     tags: ["Astro", "Nix", "blog"],
   },
   {
     title: "AI Agent Workflow",
     status: "Research log",
-    description:
-      "Experiments in using coding agents, prompts, reviews, and automation in everyday development.",
+    description: "Agent prompts, code review, automation practice.",
     tags: ["AI", "developer workflow", "automation"],
   },
 ] as const;
@@ -152,20 +139,17 @@ export const timelineSeeds = [
   {
     period: "Now",
     title: "Building Dev with Min",
-    description:
-      "Creating the home base for my developer history, blog posts, projects, and notes.",
+    description: "Developer history, blog posts, project trail.",
   },
   {
     period: "Homelab era",
     title: "Running infrastructure for myself",
-    description:
-      "Learning operations through NixOS, self-hosted services, networking, deployments, and maintenance.",
+    description: "NixOS, self-hosting, networking, deploys, maintenance.",
   },
   {
     period: "Ongoing",
     title: "From tools to principles",
-    description:
-      "Turning daily development experience into durable notes about systems, tradeoffs, and philosophy.",
+    description: "Systems, tradeoffs, durable notes, philosophy.",
   },
 ] as const;
 

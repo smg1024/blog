@@ -5,11 +5,11 @@ import { formatDate, getPublishedBlog, getSectionLabel, getBlogUrl } from "../li
 const posts = await getPublishedBlog();
 ---
 
-<Layout title="Archive" description="The complete Dev with Min blog archive.">
+<Layout title="Archive" description="Complete blog archive, newest first.">
   <header class="page-header">
     <p class="eyebrow">Blog index</p>
     <h1>Archive</h1>
-    <p>Everything published on Dev with Min, newest first.</p>
+    <p>Newest first, sectioned, tagged, durable.</p>
   </header>
 
   <section class="page-section" aria-labelledby="archive-list-title">
@@ -32,7 +32,7 @@ const posts = await getPublishedBlog();
           ))}
         </ul>
       ) : (
-        <p class="empty-state">No posts have been published yet.</p>
+        <p class="empty-state">No posts yet.</p>
       )
     }
   </section>

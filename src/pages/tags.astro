@@ -5,14 +5,11 @@ import { getPublishedTags, getTagUrl } from "../lib/content";
 const tags = await getPublishedTags();
 ---
 
-<Layout
-  title="Tags"
-  description="Browse Dev with Min blog posts by recurring tools, topics, and ideas."
->
+<Layout title="Tags" description="Tools, topics, recurring ideas, blog archive.">
   <header class="page-header">
     <p class="eyebrow">Blog index</p>
     <h1>Tags</h1>
-    <p>Recurring tools, topics, and ideas across the blog archive.</p>
+    <p>Topic map, tool trail, recurring ideas.</p>
   </header>
 
   <section class="page-section" aria-labelledby="tags-list-title">
@@ -34,7 +31,7 @@ const tags = await getPublishedTags();
           ))}
         </div>
       ) : (
-        <p class="empty-state">Tags will appear here once posts include them.</p>
+        <p class="empty-state">No tags yet.</p>
       )
     }
   </section>

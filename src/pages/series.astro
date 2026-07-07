@@ -8,11 +8,11 @@ const postsWithSeries = posts.filter((post) => post.data.series);
 const seriesNames = Array.from(new Set(postsWithSeries.map((post) => post.data.series)));
 ---
 
-<Layout title="Series" description="Connected long-running topics on Dev with Min.">
+<Layout title="Series" description="Connected topics, study paths, long-running threads.">
   <header class="page-header">
     <p class="eyebrow">Blog index</p>
     <h1>Series</h1>
-    <p>Long-running topics and study paths will live here as the archive grows.</p>
+    <p>Connected topics, study paths, long-running threads.</p>
   </header>
 
   <section class="page-section" aria-labelledby="series-list-title">
@@ -38,10 +38,7 @@ const seriesNames = Array.from(new Set(postsWithSeries.map((post) => post.data.s
           ))}
         </div>
       ) : (
-        <p class="empty-state">
-          No series has started yet. Likely first candidates: Building My Homelab, AI Agent
-          Workflow, NixOS Notes, and DevOps From Experience.
-        </p>
+        <p class="empty-state">No series yet: Homelab, AI agents, NixOS, DevOps.</p>
       )
     }
   </section>

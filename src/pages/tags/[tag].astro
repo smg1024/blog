@@ -30,15 +30,11 @@ interface Props {
 const { tag, posts } = Astro.props;
 ---
 
-<Layout title={`#${tag.name}`} description={`Blog posts tagged ${tag.name} on Dev with Min.`}>
+<Layout title={`#${tag.name}`} description={`Tag: ${tag.name}. Blog posts, related notes.`}>
   <header class="page-header">
     <p class="eyebrow">Tag</p>
     <h1>#{tag.name}</h1>
-    <p>
-      {posts.length}
-      {posts.length === 1 ? "post" : "posts"}
-      tagged with {tag.name}.
-    </p>
+    <p>{posts.length} {posts.length === 1 ? "post" : "posts"} / {tag.name}</p>
   </header>
 
   <section class="page-section" aria-labelledby="tag-posts-title">
@@ -56,7 +52,7 @@ const { tag, posts } = Astro.props;
           ))}
         </div>
       ) : (
-        <p class="empty-state">No published posts use this tag yet.</p>
+        <p class="empty-state">No posts yet.</p>
       )
     }
   </section>
