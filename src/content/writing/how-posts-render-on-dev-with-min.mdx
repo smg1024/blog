@@ -33,8 +33,8 @@ When I add or change rendering components later, this post should make the
 public result easy to inspect.
 
 <Note title="Live reference">
-  This page is intentionally published. It should represent how real posts look,
-  not only how draft templates behave in development.
+  This page is intentionally published. It should represent how real posts look, not only how draft
+  templates behave in development.
 </Note>
 
 ## Markdown baseline
@@ -61,48 +61,45 @@ Callouts are MDX components for giving different kinds of information a stable
 visual shape.
 
 <Note title="Note">
-  Use notes for context, reminders, or background that supports the surrounding
-  paragraph.
+  Use notes for context, reminders, or background that supports the surrounding paragraph.
 </Note>
 
 <Tip title="Tip">
-  Use tips for small practical improvements, shortcuts, or habits that are safe
-  to apply immediately.
+  Use tips for small practical improvements, shortcuts, or habits that are safe to apply
+  immediately.
 </Tip>
 
 <Question title="Question">
-  Use questions when the post is carrying uncertainty, a hypothesis, or a design
-  problem that is not fully resolved yet.
+  Use questions when the post is carrying uncertainty, a hypothesis, or a design problem that is not
+  fully resolved yet.
 </Question>
 
 <Decision title="Decision">
-  Use decisions to name the current technical position and why that choice makes
-  sense right now.
+  Use decisions to name the current technical position and why that choice makes sense right now.
 </Decision>
 
 <Reference title="Reference">
-  Use references for docs, papers, source links, earlier posts, or external
-  material that supports the explanation.
+  Use references for docs, papers, source links, earlier posts, or external material that supports
+  the explanation.
 </Reference>
 
 <Warning title="Warning">
-  Use warnings for tradeoffs, footguns, migration hazards, or assumptions that
-  readers should not miss.
+  Use warnings for tradeoffs, footguns, migration hazards, or assumptions that readers should not
+  miss.
 </Warning>
 
 <Danger title="Danger">
-  Use danger callouts for high-impact risks such as data loss, downtime,
-  security exposure, or irreversible operations.
+  Use danger callouts for high-impact risks such as data loss, downtime, security exposure, or
+  irreversible operations.
 </Danger>
 
 <Todo title="Todo">
-  Use todos for follow-up experiments, future post ideas, or checks that should
-  be revisited.
+  Use todos for follow-up experiments, future post ideas, or checks that should be revisited.
 </Todo>
 
 <Callout variant="tip" title="Base Callout">
-  The base `Callout` component can be used directly when choosing the variant
-  inline is clearer than importing a wrapper component.
+  The base `Callout` component can be used directly when choosing the variant inline is clearer than
+  importing a wrapper component.
 </Callout>
 
 ## Mermaid diagrams
@@ -213,7 +210,6 @@ diff markers, and logs should all render consistently.
 ```ts title="src/lib/example.ts" {"watch this":3-6}
 type WritingSection = "light-notes" | "field-logs" | "deep-dives";
 
-
 export function getSectionLabel(section: WritingSection) {
   return section.replace("-", " ");
 }
@@ -260,6 +256,6 @@ draft: false
 ```
 
 <Decision title="Current rendering contract">
-  A post can start as plain Markdown, then use MDX components only when the
-  surrounding explanation benefits from a stronger visual shape.
+  A post can start as plain Markdown, then use MDX components only when the surrounding explanation
+  benefits from a stronger visual shape.
 </Decision>

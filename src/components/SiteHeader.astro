@@ -19,11 +19,13 @@ function isCurrent(href: string) {
       <span>{SITE.name}</span>
     </a>
     <nav class="primary-nav" aria-label="Primary navigation">
-      {mainNav.map((item) => (
-				<a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
-					{item.label}
-				</a>
-			))}
+      {
+        mainNav.map((item) => (
+          <a href={item.href} aria-current={isCurrent(item.href) ? "page" : undefined}>
+            {item.label}
+          </a>
+        ))
+      }
     </nav>
   </div>
 </header>

@@ -1,0 +1,7 @@
+.astro
+.direnv
+dist
+node_modules
+result
+bun.lock
+flake.lock

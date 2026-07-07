@@ -8,8 +8,8 @@ import Layout from "../layouts/Layout.astro";
     <p class="eyebrow">Portfolio</p>
     <h1>Projects</h1>
     <p>
-      Portfolio-style records of the systems, tools, experiments, and learning projects that shape my developer
-      experience.
+      Portfolio-style records of the systems, tools, experiments, and learning projects that shape
+      my developer experience.
     </p>
   </header>
 
@@ -17,20 +17,27 @@ import Layout from "../layouts/Layout.astro";
     <div class="section-heading">
       <div>
         <h2 id="projects-list-title">Project seeds</h2>
-        <p>These placeholders define the first project lanes before detailed case studies are written.</p>
+        <p>
+          These placeholders define the first project lanes before detailed case studies are
+          written.
+        </p>
       </div>
     </div>
     <div class="card-grid">
-      {projectSeeds.map((project) => (
-				<article class="project-card">
-					<div class="card-meta">{project.status}</div>
-					<h2>{project.title}</h2>
-					<p>{project.description}</p>
-					<ul class="tag-list" aria-label={`${project.title} tags`}>
-						{project.tags.map((tag) => <li>{tag}</li>)}
-					</ul>
-				</article>
-			))}
+      {
+        projectSeeds.map((project) => (
+          <article class="project-card">
+            <div class="card-meta">{project.status}</div>
+            <h2>{project.title}</h2>
+            <p>{project.description}</p>
+            <ul class="tag-list" aria-label={`${project.title} tags`}>
+              {project.tags.map((tag) => (
+                <li>{tag}</li>
+              ))}
+            </ul>
+          </article>
+        ))
+      }
     </div>
   </section>
 </Layout>

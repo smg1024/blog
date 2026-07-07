@@ -10,7 +10,9 @@ const writing = defineCollection({
       description: z.string(),
       publishedAt: z.coerce.date(),
       section: z.enum(["light-notes", "field-logs", "deep-dives"]),
-      tags: z.array(z.string().trim().min(1, "Tags cannot be empty.")).min(1, "At least one tag is required."),
+      tags: z
+        .array(z.string().trim().min(1, "Tags cannot be empty."))
+        .min(1, "At least one tag is required."),
       series: z.string().optional(),
       draft: z.boolean().default(false),
     })

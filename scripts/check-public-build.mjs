@@ -41,7 +41,13 @@ function parseFrontmatter(filePath) {
 check(existsSync(distDir), "dist/ does not exist. Run `bun run build` first.");
 
 if (existsSync(distDir)) {
-  for (const requiredFile of ["index.html", "rss.xml", "robots.txt", "sitemap-index.xml", "sitemap-0.xml"]) {
+  for (const requiredFile of [
+    "index.html",
+    "rss.xml",
+    "robots.txt",
+    "sitemap-index.xml",
+    "sitemap-0.xml",
+  ]) {
     check(existsSync(path.join(distDir, requiredFile)), `Missing ${requiredFile} in dist/.`);
   }
 }
@@ -53,12 +59,20 @@ if (failures.length === 0) {
   const sitemapIndex = readDistFile("sitemap-index.xml");
   const sitemap = readDistFile("sitemap-0.xml");
 
-  check(home.includes(`<link rel="canonical" href="${siteUrl}/">`), "Homepage canonical URL is missing or incorrect.");
   check(
-    home.includes(`<meta property="og:image" content="${siteUrl}/images/dev-with-min-journal.png">`),
+    home.includes(`<link rel="canonical" href="${siteUrl}/">`),
+    "Homepage canonical URL is missing or incorrect.",
+  );
+  check(
+    home.includes(
+      `<meta property="og:image" content="${siteUrl}/images/dev-with-min-journal.png">`,
+    ),
     "Open Graph image is missing.",
   );
-  check(home.includes(`<meta name="twitter:card" content="summary_large_image">`), "Twitter card metadata is missing.");
+  check(
+    home.includes(`<meta name="twitter:card" content="summary_large_image">`),
+    "Twitter card metadata is missing.",
+  );
   check(
     home.includes(`<link rel="alternate" type="application/rss+xml"`),
     "RSS alternate link is missing from the homepage.",
@@ -68,7 +82,10 @@ if (failures.length === 0) {
     robots.includes(`Sitemap: ${siteUrl}/sitemap-index.xml`),
     "robots.txt does not point to the production sitemap.",
   );
-  check(sitemapIndex.includes(`${siteUrl}/sitemap-0.xml`), "Sitemap index does not reference sitemap-0.xml.");
+  check(
+    sitemapIndex.includes(`${siteUrl}/sitemap-0.xml`),
+    "Sitemap index does not reference sitemap-0.xml.",
+  );
   check(sitemap.includes(`${siteUrl}/`), "Sitemap does not contain production URLs.");
 
   const publicText = walkFiles(distDir)
@@ -81,7 +98,9 @@ if (failures.length === 0) {
     "Draft preview text leaked into the public build.",
   );
 
-  for (const postPath of walkFiles(contentDir).filter((filePath) => /\.(md|mdx)$/i.test(filePath))) {
+  for (const postPath of walkFiles(contentDir).filter((filePath) =>
+    /\.(md|mdx)$/i.test(filePath),
+  )) {
     const frontmatter = parseFrontmatter(postPath);
 
     if (!/^draft:\s*true\s*$/m.test(frontmatter)) {

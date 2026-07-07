@@ -34,7 +34,11 @@ const { tag, posts } = Astro.props;
   <header class="page-header">
     <p class="eyebrow">Tag</p>
     <h1>#{tag.name}</h1>
-    <p>{posts.length} {posts.length === 1 ? "post" : "posts"} tagged with {tag.name}.</p>
+    <p>
+      {posts.length}
+      {posts.length === 1 ? "post" : "posts"}
+      tagged with {tag.name}.
+    </p>
   </header>
 
   <section class="page-section" aria-labelledby="tag-posts-title">
@@ -44,12 +48,16 @@ const { tag, posts } = Astro.props;
       </div>
       <a href="/tags">All tags</a>
     </div>
-    {posts.length > 0 ? (
-				<div class="post-list">
-					{posts.map((post) => <PostCard post={post} />)}
-				</div>
-			) : (
-				<p class="empty-state">No published posts use this tag yet.</p>
-			)}
+    {
+      posts.length > 0 ? (
+        <div class="post-list">
+          {posts.map((post) => (
+            <PostCard post={post} />
+          ))}
+        </div>
+      ) : (
+        <p class="empty-state">No published posts use this tag yet.</p>
+      )
+    }
   </section>
 </Layout>

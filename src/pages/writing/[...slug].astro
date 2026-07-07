@@ -50,53 +50,63 @@ const isDraftPost = import.meta.env.DEV && post.data.draft;
     </div>
     <h1>{post.data.title}</h1>
     <p>{post.data.description}</p>
-    {isDraftPost && <p class="draft-note">Draft preview. This post is excluded from production builds.</p>}
+    {
+      isDraftPost && (
+        <p class="draft-note">Draft preview. This post is excluded from production builds.</p>
+      )
+    }
     <div class="article-meta">
       <span>{formatDate(post.data.publishedAt)}</span>
       {post.data.series && <span>{post.data.series}</span>}
-      {post.data.tags.length > 0 && (
-					<ul class="article-tags tag-list" aria-label="Tags">
-						{post.data.tags.map((tag) => (
-							<li>
-								<a href={getTagUrl(tag)}>{tag}</a>
-							</li>
-						))}
-					</ul>
-				)}
+      {
+        post.data.tags.length > 0 && (
+          <ul class="article-tags tag-list" aria-label="Tags">
+            {post.data.tags.map((tag) => (
+              <li>
+                <a href={getTagUrl(tag)}>{tag}</a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
     </div>
   </header>
 
-  {tocHeadings.length > 0 && (
-		<nav class="article-toc" aria-labelledby="article-toc-title">
-			<h2 id="article-toc-title">On this page</h2>
-			<ol>
-				{tocHeadings.map((heading) => (
-					<li class={`article-toc__depth-${heading.depth}`}>
-						<a href={`#${heading.slug}`}>{heading.text}</a>
-					</li>
-				))}
-			</ol>
-		</nav>
-	)}
+  {
+    tocHeadings.length > 0 && (
+      <nav class="article-toc" aria-labelledby="article-toc-title">
+        <h2 id="article-toc-title">On this page</h2>
+        <ol>
+          {tocHeadings.map((heading) => (
+            <li class={`article-toc__depth-${heading.depth}`}>
+              <a href={`#${heading.slug}`}>{heading.text}</a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    )
+  }
 
   <article class="article-body prose">
     <Content />
   </article>
 
-  {(newerPost || olderPost) && (
-		<nav class="article-nav" aria-label="Writing navigation">
-			{newerPost ? (
-				<a href={getWritingUrl(newerPost)}>
-					<span>Newer</span>
-					<strong>{newerPost.data.title}</strong>
-				</a>
-			) : null}
-			{olderPost ? (
-				<a class="article-nav__older" href={getWritingUrl(olderPost)}>
-					<span>Older</span>
-					<strong>{olderPost.data.title}</strong>
-				</a>
-			) : null}
-		</nav>
-	)}
+  {
+    (newerPost || olderPost) && (
+      <nav class="article-nav" aria-label="Writing navigation">
+        {newerPost ? (
+          <a href={getWritingUrl(newerPost)}>
+            <span>Newer</span>
+            <strong>{newerPost.data.title}</strong>
+          </a>
+        ) : null}
+        {olderPost ? (
+          <a class="article-nav__older" href={getWritingUrl(olderPost)}>
+            <span>Older</span>
+            <strong>{olderPost.data.title}</strong>
+          </a>
+        ) : null}
+      </nav>
+    )
+  }
 </Layout>
