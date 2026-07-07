@@ -1,36 +1,24 @@
 ---
-import { currentFocus, projectSeeds, SITE, writingSections } from "../data/site";
+import {
+  currentFocus,
+  identitySections,
+  projectSeeds,
+  sectionVisibility,
+  SITE,
+  blogSections,
+} from "../data/site";
 import Layout from "../layouts/Layout.astro";
-import { formatDate, getPublishedWriting, getSectionLabel, getWritingUrl } from "../lib/content";
+import { formatDate, getPublishedBlog, getSectionLabel, getBlogUrl } from "../lib/content";
 
-const allWriting = await getPublishedWriting();
-const latestWriting = allWriting.slice(0, 6);
-const writingGroups = writingSections.map((section) => ({
+const allBlog = await getPublishedBlog();
+const latestBlog = allBlog.slice(0, 6);
+const blogGroups = blogSections.map((section) => ({
   ...section,
-  posts: allWriting.filter((post) => post.data.section === section.key).slice(0, 3),
+  posts: allBlog.filter((post) => post.data.section === section.key).slice(0, 3),
 }));
-const profileLinks = [
-  {
-    title: "Profile",
-    href: "/profile",
-    description: "Who I am as a developer.",
-  },
-  {
-    title: "CV",
-    href: "/cv",
-    description: "Career, skills, and professional context.",
-  },
-  {
-    title: "Timeline",
-    href: "/timeline",
-    description: "My developer history as it unfolds.",
-  },
-  {
-    title: "Uses",
-    href: "/uses",
-    description: "Hardware, software, and homelab setup.",
-  },
-];
+const profileLinks = identitySections.filter((section) => section.visible);
+const showProjectsPreview = sectionVisibility.projects;
+const showIdentitySections = profileLinks.length > 0 || showProjectsPreview;
 ---
 
 <Layout title={SITE.name} description={SITE.description}>
@@ -43,13 +31,13 @@ const profileLinks = [
         the tools I live with every day.
       </p>
       <p>
-        This is my personal developer journal: part blog, part project record, part setup log, and
-        part history of the things I learn through honest engineering work.
+        This is my personal developer journal for notes, field logs, and longer essays about the
+        things I learn through honest engineering work.
       </p>
       <nav class="personal-links" aria-label="Personal links">
-        <a href="/profile">About</a>
-        <a href="/projects">Projects</a>
-        <a href="/timeline">Timeline</a>
+        <a href="/blog">Blog</a>
+        <a href="/archive">Archive</a>
+        <a href="/tags">Tags</a>
         <a href="/rss.xml">RSS</a>
       </nav>
     </div>
@@ -73,18 +61,18 @@ const profileLinks = [
   <section class="home-section" aria-labelledby="latest-title">
     <div class="home-section__header">
       <div>
-        <p class="eyebrow">Latest writing</p>
+        <p class="eyebrow">Latest blog posts</p>
         <h2 id="latest-title">Recently published</h2>
       </div>
       <a href="/archive">Full archive</a>
     </div>
 
     {
-      latestWriting.length > 0 ? (
+      latestBlog.length > 0 ? (
         <ol class="simple-post-list">
-          {latestWriting.map((post) => (
+          {latestBlog.map((post) => (
             <li>
-              <a href={getWritingUrl(post)}>
+              <a href={getBlogUrl(post)}>
                 <time datetime={post.data.publishedAt.toISOString()}>
                   {formatDate(post.data.publishedAt)}
                 </time>
@@ -98,28 +86,28 @@ const profileLinks = [
           ))}
         </ol>
       ) : (
-        <p class="empty-state">No writing has been published yet.</p>
+        <p class="empty-state">No blog posts have been published yet.</p>
       )
     }
   </section>
 
-  <section class="home-section" aria-labelledby="writing-title">
+  <section class="home-section" aria-labelledby="blog-title">
     <div class="home-section__header">
       <div>
-        <p class="eyebrow">Writing</p>
-        <h2 id="writing-title">Notes, logs, and deep dives</h2>
+        <p class="eyebrow">Blog</p>
+        <h2 id="blog-title">Notes, logs, and deep dives</h2>
         <p>
-          I keep casual notes separate from experience logs and heavier essays, so the archive stays
+          I keep casual notes separate from experience logs and heavier essays, so the blog stays
           easy to browse as it grows.
         </p>
       </div>
-      <a href="/writing">Writing index</a>
+      <a href="/blog">Blog index</a>
     </div>
 
-    <div class="writing-lanes">
+    <div class="blog-lanes">
       {
-        writingGroups.map((section) => (
-          <section class="writing-lane" aria-labelledby={`${section.key}-title`}>
+        blogGroups.map((section) => (
+          <section class="blog-lane" aria-labelledby={`${section.key}-title`}>
             <header>
               <div>
                 <p>{section.intensity}</p>
@@ -133,7 +121,7 @@ const profileLinks = [
               <ul class="mini-post-list">
                 {section.posts.map((post) => (
                   <li>
-                    <a href={getWritingUrl(post)}>{post.data.title}</a>
+                    <a href={getBlogUrl(post)}>{post.data.title}</a>
                   </li>
                 ))}
               </ul>
@@ -146,45 +134,49 @@ const profileLinks = [
     </div>
   </section>
 
-  <section class="home-section" aria-labelledby="projects-title">
-    <div class="home-section__header">
-      <div>
-        <p class="eyebrow">Work and identity</p>
-        <h2 id="projects-title">Projects, profile, and history</h2>
-        <p>These pages keep the professional and personal context close to the writing.</p>
-      </div>
-    </div>
+  {
+    showIdentitySections && (
+      <section class="home-section" aria-labelledby="projects-title">
+        <div class="home-section__header">
+          <div>
+            <p class="eyebrow">Work and identity</p>
+            <h2 id="projects-title">Projects, profile, and history</h2>
+            <p>These pages keep the professional and personal context close to the blog.</p>
+          </div>
+        </div>
 
-    <div class="profile-project-grid">
-      <div class="profile-link-list">
-        {
-          profileLinks.map((link) => (
-            <a href={link.href}>
-              <strong>{link.title}</strong>
-              <span>{link.description}</span>
-            </a>
-          ))
-        }
-      </div>
+        <div class="profile-project-grid">
+          {profileLinks.length > 0 && (
+            <div class="profile-link-list">
+              {profileLinks.map((link) => (
+                <a href={link.href}>
+                  <strong>{link.title}</strong>
+                  <span>{link.description}</span>
+                </a>
+              ))}
+            </div>
+          )}
 
-      <div class="home-project-list">
-        {
-          projectSeeds.map((project) => (
-            <article class="home-project">
-              <div>
-                <span>{project.status}</span>
-                <h3>{project.title}</h3>
-                <p>{project.description}</p>
-              </div>
-              <ul class="tag-list" aria-label={`${project.title} tags`}>
-                {project.tags.map((tag) => (
-                  <li>{tag}</li>
-                ))}
-              </ul>
-            </article>
-          ))
-        }
-      </div>
-    </div>
-  </section>
+          {showProjectsPreview && (
+            <div class="home-project-list">
+              {projectSeeds.map((project) => (
+                <article class="home-project">
+                  <div>
+                    <span>{project.status}</span>
+                    <h3>{project.title}</h3>
+                    <p>{project.description}</p>
+                  </div>
+                  <ul class="tag-list" aria-label={`${project.title} tags`}>
+                    {project.tags.map((tag) => (
+                      <li>{tag}</li>
+                    ))}
+                  </ul>
+                </article>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+    )
+  }
 </Layout>

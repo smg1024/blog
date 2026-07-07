@@ -5,23 +5,23 @@ publishedAt: 2026-07-06
 section: field-logs
 tags:
   - meta
-  - writing
+  - blog
   - mdx
   - astro
   - components
 draft: false
 ---
 
-import Callout from "../../components/writing/Callout.astro";
-import Danger from "../../components/writing/Danger.astro";
-import Decision from "../../components/writing/Decision.astro";
-import Mermaid from "../../components/writing/Mermaid.astro";
-import Note from "../../components/writing/Note.astro";
-import Question from "../../components/writing/Question.astro";
-import Reference from "../../components/writing/Reference.astro";
-import Tip from "../../components/writing/Tip.astro";
-import Todo from "../../components/writing/Todo.astro";
-import Warning from "../../components/writing/Warning.astro";
+import Callout from "../../components/blog/Callout.astro";
+import Danger from "../../components/blog/Danger.astro";
+import Decision from "../../components/blog/Decision.astro";
+import Mermaid from "../../components/blog/Mermaid.astro";
+import Note from "../../components/blog/Note.astro";
+import Question from "../../components/blog/Question.astro";
+import Reference from "../../components/blog/Reference.astro";
+import Tip from "../../components/blog/Tip.astro";
+import Todo from "../../components/blog/Todo.astro";
+import Warning from "../../components/blog/Warning.astro";
 
 ## Purpose
 
@@ -108,7 +108,7 @@ Mermaid diagrams render through the local `Mermaid` component. Each diagram can
 have a title and is wrapped in a scrollable figure.
 
 <Mermaid
-  title="Writing flow"
+  title="Blog flow"
   chart={`
 flowchart LR
   Experience[Experience] --> Draft[Draft]
@@ -170,7 +170,7 @@ stateDiagram
   title="Site records"
   chart={`
 classDiagram
-  class WritingPost {
+  class BlogPost {
     +string title
     +string section
     +string[] tags
@@ -183,8 +183,8 @@ classDiagram
   class DeveloperProfile {
     +string focus
   }
-  DeveloperProfile --> WritingPost : authors
-  WritingPost --> ProjectRecord : references
+  DeveloperProfile --> BlogPost : authors
+  BlogPost --> ProjectRecord : references
 `}
 />
 
@@ -208,9 +208,9 @@ Code blocks use Expressive Code. Titles, terminals, line highlights, labels,
 diff markers, and logs should all render consistently.
 
 ```ts title="src/lib/example.ts" {"watch this":3-6}
-type WritingSection = "light-notes" | "field-logs" | "deep-dives";
+type BlogSection = "light-notes" | "field-logs" | "deep-dives";
 
-export function getSectionLabel(section: WritingSection) {
+export function getSectionLabel(section: BlogSection) {
   return section.replace("-", " ");
 }
 ```
@@ -240,9 +240,9 @@ packages.default = pkgs.stdenvNoCC.mkDerivation {
 
 ## Frontmatter shape
 
-Published writing should use the content schema directly:
+Published blog posts should use the content schema directly:
 
-```yaml title="src/content/writing/example.mdx"
+```yaml title="src/content/blog/example.mdx"
 ---
 title: "Example Post"
 description: "A short summary for listings, RSS, and social previews."

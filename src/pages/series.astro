@@ -1,16 +1,16 @@
 ---
 import PostCard from "../components/PostCard.astro";
 import Layout from "../layouts/Layout.astro";
-import { getPublishedWriting } from "../lib/content";
+import { getPublishedBlog } from "../lib/content";
 
-const posts = await getPublishedWriting();
+const posts = await getPublishedBlog();
 const postsWithSeries = posts.filter((post) => post.data.series);
 const seriesNames = Array.from(new Set(postsWithSeries.map((post) => post.data.series)));
 ---
 
 <Layout title="Series" description="Connected long-running topics on Dev with Min.">
   <header class="page-header">
-    <p class="eyebrow">Writing index</p>
+    <p class="eyebrow">Blog index</p>
     <h1>Series</h1>
     <p>Long-running topics and study paths will live here as the archive grows.</p>
   </header>

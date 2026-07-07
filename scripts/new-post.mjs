@@ -3,8 +3,8 @@ import path from "node:path";
 import process from "node:process";
 
 const root = process.cwd();
-const contentDir = path.join(root, "src", "content", "writing");
-const templatesDir = path.join(root, "templates", "writing");
+const contentDir = path.join(root, "src", "content", "blog");
+const templatesDir = path.join(root, "templates", "blog");
 const defaultTags = ["tag1", "tag2", "tag3"];
 
 const sectionAliases = new Map([
@@ -23,7 +23,7 @@ const sectionAliases = new Map([
 ]);
 
 function printUsage() {
-  console.log(`Create a writing draft.
+  console.log(`Create a blog draft.
 
 Usage:
   bun run new:post -- --section field-logs --title "Deploying the blog"

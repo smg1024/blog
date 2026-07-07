@@ -1,14 +1,14 @@
 ---
 import PostCard from "../components/PostCard.astro";
-import { writingSections } from "../data/site";
+import { blogSections } from "../data/site";
 import Layout from "../layouts/Layout.astro";
-import { getWritingBySection } from "../lib/content";
+import { getBlogBySection } from "../lib/content";
 
-const section = writingSections.find((item) => item.key === "field-logs");
+const section = blogSections.find((item) => item.key === "field-logs");
 if (!section) {
-  throw new Error("Missing writing section: field-logs");
+  throw new Error("Missing blog section: field-logs");
 }
-const posts = await getWritingBySection("field-logs");
+const posts = await getBlogBySection("field-logs");
 ---
 
 <Layout title={section.title} description={section.description}>

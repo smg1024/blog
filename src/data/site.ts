@@ -6,19 +6,29 @@ export const SITE = {
   image: "/images/logo.png",
   imageAlt: "Dev with Min logo showing a bear face framed by code brackets.",
   description:
-    "A personal developer journal about homelab infrastructure, DevOps, AI agent workflows, computer science ideas, projects, setup, and the lived process of learning technology.",
+    "A personal developer journal about homelab infrastructure, DevOps, AI agent workflows, computer science ideas, and the lived process of learning technology through blog posts.",
+} as const;
+
+// Disabled section pages are also prefixed with "_" in src/pages so Astro does not publish them.
+export const sectionVisibility = {
+  blog: true,
+  projects: false,
+  timeline: false,
+  profile: false,
+  cv: false,
+  uses: false,
 } as const;
 
 export const mainNav = [
-  { label: "Writing", href: "/writing" },
-  { label: "Projects", href: "/projects" },
-  { label: "Timeline", href: "/timeline" },
-  { label: "Profile", href: "/profile" },
-  { label: "CV", href: "/cv" },
-  { label: "Uses", href: "/uses" },
+  { label: "Blog", href: "/blog", visible: sectionVisibility.blog },
+  { label: "Projects", href: "/projects", visible: sectionVisibility.projects },
+  { label: "Timeline", href: "/timeline", visible: sectionVisibility.timeline },
+  { label: "Profile", href: "/profile", visible: sectionVisibility.profile },
+  { label: "CV", href: "/cv", visible: sectionVisibility.cv },
+  { label: "Uses", href: "/uses", visible: sectionVisibility.uses },
 ] as const;
 
-export const writingSections = [
+export const blogSections = [
   {
     key: "light-notes",
     title: "Light Notes",
@@ -46,7 +56,7 @@ export const writingSections = [
     href: "/deep-dives",
     intensity: "Heavy",
     description:
-      "Long-form technical and philosophical writing about DevOps, AI agents, systems, and computer science ideas.",
+      "Long-form technical and philosophical essays about DevOps, AI agents, systems, and computer science ideas.",
     examples: [
       "DevOps architecture",
       "AI agent utilization",
@@ -56,7 +66,7 @@ export const writingSections = [
   },
 ] as const;
 
-export const writingUtilities = [
+export const blogUtilities = [
   {
     title: "Tags",
     href: "/tags",
@@ -78,26 +88,31 @@ export const identitySections = [
   {
     title: "Projects",
     href: "/projects",
+    visible: sectionVisibility.projects,
     description: "Portfolio-style records of systems, tools, and experiments I have built.",
   },
   {
     title: "Profile",
     href: "/profile",
+    visible: sectionVisibility.profile,
     description: "Developer profile, interests, values, and current direction.",
   },
   {
     title: "CV",
     href: "/cv",
+    visible: sectionVisibility.cv,
     description: "A more formal career and skills page for professional context.",
   },
   {
     title: "Timeline",
     href: "/timeline",
+    visible: sectionVisibility.timeline,
     description: "A chronological history of my developer experience.",
   },
   {
     title: "Uses",
     href: "/uses",
+    visible: sectionVisibility.uses,
     description: "Laptop, keyboards, editor, terminal, homelab, and daily tools.",
   },
 ] as const;
@@ -121,8 +136,8 @@ export const projectSeeds = [
     title: "Dev with Min",
     status: "In progress",
     description:
-      "This blog as a durable writing system, static site, and deployable artifact for my homelab.",
-    tags: ["Astro", "Nix", "writing"],
+      "This blog as a durable publishing system, static site, and deployable artifact for my homelab.",
+    tags: ["Astro", "Nix", "blog"],
   },
   {
     title: "AI Agent Workflow",
@@ -137,7 +152,8 @@ export const timelineSeeds = [
   {
     period: "Now",
     title: "Building Dev with Min",
-    description: "Creating the home base for my developer history, writing, projects, and notes.",
+    description:
+      "Creating the home base for my developer history, blog posts, projects, and notes.",
   },
   {
     period: "Homelab era",

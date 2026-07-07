@@ -4,7 +4,7 @@ import process from "node:process";
 
 const root = process.cwd();
 const distDir = path.join(root, "dist");
-const contentDir = path.join(root, "src", "content", "writing");
+const contentDir = path.join(root, "src", "content", "blog");
 const siteUrl = "https://blog.ridewithmin.com";
 const failures = [];
 
@@ -110,10 +110,10 @@ if (failures.length === 0) {
       .replace(/\.(md|mdx)$/i, "")
       .split(path.sep)
       .join("/");
-    const route = `/writing/${slug}/`;
+    const route = `/blog/${slug}/`;
 
     check(
-      !existsSync(path.join(distDir, "writing", slug, "index.html")),
+      !existsSync(path.join(distDir, "blog", slug, "index.html")),
       `Draft post route leaked into dist/: ${slug}`,
     );
     check(!publicText.includes(route), `Draft post URL leaked into public output: ${route}`);

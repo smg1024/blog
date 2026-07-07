@@ -1,16 +1,16 @@
 ---
-import type { WritingEntry } from "../lib/content";
-import { formatDate, getSectionLabel, getWritingUrl } from "../lib/content";
+import type { BlogEntry } from "../lib/content";
+import { formatDate, getSectionLabel, getBlogUrl } from "../lib/content";
 
 interface Props {
-  post: WritingEntry;
+  post: BlogEntry;
 }
 
 const { post } = Astro.props;
 const isDraftPost = import.meta.env.DEV && post.data.draft;
 ---
 
-<a class:list={["post-card", { "post-card--draft": isDraftPost }]} href={getWritingUrl(post)}>
+<a class:list={["post-card", { "post-card--draft": isDraftPost }]} href={getBlogUrl(post)}>
   <article class="post-card__inner">
     <div class="post-meta">
       <span>{formatDate(post.data.publishedAt)}</span>

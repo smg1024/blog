@@ -6,6 +6,7 @@ interface Props {
 }
 
 const { currentPath } = Astro.props;
+const visibleMainNav = mainNav.filter((item) => item.visible);
 
 function isCurrent(href: string) {
   return href === "/" ? currentPath === "/" : currentPath.startsWith(href);
@@ -20,7 +21,7 @@ function isCurrent(href: string) {
     </a>
     <nav class="primary-nav" aria-label="Primary navigation">
       {
-        mainNav.map((item) => (
+        visibleMainNav.map((item) => (
           <a href={item.href} aria-current={isCurrent(item.href) ? "page" : undefined}>
             {item.label}
           </a>

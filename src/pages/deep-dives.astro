@@ -1,14 +1,14 @@
 ---
 import PostCard from "../components/PostCard.astro";
-import { writingSections } from "../data/site";
+import { blogSections } from "../data/site";
 import Layout from "../layouts/Layout.astro";
-import { getWritingBySection } from "../lib/content";
+import { getBlogBySection } from "../lib/content";
 
-const section = writingSections.find((item) => item.key === "deep-dives");
+const section = blogSections.find((item) => item.key === "deep-dives");
 if (!section) {
-  throw new Error("Missing writing section: deep-dives");
+  throw new Error("Missing blog section: deep-dives");
 }
-const posts = await getWritingBySection("deep-dives");
+const posts = await getBlogBySection("deep-dives");
 ---
 
 <Layout title={section.title} description={section.description}>
@@ -33,7 +33,7 @@ const posts = await getWritingBySection("deep-dives");
         </div>
       ) : (
         <p class="empty-state">
-          Deep dives will collect long-form technical and philosophical writing.
+          Deep dives will collect long-form technical and philosophical essays.
         </p>
       )
     }

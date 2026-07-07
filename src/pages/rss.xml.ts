@@ -1,10 +1,10 @@
 import rss from "@astrojs/rss";
 import type { APIRoute } from "astro";
 import { SITE } from "../data/site";
-import { getPublishedWriting, getWritingUrl } from "../lib/content";
+import { getPublishedBlog, getBlogUrl } from "../lib/content";
 
 export const GET: APIRoute = async (context) => {
-  const posts = await getPublishedWriting();
+  const posts = await getPublishedBlog();
 
   return rss({
     title: SITE.name,
@@ -14,7 +14,7 @@ export const GET: APIRoute = async (context) => {
       title: post.data.title,
       description: post.data.description,
       pubDate: post.data.publishedAt,
-      link: getWritingUrl(post),
+      link: getBlogUrl(post),
       categories: post.data.tags,
     })),
   });

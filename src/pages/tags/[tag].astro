@@ -2,35 +2,35 @@
 import PostCard from "../../components/PostCard.astro";
 import Layout from "../../layouts/Layout.astro";
 import {
-  getPublishedWriting,
+  getPublishedBlog,
   getTagSummaries,
-  getWritingByTagSlug,
+  getBlogByTagSlug,
   type TagSummary,
-  type WritingEntry,
+  type BlogEntry,
 } from "../../lib/content";
 
 export async function getStaticPaths() {
-  const posts = await getPublishedWriting();
+  const posts = await getPublishedBlog();
   const tags = getTagSummaries(posts);
 
   return tags.map((tag) => ({
     params: { tag: tag.slug },
     props: {
       tag,
-      posts: getWritingByTagSlug(posts, tag.slug),
+      posts: getBlogByTagSlug(posts, tag.slug),
     },
   }));
 }
 
 interface Props {
   tag: TagSummary;
-  posts: WritingEntry[];
+  posts: BlogEntry[];
 }
 
 const { tag, posts } = Astro.props;
 ---
 
-<Layout title={`#${tag.name}`} description={`Writing tagged ${tag.name} on Dev with Min.`}>
+<Layout title={`#${tag.name}`} description={`Blog posts tagged ${tag.name} on Dev with Min.`}>
   <header class="page-header">
     <p class="eyebrow">Tag</p>
     <h1>#{tag.name}</h1>

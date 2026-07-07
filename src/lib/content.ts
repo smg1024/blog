@@ -1,7 +1,7 @@
 import { type CollectionEntry, getCollection } from "astro:content";
 
-export type WritingEntry = CollectionEntry<"writing">;
-export type WritingSectionKey = WritingEntry["data"]["section"];
+export type BlogEntry = CollectionEntry<"blog">;
+export type BlogSectionKey = BlogEntry["data"]["section"];
 
 export interface TagSummary {
   name: string;
@@ -9,8 +9,8 @@ export interface TagSummary {
   count: number;
 }
 
-export function getWritingUrl(entry: WritingEntry) {
-  return `/writing/${entry.id}/`;
+export function getBlogUrl(entry: BlogEntry) {
+  return `/blog/${entry.id}/`;
 }
 
 export function getTagSlug(tag: string) {
@@ -36,51 +36,51 @@ export function formatDate(date: Date) {
   }).format(date);
 }
 
-function sortWriting(entries: WritingEntry[]) {
+function sortBlog(entries: BlogEntry[]) {
   return entries.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
 }
 
-export function isDraft(entry: WritingEntry) {
+export function isDraft(entry: BlogEntry) {
   return entry.data.draft;
 }
 
-export function isPublished(entry: WritingEntry) {
+export function isPublished(entry: BlogEntry) {
   return !entry.data.draft;
 }
 
-export function isVisibleWriting(entry: WritingEntry) {
+export function isVisibleBlog(entry: BlogEntry) {
   return import.meta.env.DEV || isPublished(entry);
 }
 
-export async function getPublishedWriting() {
-  const entries = await getCollection("writing", isPublished);
+export async function getPublishedBlog() {
+  const entries = await getCollection("blog", isPublished);
 
-  return sortWriting(entries);
+  return sortBlog(entries);
 }
 
-export async function getVisibleWriting() {
-  const entries = await getCollection("writing", isVisibleWriting);
+export async function getVisibleBlog() {
+  const entries = await getCollection("blog", isVisibleBlog);
 
-  return sortWriting(entries);
+  return sortBlog(entries);
 }
 
-export async function getDraftWriting() {
+export async function getDraftBlog() {
   if (!import.meta.env.DEV) {
     return [];
   }
 
-  const entries = await getCollection("writing", isDraft);
+  const entries = await getCollection("blog", isDraft);
 
-  return sortWriting(entries);
+  return sortBlog(entries);
 }
 
-export async function getWritingBySection(section: WritingSectionKey) {
-  const entries = await getPublishedWriting();
+export async function getBlogBySection(section: BlogSectionKey) {
+  const entries = await getPublishedBlog();
 
   return entries.filter((entry) => entry.data.section === section);
 }
 
-export function getTagSummaries(posts: WritingEntry[]) {
+export function getTagSummaries(posts: BlogEntry[]) {
   const tags = new Map<string, TagSummary>();
 
   for (const post of posts) {
@@ -107,15 +107,15 @@ export function getTagSummaries(posts: WritingEntry[]) {
 }
 
 export async function getPublishedTags() {
-  return getTagSummaries(await getPublishedWriting());
+  return getTagSummaries(await getPublishedBlog());
 }
 
-export function getWritingByTagSlug(posts: WritingEntry[], slug: string) {
+export function getBlogByTagSlug(posts: BlogEntry[], slug: string) {
   return posts.filter((post) => post.data.tags.some((tag) => getTagSlug(tag) === slug));
 }
 
-export function getSectionLabel(section: WritingSectionKey) {
-  const labels: Record<WritingSectionKey, string> = {
+export function getSectionLabel(section: BlogSectionKey) {
+  const labels: Record<BlogSectionKey, string> = {
     "light-notes": "Light Notes",
     "field-logs": "Field Logs",
     "deep-dives": "Deep Dives",

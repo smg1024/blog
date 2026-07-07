@@ -1,22 +1,22 @@
 ---
 import PostCard from "../components/PostCard.astro";
-import { writingSections, writingUtilities } from "../data/site";
+import { blogSections, blogUtilities } from "../data/site";
 import Layout from "../layouts/Layout.astro";
-import { getDraftWriting, getPublishedWriting } from "../lib/content";
+import { getDraftBlog, getPublishedBlog } from "../lib/content";
 
-const posts = await getPublishedWriting();
-const draftPosts = await getDraftWriting();
+const posts = await getPublishedBlog();
+const draftPosts = await getDraftBlog();
 ---
 
 <Layout
-  title="Writing"
-  description="Writing from Dev with Min, organized by intensity: light notes, field logs, and deep dives."
+  title="Blog"
+  description="Blog posts from Dev with Min, organized by intensity: light notes, field logs, and deep dives."
 >
   <header class="page-header">
-    <p class="eyebrow">Writing</p>
+    <p class="eyebrow">Blog</p>
     <h1>Notes, logs, and deep dives.</h1>
     <p>
-      The writing archive is split by intensity so a quick tool note does not compete with a long
+      The blog archive is split by intensity so a quick tool note does not compete with a long
       DevOps or computer science essay.
     </p>
   </header>
@@ -30,7 +30,7 @@ const draftPosts = await getDraftWriting();
     </div>
     <div class="card-grid">
       {
-        writingSections.map((section) => (
+        blogSections.map((section) => (
           <a class="section-card" href={section.href}>
             <div class="card-meta">{section.intensity}</div>
             <h3>{section.title}</h3>
@@ -54,7 +54,7 @@ const draftPosts = await getDraftWriting();
     </div>
     <div class="card-grid card-grid--two">
       {
-        writingUtilities.map((section) => (
+        blogUtilities.map((section) => (
           <a class="section-card" href={section.href}>
             <h3>{section.title}</h3>
             <p>{section.description}</p>
@@ -64,10 +64,10 @@ const draftPosts = await getDraftWriting();
     </div>
   </section>
 
-  <section class="page-section" aria-labelledby="all-writing-title">
+  <section class="page-section" aria-labelledby="all-blog-title">
     <div class="section-heading">
       <div>
-        <h2 id="all-writing-title">Published writing</h2>
+        <h2 id="all-blog-title">Published posts</h2>
       </div>
     </div>
     {
@@ -78,17 +78,17 @@ const draftPosts = await getDraftWriting();
           ))}
         </div>
       ) : (
-        <p class="empty-state">No writing has been published yet.</p>
+        <p class="empty-state">No blog posts have been published yet.</p>
       )
     }
   </section>
 
   {
     draftPosts.length > 0 && (
-      <section class="page-section draft-section" aria-labelledby="draft-writing-title">
+      <section class="page-section draft-section" aria-labelledby="draft-blog-title">
         <div class="section-heading">
           <div>
-            <h2 id="draft-writing-title">Drafts</h2>
+            <h2 id="draft-blog-title">Drafts</h2>
             <p>Visible only during local development.</p>
           </div>
         </div>

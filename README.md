@@ -6,12 +6,12 @@ This site is built with Astro and is intended to become a long-term record of de
 
 ## Structure
 
-- `/writing` - writing overview
+- `/blog` - blog overview
 - `/notes` - light notes
 - `/logs` - field logs
-- `/deep-dives` - long-form heavy writing
+- `/deep-dives` - long-form heavy blog
 - `/tags` - posts grouped by tag
-- `/series` - connected writing tracks
+- `/series` - connected blog tracks
 - `/archive` - full post index
 - `/projects` - portfolio records
 - `/profile` - developer profile
@@ -19,19 +19,19 @@ This site is built with Astro and is intended to become a long-term record of de
 - `/timeline` - developer history
 - `/uses` - hardware, software, and homelab setup
 
-## Writing
+## Blog
 
-Posts live in `src/content/writing`.
+Posts live in `src/content/blog`.
 
-Create a draft from one of the writing templates:
+Create a draft from one of the blog templates:
 
 ```sh
 bun run new:post -- --section field-logs --title "Deploying the blog" --tags astro,nix,homelab
 ```
 
-The script writes an MDX draft with `draft: true`. Pass `--md` only when a post should be plain Markdown, and pass `--publish` only when the new post should be immediately public. Templates live in `templates/writing`.
+The script writes an MDX draft with `draft: true`. Pass `--md` only when a post should be plain Markdown, and pass `--publish` only when the new post should be immediately public. Templates live in `templates/blog`.
 When `--tags` is omitted, the draft starts with placeholder tags `tag1`, `tag2`, and `tag3`.
-MDX is the default so posts can use component-based writing blocks.
+MDX is the default so posts can use component-based blog blocks.
 
 Required frontmatter:
 
@@ -45,18 +45,18 @@ tags:
 draft: false
 ```
 
-MDX writing blocks:
+MDX blog blocks:
 
 ```mdx
-import Note from "../../components/writing/Note.astro";
-import Tip from "../../components/writing/Tip.astro";
-import Question from "../../components/writing/Question.astro";
-import Decision from "../../components/writing/Decision.astro";
-import Reference from "../../components/writing/Reference.astro";
-import Warning from "../../components/writing/Warning.astro";
-import Todo from "../../components/writing/Todo.astro";
-import Danger from "../../components/writing/Danger.astro";
-import Mermaid from "../../components/writing/Mermaid.astro";
+import Note from "../../components/blog/Note.astro";
+import Tip from "../../components/blog/Tip.astro";
+import Question from "../../components/blog/Question.astro";
+import Decision from "../../components/blog/Decision.astro";
+import Reference from "../../components/blog/Reference.astro";
+import Warning from "../../components/blog/Warning.astro";
+import Todo from "../../components/blog/Todo.astro";
+import Danger from "../../components/blog/Danger.astro";
+import Mermaid from "../../components/blog/Mermaid.astro";
 
 <Note title="Operational note">
   Keep quick context close to the command or diagram it explains.

@@ -354,25 +354,25 @@ main {
   color: var(--accent-strong);
 }
 
-.writing-lanes {
+.blog-lanes {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.35rem;
 }
 
-.writing-lane {
+.blog-lane {
   border-top: 3px solid var(--line-strong);
   padding-top: 1rem;
 }
 
-.writing-lane header {
+.blog-lane header {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
   margin-bottom: 0.7rem;
 }
 
-.writing-lane header p {
+.blog-lane header p {
   margin: 0 0 0.3rem;
   color: var(--soft);
   font-size: 0.82rem;
@@ -380,17 +380,17 @@ main {
   text-transform: uppercase;
 }
 
-.writing-lane h3 {
+.blog-lane h3 {
   margin: 0;
   font-size: 1.2rem;
   line-height: 1.25;
 }
 
-.writing-lane h3 a {
+.blog-lane h3 a {
   text-decoration: none;
 }
 
-.writing-lane > p {
+.blog-lane > p {
   margin: 0;
   color: var(--muted);
 }
@@ -1091,7 +1091,7 @@ main {
   }
 
   .personal-hero,
-  .writing-lanes,
+  .blog-lanes,
   .profile-project-grid,
   .card-grid,
   .card-grid--two,

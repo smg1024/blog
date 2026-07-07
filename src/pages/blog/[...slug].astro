@@ -5,13 +5,13 @@ import {
   formatDate,
   getSectionLabel,
   getTagUrl,
-  getVisibleWriting,
-  getWritingUrl,
-  type WritingEntry,
+  getVisibleBlog,
+  getBlogUrl,
+  type BlogEntry,
 } from "../../lib/content";
 
 export async function getStaticPaths() {
-  const posts = await getVisibleWriting();
+  const posts = await getVisibleBlog();
 
   return posts.map((post, index) => ({
     params: { slug: post.id },
@@ -24,9 +24,9 @@ export async function getStaticPaths() {
 }
 
 interface Props {
-  post: WritingEntry;
-  newerPost: WritingEntry | null;
-  olderPost: WritingEntry | null;
+  post: BlogEntry;
+  newerPost: BlogEntry | null;
+  olderPost: BlogEntry | null;
 }
 
 const { post, newerPost, olderPost } = Astro.props;
@@ -93,15 +93,15 @@ const isDraftPost = import.meta.env.DEV && post.data.draft;
 
   {
     (newerPost || olderPost) && (
-      <nav class="article-nav" aria-label="Writing navigation">
+      <nav class="article-nav" aria-label="Blog navigation">
         {newerPost ? (
-          <a href={getWritingUrl(newerPost)}>
+          <a href={getBlogUrl(newerPost)}>
             <span>Newer</span>
             <strong>{newerPost.data.title}</strong>
           </a>
         ) : null}
         {olderPost ? (
-          <a class="article-nav__older" href={getWritingUrl(olderPost)}>
+          <a class="article-nav__older" href={getBlogUrl(olderPost)}>
             <span>Older</span>
             <strong>{olderPost.data.title}</strong>
           </a>
