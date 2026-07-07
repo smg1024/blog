@@ -103,6 +103,17 @@ main {
   transform: translateY(0);
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
 .site-header {
   position: sticky;
   top: 0;
@@ -1013,6 +1024,93 @@ main {
 
 .article-nav__older {
   text-align: right;
+}
+
+.tag-filter {
+  border: 0;
+  margin: 0 0 1.1rem;
+  padding: 0;
+}
+
+.tag-filter__choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.tag-filter__choice {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.35rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  padding: 0.5rem 0.8rem;
+  color: var(--ink);
+  font-weight: 720;
+  cursor: pointer;
+  user-select: none;
+}
+
+.tag-filter__choice:has(input:checked) {
+  border-color: var(--accent-strong);
+  background: var(--accent-strong);
+  color: #ffffff;
+  box-shadow: 0 10px 26px rgba(35, 131, 130, 0.18);
+}
+
+.tag-filter__choice input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+.tag-filter__choice:has(input:focus-visible) {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 3px;
+}
+
+.tag-filter__label {
+  line-height: 1;
+}
+
+.tag-filter__choice small {
+  color: var(--soft);
+  font-size: 0.82rem;
+  font-weight: 720;
+}
+
+.tag-filter__choice:has(input:checked) small {
+  color: color-mix(in srgb, #ffffff 82%, var(--accent));
+}
+
+.tag-filter__clear {
+  min-height: 2.35rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  padding: 0.5rem 0.8rem;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 720;
+  cursor: pointer;
+}
+
+.tag-filter__clear:hover {
+  border-color: var(--line-strong);
+  color: var(--accent-strong);
+}
+
+.tag-filter__results {
+  margin-top: 1rem;
 }
 
 .tag-cloud {

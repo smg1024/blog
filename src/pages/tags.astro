@@ -1,8 +1,10 @@
 ---
+import PostCard from "../components/PostCard.astro";
 import Layout from "../layouts/Layout.astro";
-import { getPublishedTags, getTagUrl } from "../lib/content";
+import { getPublishedBlog, getTagSlug, getTagSummaries } from "../lib/content";
 
-const tags = await getPublishedTags();
+const posts = await getPublishedBlog();
+const tags = getTagSummaries(posts);
 ---
 
 <Layout title="Tags" description="Tools, topics, recurring ideas, blog archive.">
@@ -12,27 +14,97 @@ const tags = await getPublishedTags();
     <p>Topic map, tool trail, recurring ideas.</p>
   </header>
 
-  <section class="page-section" aria-labelledby="tags-list-title">
+  <section class="page-section" aria-labelledby="tags-filter-title">
     <div class="section-heading">
       <div>
-        <h2 id="tags-list-title">All tags</h2>
+        <h2 id="tags-filter-title">Tags</h2>
       </div>
     </div>
     {
       tags.length > 0 ? (
-        <div class="tag-cloud">
-          {tags.map((tag) => (
-            <a class="tag-card" href={getTagUrl(tag.name)}>
-              <strong>{tag.name}</strong>
-              <span>
-                {tag.count} {tag.count === 1 ? "post" : "posts"}
-              </span>
-            </a>
-          ))}
-        </div>
+        <>
+          <fieldset class="tag-filter" data-tag-filter>
+            <legend class="sr-only">Tags</legend>
+            <div class="tag-filter__choices">
+              {tags.map((tag) => (
+                <label class="tag-filter__choice">
+                  <input type="checkbox" value={tag.slug} />
+                  <span class="tag-filter__label">{tag.name}</span>
+                  <small>{tag.count}</small>
+                </label>
+              ))}
+              <button class="tag-filter__clear" type="button" data-tag-clear hidden>
+                Clear
+              </button>
+            </div>
+          </fieldset>
+
+          <div class="post-list tag-filter__results" data-tag-results>
+            {posts.map((post) => (
+              <div data-tag-post data-tags={post.data.tags.map((tag) => getTagSlug(tag)).join(" ")}>
+                <PostCard post={post} />
+              </div>
+            ))}
+          </div>
+
+          <p class="empty-state" data-tag-empty hidden>
+            No matching posts.
+          </p>
+        </>
       ) : (
         <p class="empty-state">No tags yet.</p>
       )
     }
   </section>
 </Layout>
+
+<script>
+  const filter = document.querySelector<HTMLElement>("[data-tag-filter]");
+
+  if (filter) {
+    const inputs = Array.from(filter.querySelectorAll<HTMLInputElement>('input[type="checkbox"]'));
+    const posts = Array.from(document.querySelectorAll<HTMLElement>("[data-tag-post]"));
+    const clearButton = document.querySelector<HTMLButtonElement>("[data-tag-clear]");
+    const emptyState = document.querySelector<HTMLElement>("[data-tag-empty]");
+
+    function updatePosts() {
+      const selectedTags = inputs.filter((input) => input.checked).map((input) => input.value);
+      const hasSelection = selectedTags.length > 0;
+      let visibleCount = 0;
+
+      for (const post of posts) {
+        const postTags = (post.dataset.tags ?? "").split(" ").filter(Boolean);
+        const matches =
+          !hasSelection || selectedTags.some((selectedTag) => postTags.includes(selectedTag));
+
+        post.hidden = !matches;
+
+        if (matches) {
+          visibleCount += 1;
+        }
+      }
+
+      if (clearButton) {
+        clearButton.hidden = !hasSelection;
+      }
+
+      if (emptyState) {
+        emptyState.hidden = visibleCount > 0;
+      }
+    }
+
+    for (const input of inputs) {
+      input.addEventListener("change", updatePosts);
+    }
+
+    clearButton?.addEventListener("click", () => {
+      for (const input of inputs) {
+        input.checked = false;
+      }
+
+      updatePosts();
+    });
+
+    updatePosts();
+  }
+</script>
