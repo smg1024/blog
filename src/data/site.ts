@@ -47,14 +47,31 @@ export const writingSections = [
     intensity: "Heavy",
     description:
       "Long-form technical and philosophical writing about DevOps, AI agents, systems, and computer science ideas.",
-    examples: ["DevOps architecture", "AI agent utilization", "CS philosophy", "hard-earned lessons"],
+    examples: [
+      "DevOps architecture",
+      "AI agent utilization",
+      "CS philosophy",
+      "hard-earned lessons",
+    ],
   },
 ] as const;
 
 export const writingUtilities = [
-  { title: "Tags", href: "/tags", description: "Browse posts by recurring tools, topics, and ideas." },
-  { title: "Series", href: "/series", description: "Long-running connected topics and study paths." },
-  { title: "Archive", href: "/archive", description: "A complete index by date, type, intensity, and tag." },
+  {
+    title: "Tags",
+    href: "/tags",
+    description: "Browse posts by recurring tools, topics, and ideas.",
+  },
+  {
+    title: "Series",
+    href: "/series",
+    description: "Long-running connected topics and study paths.",
+  },
+  {
+    title: "Archive",
+    href: "/archive",
+    description: "A complete index by date, type, intensity, and tag.",
+  },
 ] as const;
 
 export const identitySections = [
@@ -96,19 +113,22 @@ export const projectSeeds = [
   {
     title: "Homelab",
     status: "Living system",
-    description: "NixOS server infrastructure, services, deployment patterns, and the operational lessons behind them.",
+    description:
+      "NixOS server infrastructure, services, deployment patterns, and the operational lessons behind them.",
     tags: ["NixOS", "DevOps", "self-hosting"],
   },
   {
     title: "Dev with Min",
     status: "In progress",
-    description: "This blog as a durable writing system, static site, and deployable artifact for my homelab.",
+    description:
+      "This blog as a durable writing system, static site, and deployable artifact for my homelab.",
     tags: ["Astro", "Nix", "writing"],
   },
   {
     title: "AI Agent Workflow",
     status: "Research log",
-    description: "Experiments in using coding agents, prompts, reviews, and automation in everyday development.",
+    description:
+      "Experiments in using coding agents, prompts, reviews, and automation in everyday development.",
     tags: ["AI", "developer workflow", "automation"],
   },
 ] as const;
@@ -122,12 +142,14 @@ export const timelineSeeds = [
   {
     period: "Homelab era",
     title: "Running infrastructure for myself",
-    description: "Learning operations through NixOS, self-hosted services, networking, deployments, and maintenance.",
+    description:
+      "Learning operations through NixOS, self-hosted services, networking, deployments, and maintenance.",
   },
   {
     period: "Ongoing",
     title: "From tools to principles",
-    description: "Turning daily development experience into durable notes about systems, tradeoffs, and philosophy.",
+    description:
+      "Turning daily development experience into durable notes about systems, tradeoffs, and philosophy.",
   },
 ] as const;
 

@@ -12,12 +12,12 @@
     x86_64-linux = {
       os = "linux";
       cpu = "x64";
-      hash = "sha256-30KsLPkXFGrVzks6Jevs9uQhhqNTnpc4eR/FQOwqo0A=";
+      hash = "sha256-gN0XupzJYmbKtPNS3WlhLjSDEICx7LsZJblnHPCAM+A=";
     };
     aarch64-darwin = {
       os = "darwin";
       cpu = "arm64";
-      hash = "sha256-04ry8EXuavRZV1+6eYyH/XzEnf7grKeLF/9Yq6sqiG0=";
+      hash = "sha256-gBEIIKSdpa8oriK0AJ5kWwgR3GeaTz9NRdUoP6B3obY=";
     };
   };
 

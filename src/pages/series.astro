@@ -21,24 +21,28 @@ const seriesNames = Array.from(new Set(postsWithSeries.map((post) => post.data.s
         <h2 id="series-list-title">Published series</h2>
       </div>
     </div>
-    {seriesNames.length > 0 ? (
-				<div class="post-list">
-					{seriesNames.map((series) => (
-						<section>
-							<h3>{series}</h3>
-							<div class="post-list">
-								{postsWithSeries
-									.filter((post) => post.data.series === series)
-									.map((post) => <PostCard post={post} />)}
-							</div>
-						</section>
-					))}
-				</div>
-			) : (
-				<p class="empty-state">
-					No series has started yet. Likely first candidates: Building My Homelab, AI Agent Workflow,
-					NixOS Notes, and DevOps From Experience.
-				</p>
-			)}
+    {
+      seriesNames.length > 0 ? (
+        <div class="post-list">
+          {seriesNames.map((series) => (
+            <section>
+              <h3>{series}</h3>
+              <div class="post-list">
+                {postsWithSeries
+                  .filter((post) => post.data.series === series)
+                  .map((post) => (
+                    <PostCard post={post} />
+                  ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      ) : (
+        <p class="empty-state">
+          No series has started yet. Likely first candidates: Building My Homelab, AI Agent
+          Workflow, NixOS Notes, and DevOps From Experience.
+        </p>
+      )
+    }
   </section>
 </Layout>

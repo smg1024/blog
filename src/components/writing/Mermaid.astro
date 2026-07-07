@@ -18,106 +18,108 @@ const diagram = chart?.trim();
 </figure>
 
 <script>
-import mermaid from "mermaid";
+  import mermaid from "mermaid";
 
-const readCssVar = (name: string, fallback: string) => {
-  const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  const readCssVar = (name: string, fallback: string) => {
+    const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
-  return value || fallback;
-};
-
-const getMermaidThemeVariables = () => {
-  const bg = readCssVar("--bg", "#f8fafc");
-  const surface = readCssVar("--surface", "#ffffff");
-  const surfaceAlt = readCssVar("--surface-alt", "#eef4f0");
-  const ink = readCssVar("--ink", "#172033");
-  const muted = readCssVar("--muted", "#5f697a");
-  const line = readCssVar("--line", "#dce3eb");
-  const lineStrong = readCssVar("--line-strong", "#bfccd8");
-
-  return {
-    background: surface,
-    darkMode: window.matchMedia("(prefers-color-scheme: dark)").matches,
-    fontFamily: getComputedStyle(document.documentElement).fontFamily,
-    lineColor: lineStrong,
-    primaryBorderColor: lineStrong,
-    primaryColor: surfaceAlt,
-    primaryTextColor: ink,
-    secondaryBorderColor: line,
-    secondaryColor: surface,
-    secondaryTextColor: ink,
-    tertiaryBorderColor: line,
-    tertiaryColor: surface,
-    tertiaryTextColor: ink,
-    textColor: ink,
-    titleColor: ink,
-
-    actorBkg: surfaceAlt,
-    actorBorder: lineStrong,
-    actorLineColor: lineStrong,
-    actorTextColor: ink,
-    arrowheadColor: lineStrong,
-    clusterBkg: bg,
-    clusterBorder: line,
-    defaultLinkColor: lineStrong,
-    edgeLabelBackground: surface,
-    labelTextColor: ink,
-    mainBkg: surfaceAlt,
-    nodeBkg: surfaceAlt,
-    nodeBorder: lineStrong,
-    nodeTextColor: ink,
-    signalColor: lineStrong,
-    signalTextColor: ink,
-
-    attributeBackgroundColorEven: surfaceAlt,
-    attributeBackgroundColorOdd: surface,
-    erEdgeLabelBackground: surface,
-    relationColor: lineStrong,
-    relationLabelBackground: surface,
-    relationLabelColor: muted,
+    return value || fallback;
   };
-};
 
-const renderMermaid = async () => {
-  const diagrams = document.querySelectorAll<HTMLElement>("[data-mermaid-diagram]:not([data-processed='true'])");
+  const getMermaidThemeVariables = () => {
+    const bg = readCssVar("--bg", "#f8fafc");
+    const surface = readCssVar("--surface", "#ffffff");
+    const surfaceAlt = readCssVar("--surface-alt", "#eef4f0");
+    const ink = readCssVar("--ink", "#172033");
+    const muted = readCssVar("--muted", "#5f697a");
+    const line = readCssVar("--line", "#dce3eb");
+    const lineStrong = readCssVar("--line-strong", "#bfccd8");
 
-  if (diagrams.length === 0) {
-    return;
+    return {
+      background: surface,
+      darkMode: window.matchMedia("(prefers-color-scheme: dark)").matches,
+      fontFamily: getComputedStyle(document.documentElement).fontFamily,
+      lineColor: lineStrong,
+      primaryBorderColor: lineStrong,
+      primaryColor: surfaceAlt,
+      primaryTextColor: ink,
+      secondaryBorderColor: line,
+      secondaryColor: surface,
+      secondaryTextColor: ink,
+      tertiaryBorderColor: line,
+      tertiaryColor: surface,
+      tertiaryTextColor: ink,
+      textColor: ink,
+      titleColor: ink,
+
+      actorBkg: surfaceAlt,
+      actorBorder: lineStrong,
+      actorLineColor: lineStrong,
+      actorTextColor: ink,
+      arrowheadColor: lineStrong,
+      clusterBkg: bg,
+      clusterBorder: line,
+      defaultLinkColor: lineStrong,
+      edgeLabelBackground: surface,
+      labelTextColor: ink,
+      mainBkg: surfaceAlt,
+      nodeBkg: surfaceAlt,
+      nodeBorder: lineStrong,
+      nodeTextColor: ink,
+      signalColor: lineStrong,
+      signalTextColor: ink,
+
+      attributeBackgroundColorEven: surfaceAlt,
+      attributeBackgroundColorOdd: surface,
+      erEdgeLabelBackground: surface,
+      relationColor: lineStrong,
+      relationLabelBackground: surface,
+      relationLabelColor: muted,
+    };
+  };
+
+  const renderMermaid = async () => {
+    const diagrams = document.querySelectorAll<HTMLElement>(
+      "[data-mermaid-diagram]:not([data-processed='true'])",
+    );
+
+    if (diagrams.length === 0) {
+      return;
+    }
+
+    mermaid.initialize({
+      startOnLoad: false,
+      securityLevel: "strict",
+      theme: "base",
+      themeVariables: getMermaidThemeVariables(),
+      flowchart: {
+        htmlLabels: false,
+        useMaxWidth: true,
+      },
+      sequence: {
+        useMaxWidth: true,
+      },
+    });
+
+    try {
+      await mermaid.run({
+        nodes: diagrams,
+      });
+    } catch (error) {
+      diagrams.forEach((diagram) => {
+        if (!diagram.querySelector("svg")) {
+          diagram.dataset.mermaidError = "true";
+        }
+      });
+      console.error("Mermaid render failed", error);
+    }
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => void renderMermaid(), { once: true });
+  } else {
+    void renderMermaid();
   }
 
-  mermaid.initialize({
-    startOnLoad: false,
-    securityLevel: "strict",
-    theme: "base",
-    themeVariables: getMermaidThemeVariables(),
-    flowchart: {
-      htmlLabels: false,
-      useMaxWidth: true,
-    },
-    sequence: {
-      useMaxWidth: true,
-    },
-  });
-
-  try {
-    await mermaid.run({
-      nodes: diagrams,
-    });
-  } catch (error) {
-    diagrams.forEach((diagram) => {
-      if (!diagram.querySelector("svg")) {
-        diagram.dataset.mermaidError = "true";
-      }
-    });
-    console.error("Mermaid render failed", error);
-  }
-};
-
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", () => void renderMermaid(), { once: true });
-} else {
-  void renderMermaid();
-}
-
-document.addEventListener("astro:page-load", () => void renderMermaid());
+  document.addEventListener("astro:page-load", () => void renderMermaid());
 </script>

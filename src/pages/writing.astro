@@ -16,8 +16,8 @@ const draftPosts = await getDraftWriting();
     <p class="eyebrow">Writing</p>
     <h1>Notes, logs, and deep dives.</h1>
     <p>
-      The writing archive is split by intensity so a quick tool note does not compete with a long DevOps or computer
-      science essay.
+      The writing archive is split by intensity so a quick tool note does not compete with a long
+      DevOps or computer science essay.
     </p>
   </header>
 
@@ -29,16 +29,20 @@ const draftPosts = await getDraftWriting();
       </div>
     </div>
     <div class="card-grid">
-      {writingSections.map((section) => (
-				<a class="section-card" href={section.href}>
-					<div class="card-meta">{section.intensity}</div>
-					<h3>{section.title}</h3>
-					<p>{section.description}</p>
-					<ul class="example-list" aria-label={`${section.title} examples`}>
-						{section.examples.map((example) => <li>{example}</li>)}
-					</ul>
-				</a>
-			))}
+      {
+        writingSections.map((section) => (
+          <a class="section-card" href={section.href}>
+            <div class="card-meta">{section.intensity}</div>
+            <h3>{section.title}</h3>
+            <p>{section.description}</p>
+            <ul class="example-list" aria-label={`${section.title} examples`}>
+              {section.examples.map((example) => (
+                <li>{example}</li>
+              ))}
+            </ul>
+          </a>
+        ))
+      }
     </div>
   </section>
 
@@ -49,12 +53,14 @@ const draftPosts = await getDraftWriting();
       </div>
     </div>
     <div class="card-grid card-grid--two">
-      {writingUtilities.map((section) => (
-				<a class="section-card" href={section.href}>
-					<h3>{section.title}</h3>
-					<p>{section.description}</p>
-				</a>
-			))}
+      {
+        writingUtilities.map((section) => (
+          <a class="section-card" href={section.href}>
+            <h3>{section.title}</h3>
+            <p>{section.description}</p>
+          </a>
+        ))
+      }
     </div>
   </section>
 
@@ -64,26 +70,34 @@ const draftPosts = await getDraftWriting();
         <h2 id="all-writing-title">Published writing</h2>
       </div>
     </div>
-    {posts.length > 0 ? (
-				<div class="post-list">
-					{posts.map((post) => <PostCard post={post} />)}
-				</div>
-			) : (
-				<p class="empty-state">No writing has been published yet.</p>
-			)}
+    {
+      posts.length > 0 ? (
+        <div class="post-list">
+          {posts.map((post) => (
+            <PostCard post={post} />
+          ))}
+        </div>
+      ) : (
+        <p class="empty-state">No writing has been published yet.</p>
+      )
+    }
   </section>
 
-  {draftPosts.length > 0 && (
-		<section class="page-section draft-section" aria-labelledby="draft-writing-title">
-			<div class="section-heading">
-				<div>
-					<h2 id="draft-writing-title">Drafts</h2>
-					<p>Visible only during local development.</p>
-				</div>
-			</div>
-			<div class="post-list">
-				{draftPosts.map((post) => <PostCard post={post} />)}
-			</div>
-		</section>
-	)}
+  {
+    draftPosts.length > 0 && (
+      <section class="page-section draft-section" aria-labelledby="draft-writing-title">
+        <div class="section-heading">
+          <div>
+            <h2 id="draft-writing-title">Drafts</h2>
+            <p>Visible only during local development.</p>
+          </div>
+        </div>
+        <div class="post-list">
+          {draftPosts.map((post) => (
+            <PostCard post={post} />
+          ))}
+        </div>
+      </section>
+    )
+  }
 </Layout>

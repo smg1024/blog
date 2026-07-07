@@ -39,12 +39,12 @@ const profileLinks = [
       <p class="eyebrow">Dev with Min</p>
       <h1 id="home-title">Hey, I'm Min.</h1>
       <p class="lede">
-        I write about building software, running a homelab, learning DevOps, using AI agents, and the tools I live with
-        every day.
+        I write about building software, running a homelab, learning DevOps, using AI agents, and
+        the tools I live with every day.
       </p>
       <p>
-        This is my personal developer journal: part blog, part project record, part setup log, and part history of the
-        things I learn through honest engineering work.
+        This is my personal developer journal: part blog, part project record, part setup log, and
+        part history of the things I learn through honest engineering work.
       </p>
       <nav class="personal-links" aria-label="Personal links">
         <a href="/profile">About</a>
@@ -60,7 +60,7 @@ const profileLinks = [
         src="/images/dev-with-min-journal.png"
         alt="A developer workspace with a laptop, notebook, keyboard, and homelab equipment."
         fetchpriority="high"
-      >
+      />
       <div class="now-panel">
         <p class="eyebrow">Now</p>
         <ul class="status-list">
@@ -79,7 +79,8 @@ const profileLinks = [
       <a href="/archive">Full archive</a>
     </div>
 
-    {latestWriting.length > 0 ? (
+    {
+      latestWriting.length > 0 ? (
         <ol class="simple-post-list">
           {latestWriting.map((post) => (
             <li>
@@ -98,7 +99,8 @@ const profileLinks = [
         </ol>
       ) : (
         <p class="empty-state">No writing has been published yet.</p>
-      )}
+      )
+    }
   </section>
 
   <section class="home-section" aria-labelledby="writing-title">
@@ -107,19 +109,17 @@ const profileLinks = [
         <p class="eyebrow">Writing</p>
         <h2 id="writing-title">Notes, logs, and deep dives</h2>
         <p>
-          I keep casual notes separate from experience logs and heavier essays, so the archive stays easy to browse as
-          it grows.
+          I keep casual notes separate from experience logs and heavier essays, so the archive stays
+          easy to browse as it grows.
         </p>
       </div>
       <a href="/writing">Writing index</a>
     </div>
 
     <div class="writing-lanes">
-      {writingGroups.map((section) => (
-          <section
-            class="writing-lane"
-            aria-labelledby={`${section.key}-title`}
-          >
+      {
+        writingGroups.map((section) => (
+          <section class="writing-lane" aria-labelledby={`${section.key}-title`}>
             <header>
               <div>
                 <p>{section.intensity}</p>
@@ -141,7 +141,8 @@ const profileLinks = [
               <p class="quiet-note">No posts yet.</p>
             )}
           </section>
-        ))}
+        ))
+      }
     </div>
   </section>
 
@@ -156,16 +157,19 @@ const profileLinks = [
 
     <div class="profile-project-grid">
       <div class="profile-link-list">
-        {profileLinks.map((link) => (
+        {
+          profileLinks.map((link) => (
             <a href={link.href}>
               <strong>{link.title}</strong>
               <span>{link.description}</span>
             </a>
-          ))}
+          ))
+        }
       </div>
 
       <div class="home-project-list">
-        {projectSeeds.map((project) => (
+        {
+          projectSeeds.map((project) => (
             <article class="home-project">
               <div>
                 <span>{project.status}</span>
@@ -178,7 +182,8 @@ const profileLinks = [
                 ))}
               </ul>
             </article>
-          ))}
+          ))
+        }
       </div>
     </div>
   </section>

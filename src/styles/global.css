@@ -26,7 +26,14 @@
 html {
   background: var(--bg);
   color: var(--ink);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
   font-size: 16px;
 }
 
@@ -663,7 +670,11 @@ main {
 }
 
 .draft-section {
-  background: linear-gradient(180deg, color-mix(in srgb, var(--accent-warm) 6%, transparent), transparent 8rem);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--accent-warm) 6%, transparent),
+    transparent 8rem
+  );
 }
 
 .article-header {

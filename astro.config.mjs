@@ -24,7 +24,8 @@ export default defineConfig({
         codePaddingBlock: "1.1rem",
         codePaddingInline: "2.4rem",
         codeSelectionBackground: "rgba(45, 212, 191, 0.22)",
-        uiFontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+        uiFontFamily:
+          'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
         uiFontSize: "0.78rem",
         frames: {
           editorTabBarBackground: "color-mix(in srgb, var(--code-bg) 88%, #ffffff)",
