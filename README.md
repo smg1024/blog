@@ -8,8 +8,7 @@ This site is built with Astro and is intended to become a long-term record of de
 
 - `/blog` - all posts, newest first
 - `/blog/[slug]` - individual post
-- `/tags` - posts grouped by tag
-- `/tags/[tag]` - posts for one tag
+- `/tags` - filter posts by tag
 - `/series` - connected blog tracks
 - `/archive` - full post index
 - `/projects` - portfolio records

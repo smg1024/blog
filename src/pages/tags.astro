@@ -67,6 +67,27 @@ const tags = getTagSummaries(posts);
     const clearButton = document.querySelector<HTMLButtonElement>("[data-tag-clear]");
     const emptyState = document.querySelector<HTMLElement>("[data-tag-empty]");
 
+    function selectedFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const raw = params.getAll("tag").flatMap((value) => value.split(","));
+
+      return new Set(raw.map((value) => value.trim()).filter(Boolean));
+    }
+
+    function syncUrl(selectedTags: string[]) {
+      const params = new URLSearchParams(window.location.search);
+      params.delete("tag");
+
+      for (const tag of selectedTags) {
+        params.append("tag", tag);
+      }
+
+      const query = params.toString();
+      const url = query ? `${window.location.pathname}?${query}` : window.location.pathname;
+
+      window.history.replaceState(null, "", url);
+    }
+
     function updatePosts() {
       const selectedTags = inputs.filter((input) => input.checked).map((input) => input.value);
       const hasSelection = selectedTags.length > 0;
@@ -91,6 +112,8 @@ const tags = getTagSummaries(posts);
       if (emptyState) {
         emptyState.hidden = visibleCount > 0;
       }
+
+      syncUrl(selectedTags);
     }
 
     for (const input of inputs) {
@@ -104,6 +127,14 @@ const tags = getTagSummaries(posts);
 
       updatePosts();
     });
+
+    const initialTags = selectedFromUrl();
+
+    if (initialTags.size > 0) {
+      for (const input of inputs) {
+        input.checked = initialTags.has(input.value);
+      }
+    }
 
     updatePosts();
   }

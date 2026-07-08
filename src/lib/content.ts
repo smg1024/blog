@@ -24,7 +24,7 @@ export function getTagSlug(tag: string) {
 }
 
 export function getTagUrl(tag: string) {
-  return `/tags/${getTagSlug(tag)}/`;
+  return `/tags/?tag=${getTagSlug(tag)}`;
 }
 
 export function formatDate(date: Date) {
@@ -101,8 +101,4 @@ export function getTagSummaries(posts: BlogEntry[]) {
 
 export async function getPublishedTags() {
   return getTagSummaries(await getPublishedBlog());
-}
-
-export function getBlogByTagSlug(posts: BlogEntry[], slug: string) {
-  return posts.filter((post) => post.data.tags.some((tag) => getTagSlug(tag) === slug));
 }
