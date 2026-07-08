@@ -1,6 +1,6 @@
 ---
 import type { BlogEntry } from "../lib/content";
-import { formatDate, getSectionLabel, getBlogUrl } from "../lib/content";
+import { formatDate, getBlogUrl } from "../lib/content";
 
 interface Props {
   post: BlogEntry;
@@ -14,7 +14,6 @@ const isDraftPost = import.meta.env.DEV && post.data.draft;
   <article class="post-card__inner">
     <div class="post-meta">
       <span>{formatDate(post.data.publishedAt)}</span>
-      <span>{getSectionLabel(post.data.section)}</span>
       {isDraftPost && <span class="draft-badge">Draft</span>}
     </div>
     <h3>{post.data.title}</h3>

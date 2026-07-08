@@ -2,15 +2,14 @@
 
 Personal developer blog for <https://blog.ridewithmin.com>.
 
-This site is built with Astro and is intended to become a long-term record of developer experience: light notes, field logs, deep dives, projects, CV, setup, and timeline.
+This site is built with Astro and is intended to become a long-term record of developer experience: notes, logs, essays, projects, CV, setup, and timeline.
 
 ## Structure
 
-- `/blog` - blog overview
-- `/blog/notes` - light notes
-- `/blog/logs` - field logs
-- `/blog/deep-dives` - long-form heavy blog
+- `/blog` - all posts, newest first
+- `/blog/[slug]` - individual post
 - `/tags` - posts grouped by tag
+- `/tags/[tag]` - posts for one tag
 - `/series` - connected blog tracks
 - `/archive` - full post index
 - `/projects` - portfolio records
@@ -23,13 +22,13 @@ This site is built with Astro and is intended to become a long-term record of de
 
 Posts live in `src/content/blog`.
 
-Create a draft from one of the blog templates:
+Create a draft from the blog template:
 
 ```sh
-bun run new:post -- --section field-logs --title "Deploying the blog" --tags astro,nix,homelab
+bun run new:post -- --title "Deploying the blog" --tags astro,nix,homelab
 ```
 
-The script writes an MDX draft with `draft: true`. Pass `--md` only when a post should be plain Markdown, and pass `--publish` only when the new post should be immediately public. Templates live in `templates/blog`.
+The script writes an MDX draft with `draft: true`. Pass `--md` only when a post should be plain Markdown, and pass `--publish` only when the new post should be immediately public. The template lives at `templates/blog/post.md`.
 When `--tags` is omitted, the draft starts with placeholder tags `tag1`, `tag2`, and `tag3`.
 MDX is the default so posts can use component-based blog blocks.
 
@@ -39,7 +38,6 @@ Required frontmatter:
 title: Opening Dev with Min
 description: A short post summary.
 publishedAt: 2026-07-03
-section: field-logs # light-notes | field-logs | deep-dives
 tags:
   - astro
 draft: false

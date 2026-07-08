@@ -3,7 +3,6 @@ import { render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import {
   formatDate,
-  getSectionLabel,
   getTagUrl,
   getVisibleBlog,
   getBlogUrl,
@@ -45,7 +44,7 @@ const isDraftPost = import.meta.env.DEV && post.data.draft;
 >
   <header class:list={["article-header", { "article-header--draft": isDraftPost }]}>
     <div class="article-kicker">
-      <p class="eyebrow">{getSectionLabel(post.data.section)}</p>
+      <p class="eyebrow">{post.data.tags[0]}</p>
       {isDraftPost && <span class="draft-badge">Draft</span>}
     </div>
     <h1>{post.data.title}</h1>

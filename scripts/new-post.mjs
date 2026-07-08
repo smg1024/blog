@@ -7,31 +7,15 @@ const contentDir = path.join(root, "src", "content", "blog");
 const templatesDir = path.join(root, "templates", "blog");
 const defaultTags = ["tag1", "tag2", "tag3"];
 
-const sectionAliases = new Map([
-  ["light", "light-notes"],
-  ["note", "light-notes"],
-  ["notes", "light-notes"],
-  ["light-notes", "light-notes"],
-  ["field", "field-logs"],
-  ["log", "field-logs"],
-  ["logs", "field-logs"],
-  ["field-logs", "field-logs"],
-  ["deep", "deep-dives"],
-  ["dive", "deep-dives"],
-  ["dives", "deep-dives"],
-  ["deep-dives", "deep-dives"],
-]);
-
 function printUsage() {
   console.log(`Create a blog draft.
 
 Usage:
-  bun run new:post -- --section field-logs --title "Deploying the blog"
-  bun run new:post -- notes "Keyboard setup notes" --tags keyboard,setup
+  bun run new:post -- --title "Deploying the blog" --tags devops,astro
+  bun run new:post -- "Keyboard setup notes" --tags keyboard,setup
 
 Required flags:
-  --section <section>      light-notes | field-logs | deep-dives
-  --title <title>          Post title
+  --title <title>          Post title (can also be passed positionally)
 
 Optional flags:
   --description <text>     Frontmatter description
@@ -92,25 +76,11 @@ function parseArgs(argv) {
     }
   }
 
-  if (!options.section && positionals[0]) {
-    options.section = positionals.shift();
-  }
-
   if (!options.title && positionals.length > 0) {
     options.title = positionals.join(" ");
   }
 
   return options;
-}
-
-function normalizeSection(section) {
-  const normalized = sectionAliases.get(String(section).toLowerCase());
-
-  if (!normalized) {
-    throw new Error(`Unknown section "${section}". Use light-notes, field-logs, or deep-dives.`);
-  }
-
-  return normalized;
 }
 
 function today() {
@@ -151,13 +121,12 @@ function parseTags(value) {
   return tags.length > 0 ? tags : defaultTags;
 }
 
-function buildFrontmatter({ title, description, date, section, tags, series, publish }) {
+function buildFrontmatter({ title, description, date, tags, series, publish }) {
   const lines = [
     "---",
     `title: ${yamlString(title)}`,
     `description: ${yamlString(description)}`,
     `publishedAt: ${date}`,
-    `section: ${section}`,
   ];
 
   if (tags.length > 0) {
@@ -175,8 +144,8 @@ function buildFrontmatter({ title, description, date, section, tags, series, pub
   return lines.join("\n");
 }
 
-function readTemplate(section) {
-  const templatePath = path.join(templatesDir, `${section}.md`);
+function readTemplate() {
+  const templatePath = path.join(templatesDir, "post.md");
 
   return readFileSync(templatePath, "utf8").trimStart();
 }
@@ -189,12 +158,11 @@ function main() {
     return;
   }
 
-  if (!options.section || !options.title) {
+  if (!options.title) {
     printUsage();
-    throw new Error("Both --section and --title are required.");
+    throw new Error("--title is required.");
   }
 
-  const section = normalizeSection(options.section);
   const title = String(options.title).trim();
   const slug = options.slug ? slugify(options.slug) : slugify(title);
 
@@ -222,12 +190,11 @@ function main() {
     title,
     description,
     date,
-    section,
     tags,
     series: options.series,
     publish: options.publish,
   });
-  const template = readTemplate(section).replaceAll("{{title}}", title);
+  const template = readTemplate().replaceAll("{{title}}", title);
 
   writeFileSync(postPath, `${frontmatter}${template}`, "utf8");
   console.log(`Created ${path.relative(root, postPath)}`);

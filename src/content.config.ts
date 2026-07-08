@@ -9,7 +9,6 @@ const blog = defineCollection({
       title: z.string(),
       description: z.string(),
       publishedAt: z.coerce.date(),
-      section: z.enum(["light-notes", "field-logs", "deep-dives"]),
       tags: z
         .array(z.string().trim().min(1, "Tags cannot be empty."))
         .min(1, "At least one tag is required."),

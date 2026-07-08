@@ -1,7 +1,6 @@
 import { type CollectionEntry, getCollection } from "astro:content";
 
 export type BlogEntry = CollectionEntry<"blog">;
-export type BlogSectionKey = BlogEntry["data"]["section"];
 
 export interface TagSummary {
   name: string;
@@ -74,12 +73,6 @@ export async function getDraftBlog() {
   return sortBlog(entries);
 }
 
-export async function getBlogBySection(section: BlogSectionKey) {
-  const entries = await getPublishedBlog();
-
-  return entries.filter((entry) => entry.data.section === section);
-}
-
 export function getTagSummaries(posts: BlogEntry[]) {
   const tags = new Map<string, TagSummary>();
 
@@ -112,14 +105,4 @@ export async function getPublishedTags() {
 
 export function getBlogByTagSlug(posts: BlogEntry[], slug: string) {
   return posts.filter((post) => post.data.tags.some((tag) => getTagSlug(tag) === slug));
-}
-
-export function getSectionLabel(section: BlogSectionKey) {
-  const labels: Record<BlogSectionKey, string> = {
-    "light-notes": "Light Notes",
-    "field-logs": "Field Logs",
-    "deep-dives": "Deep Dives",
-  };
-
-  return labels[section];
 }

@@ -28,41 +28,6 @@ export const mainNav = [
   { label: "Uses", href: "/uses", visible: sectionVisibility.uses },
 ] as const;
 
-export const blogSections = [
-  {
-    key: "light-notes",
-    title: "Light Notes",
-    navLabel: "Notes",
-    href: "/blog/notes",
-    intensity: "Light",
-    description: "Setup notes, quick lessons, tools, keyboards, debugging fragments.",
-    examples: ["laptop setup", "keyboard notes", "tool trials", "debugging fragments"],
-  },
-  {
-    key: "field-logs",
-    title: "Field Logs",
-    navLabel: "Logs",
-    href: "/blog/logs",
-    intensity: "Medium",
-    description: "Experiments, migrations, incidents, deployments, learning records.",
-    examples: ["homelab incidents", "deployment notes", "build journals", "learning records"],
-  },
-  {
-    key: "deep-dives",
-    title: "Deep Dives",
-    navLabel: "Deep Dives",
-    href: "/blog/deep-dives",
-    intensity: "Heavy",
-    description: "DevOps architecture, AI agents, systems thinking, computer science.",
-    examples: [
-      "DevOps architecture",
-      "AI agent utilization",
-      "CS philosophy",
-      "hard-earned lessons",
-    ],
-  },
-] as const;
-
 export const blogUtilities = [
   {
     title: "Tags",

@@ -1,20 +1,10 @@
 ---
-import {
-  identitySections,
-  projectSeeds,
-  sectionVisibility,
-  SITE,
-  blogSections,
-} from "../data/site";
+import { identitySections, projectSeeds, sectionVisibility, SITE } from "../data/site";
 import Layout from "../layouts/Layout.astro";
-import { formatDate, getPublishedBlog, getSectionLabel, getBlogUrl } from "../lib/content";
+import { formatDate, getPublishedBlog, getBlogUrl } from "../lib/content";
 
 const allBlog = await getPublishedBlog();
 const latestBlog = allBlog.slice(0, 6);
-const blogGroups = blogSections.map((section) => ({
-  ...section,
-  posts: allBlog.filter((post) => post.data.section === section.key).slice(0, 3),
-}));
 const profileLinks = identitySections.filter((section) => section.visible);
 const showProjectsPreview = sectionVisibility.projects;
 const showIdentitySections = profileLinks.length > 0 || showProjectsPreview;
@@ -26,7 +16,7 @@ const showIdentitySections = profileLinks.length > 0 || showProjectsPreview;
       <p class="eyebrow">Dev with Min</p>
       <h1 id="home-title">Hey, I'm Poby.</h1>
       <p class="lede">Software systems, NixOS homelab, DevOps practice, AI agents, daily tools.</p>
-      <p>Notes, field logs, deep dives, tradeoffs, lessons learned.</p>
+      <p>Notes, logs, and essays — tradeoffs and lessons, organized by tag.</p>
       <nav class="personal-links" aria-label="Personal links">
         <a href="/blog">Blog</a>
         <a href="/archive">Archive</a>
@@ -67,7 +57,6 @@ const showIdentitySections = profileLinks.length > 0 || showProjectsPreview;
                   <strong>{post.data.title}</strong>
                   <small>{post.data.description}</small>
                 </span>
-                <em>{getSectionLabel(post.data.section)}</em>
               </a>
             </li>
           ))}
@@ -76,45 +65,6 @@ const showIdentitySections = profileLinks.length > 0 || showProjectsPreview;
         <p class="empty-state">No blog posts yet.</p>
       )
     }
-  </section>
-
-  <section class="home-section" aria-labelledby="blog-title">
-    <div class="home-section__header">
-      <div>
-        <p class="eyebrow">Blog</p>
-        <h2 id="blog-title">Notes, logs, and deep dives</h2>
-        <p>Light notes, field logs, deep dives, low-noise archive.</p>
-      </div>
-      <a href="/blog">Blog index</a>
-    </div>
-
-    <div class="blog-lanes">
-      {
-        blogGroups.map((section) => (
-          <section class="blog-lane" aria-labelledby={`${section.key}-title`}>
-            <header>
-              <div>
-                <p>{section.intensity}</p>
-                <h3 id={`${section.key}-title`}>
-                  <a href={section.href}>{section.title}</a>
-                </h3>
-              </div>
-            </header>
-            {section.posts.length > 0 ? (
-              <ul class="mini-post-list">
-                {section.posts.map((post) => (
-                  <li>
-                    <a href={getBlogUrl(post)}>{post.data.title}</a>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p class="quiet-note">No posts yet.</p>
-            )}
-          </section>
-        ))
-      }
-    </div>
   </section>
 
   {
