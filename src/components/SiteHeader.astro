@@ -1,4 +1,6 @@
 ---
+import { Monitor, Moon, Sun } from "lucide-astro";
+
 import { mainNav, SITE } from "../data/site";
 
 interface Props {
@@ -19,14 +21,60 @@ function isCurrent(href: string) {
       <span class="brand-mark" aria-hidden="true">DM</span>
       <span>{SITE.name}</span>
     </a>
-    <nav class="primary-nav" aria-label="Primary navigation">
-      {
-        visibleMainNav.map((item) => (
-          <a href={item.href} aria-current={isCurrent(item.href) ? "page" : undefined}>
-            {item.label}
-          </a>
-        ))
-      }
-    </nav>
+    <div class="header-actions">
+      <nav class="primary-nav" aria-label="Primary navigation">
+        {
+          visibleMainNav.map((item) => (
+            <a href={item.href} aria-current={isCurrent(item.href) ? "page" : undefined}>
+              {item.label}
+            </a>
+          ))
+        }
+      </nav>
+      <button
+        type="button"
+        class="theme-toggle"
+        aria-label="Switch color theme (system, light, dark)"
+        title="Switch color theme"
+      >
+        <Sun class="theme-toggle__icon theme-toggle__icon--light" size={18} aria-hidden="true" />
+        <Moon class="theme-toggle__icon theme-toggle__icon--dark" size={18} aria-hidden="true" />
+        <Monitor
+          class="theme-toggle__icon theme-toggle__icon--system"
+          size={18}
+          aria-hidden="true"
+        />
+      </button>
+    </div>
   </div>
 </header>
+
+<script>
+  const KEY = "theme-preference";
+  const ORDER = ["system", "light", "dark"] as const;
+  const mql = window.matchMedia("(prefers-color-scheme: dark)");
+
+  function resolve(pref: string): string {
+    return pref === "system" ? (mql.matches ? "dark" : "light") : pref;
+  }
+
+  function apply(pref: string) {
+    const root = document.documentElement;
+    root.dataset.themePref = pref;
+    root.dataset.theme = resolve(pref);
+  }
+
+  const button = document.querySelector<HTMLButtonElement>(".theme-toggle");
+  button?.addEventListener("click", () => {
+    const current = localStorage.getItem(KEY) || "system";
+    const next = ORDER[(ORDER.indexOf(current as (typeof ORDER)[number]) + 1) % ORDER.length];
+    if (next === "system") localStorage.removeItem(KEY);
+    else localStorage.setItem(KEY, next);
+    apply(next);
+  });
+
+  // When following the system setting, react to OS light/dark changes live.
+  mql.addEventListener("change", () => {
+    if ((localStorage.getItem(KEY) || "system") === "system") apply("system");
+  });
+</script>

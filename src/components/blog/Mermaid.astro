@@ -20,6 +20,10 @@ const diagram = chart?.trim();
 <script>
   import mermaid from "mermaid";
 
+  // Mermaid bakes colors into the rendered SVG, so we keep each diagram's source text
+  // to re-render it (with fresh Catppuccin variables) whenever the theme toggles.
+  const sources = new WeakMap<HTMLElement, string>();
+
   const readCssVar = (name: string, fallback: string) => {
     const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
@@ -27,19 +31,20 @@ const diagram = chart?.trim();
   };
 
   const getMermaidThemeVariables = () => {
-    const bg = readCssVar("--bg", "#f8fafc");
-    const surface = readCssVar("--surface", "#ffffff");
-    const surfaceAlt = readCssVar("--surface-alt", "#eef4f0");
-    const ink = readCssVar("--ink", "#172033");
-    const muted = readCssVar("--muted", "#5f697a");
-    const line = readCssVar("--line", "#dce3eb");
-    const lineStrong = readCssVar("--line-strong", "#bfccd8");
+    const bg = readCssVar("--bg", "#eff1f5");
+    const surface = readCssVar("--surface", "#e6e9ef");
+    const surfaceAlt = readCssVar("--surface-alt", "#dce0e8");
+    const ink = readCssVar("--ink", "#4c4f69");
+    const muted = readCssVar("--muted", "#5c5f77");
+    const line = readCssVar("--line", "#ccd0da");
+    const lineStrong = readCssVar("--line-strong", "#bcc0cc");
+    const accent = readCssVar("--accent", "#8839ef");
 
     return {
       background: surface,
-      darkMode: window.matchMedia("(prefers-color-scheme: dark)").matches,
+      darkMode: document.documentElement.dataset.theme === "dark",
       fontFamily: getComputedStyle(document.documentElement).fontFamily,
-      lineColor: lineStrong,
+      lineColor: accent,
       primaryBorderColor: lineStrong,
       primaryColor: surfaceAlt,
       primaryTextColor: ink,
@@ -56,23 +61,23 @@ const diagram = chart?.trim();
       actorBorder: lineStrong,
       actorLineColor: lineStrong,
       actorTextColor: ink,
-      arrowheadColor: lineStrong,
+      arrowheadColor: accent,
       clusterBkg: bg,
       clusterBorder: line,
-      defaultLinkColor: lineStrong,
+      defaultLinkColor: accent,
       edgeLabelBackground: surface,
       labelTextColor: ink,
       mainBkg: surfaceAlt,
       nodeBkg: surfaceAlt,
       nodeBorder: lineStrong,
       nodeTextColor: ink,
-      signalColor: lineStrong,
+      signalColor: accent,
       signalTextColor: ink,
 
       attributeBackgroundColorEven: surfaceAlt,
       attributeBackgroundColorOdd: surface,
       erEdgeLabelBackground: surface,
-      relationColor: lineStrong,
+      relationColor: accent,
       relationLabelBackground: surface,
       relationLabelColor: muted,
     };
@@ -86,6 +91,11 @@ const diagram = chart?.trim();
     if (diagrams.length === 0) {
       return;
     }
+
+    // Remember each diagram's source before Mermaid replaces it with an SVG.
+    diagrams.forEach((node) => {
+      if (!sources.has(node)) sources.set(node, node.textContent ?? "");
+    });
 
     mermaid.initialize({
       startOnLoad: false,
@@ -122,4 +132,22 @@ const diagram = chart?.trim();
   }
 
   document.addEventListener("astro:page-load", () => void renderMermaid());
+
+  // The rendered SVG has baked-in colors, so re-render from source when the theme changes
+  // to repaint diagrams with the active Catppuccin (Latte or Macchiato) variables.
+  const rerenderForTheme = () => {
+    document.querySelectorAll<HTMLElement>("[data-mermaid-diagram]").forEach((node) => {
+      const source = sources.get(node);
+      if (source == null) return;
+      node.textContent = source;
+      delete node.dataset.processed;
+      delete node.dataset.mermaidError;
+    });
+    void renderMermaid();
+  };
+
+  new MutationObserver(rerenderForTheme).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["data-theme"],
+  });
 </script>
