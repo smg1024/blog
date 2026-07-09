@@ -1,0 +1,55 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title="404 — Not found"
+  description="This page could not be found."
+  noindex={true}
+>
+  <section class="not-found">
+    <div class="not-found__inner">
+      <p class="not-found__code">404</p>
+      <p class="not-found__text">Not Found</p>
+      <a class="not-found__home" href="/">Back home</a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .not-found {
+    display: grid;
+    place-items: center;
+    min-height: 65vh;
+  }
+
+  .not-found__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  .not-found__code {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: clamp(3.5rem, 12vw, 6rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--accent-strong);
+  }
+
+  .not-found__text {
+    margin: 0;
+    font-size: 1.15rem;
+    color: var(--muted);
+  }
+
+  .not-found__home {
+    margin-top: 1rem;
+    font-weight: 720;
+    color: var(--accent-strong);
+  }
+</style>
