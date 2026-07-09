@@ -102,6 +102,17 @@ sequenceDiagram
 />
 
 <Mermaid
+  title="Deploy flow"
+  chart={`
+flowchart LR
+  A[Build] --> B{Tests}
+  B -->|pass| C[Deploy]:::ok
+  B -->|fail| D[Rollback]:::err
+  classDef ok  fill:#40a02b,stroke:#2c6e1e,color:#fff
+  classDef err fill:#d20f39,stroke:#a01028,color:#fff
+`}
+/>
+<Mermaid
   title="Content model"
   chart={`
 erDiagram

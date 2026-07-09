@@ -11,7 +11,11 @@ export default defineConfig({
   site: "https://blog.ridewithmin.com",
   integrations: [
     expressiveCode({
-      themes: ["github-dark-dimmed"],
+      // First theme (Latte) is the light default; Macchiato is applied on [data-theme='dark'].
+      themes: ["catppuccin-latte", "catppuccin-macchiato"],
+      // Follow the site's manual theme toggle instead of prefers-color-scheme.
+      themeCssSelector: (theme) => `[data-theme='${theme.type}']`,
+      useDarkModeMediaQuery: false,
       frames: {
         showCopyToClipboardButton: true,
         removeCommentsWhenCopyingTerminalFrames: false,
@@ -20,20 +24,22 @@ export default defineConfig({
         borderColor: "var(--code-border)",
         borderRadius: "8px",
         codeBackground: "var(--code-bg)",
+        codeFontFamily:
+          '"D2Coding", "D2 coding subset", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace',
         codeFontSize: "0.92rem",
         codeLineHeight: "1.65",
         codePaddingBlock: "1.1rem",
-        codePaddingInline: "2.4rem",
-        codeSelectionBackground: "rgba(45, 212, 191, 0.22)",
+        codePaddingInline: "1.4rem",
+        codeSelectionBackground: "rgba(136, 57, 239, 0.2)",
         uiFontFamily:
-          'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+          '"D2Coding", "D2 coding subset", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace',
         uiFontSize: "0.78rem",
         frames: {
-          editorTabBarBackground: "color-mix(in srgb, var(--code-bg) 88%, #ffffff)",
-          frameBoxShadowCssValue: "0 14px 34px rgba(17, 24, 39, 0.14)",
+          editorTabBarBackground: "var(--surface-alt)",
+          frameBoxShadowCssValue: "none",
           inlineButtonBorder: "var(--code-border)",
           inlineButtonForeground: "var(--code-ink)",
-          terminalTitlebarBackground: "color-mix(in srgb, var(--code-bg) 88%, #ffffff)",
+          terminalTitlebarBackground: "var(--surface-alt)",
         },
       },
     }),

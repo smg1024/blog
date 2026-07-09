@@ -36,8 +36,35 @@ const socialImageUrl = new URL(image, SITE.url).toString();
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {/* Resolve the theme before first paint to avoid a flash of the wrong palette. */}
+    <script is:inline>
+      (function () {
+        try {
+          var pref = localStorage.getItem("theme-preference") || "system";
+          var systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+          var resolved = pref === "system" ? (systemDark ? "dark" : "light") : pref;
+          var root = document.documentElement;
+          root.dataset.theme = resolved;
+          root.dataset.themePref = pref;
+        } catch (e) {}
+      })();
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate" type="application/rss+xml" title={`${SITE.name} RSS`} href="/rss.xml" />
+    {/* Pretendard (prose + UI) via its dynamic-subset CDN: downloads only glyphs used per page. */}
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css"
+    />
+    {/* D2Coding (code + structural accents) is self-hosted; preload the Regular weight. */}
+    <link
+      rel="preload"
+      href="/fonts/d2coding/D2Coding-subset.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
     <meta name="author" content={SITE.author} />
