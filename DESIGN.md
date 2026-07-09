@@ -1,10 +1,11 @@
 ---
 version: alpha
 name: Dev with Min
-description: A minimalist software-engineer blog — Catppuccin palette, bilingual EN/KR type, light/dark toggle.
-# Tokens below are the canonical LIGHT theme (Catppuccin Latte). The dark theme
-# (Catppuccin Macchiato) mirrors every token 1:1 via a [data-theme="dark"] attribute;
-# see the Colors section for the full light/dark mapping.
+description: A minimalist software-engineer blog — Catppuccin palette, bilingual EN/KR type, system-default light/dark.
+# Default theme is `system`: the site follows the visitor's OS preference, rendering
+# Latte (light) or Macchiato (dark). The tokens below are the LIGHT (Catppuccin Latte)
+# reference set the two themes are authored against; Macchiato mirrors every token 1:1
+# via [data-theme="dark"]. See the Colors section for the full light/dark mapping.
 colors:
   accent: "#8839ef"       # Mauve — the single accent
   accentWarm: "#fe640b"   # Peach — drafts / warnings
@@ -100,10 +101,12 @@ Easy to read; **never** a product-designer showcase with heavy 3D or motion. Eve
 below is tested against that sentence: if an option is more "field notes" and less
 "corporate," it wins.
 
-The site is **light-first**: the canonical design surface is Catppuccin **Latte**, and a
-Catppuccin **Macchiato** dark theme mirrors it token-for-token. Theme is controlled by a
-`[data-theme]` attribute on `<html>`, resolved before first paint by a tiny inline script,
-so there is no flash. A header toggle cycles **system → light → dark** and persists to
+The default theme is **`system`**: the site follows the visitor's OS preference, rendering
+Catppuccin **Latte** (light) or **Macchiato** (dark) to match. The two themes mirror each
+other token-for-token; **Latte is the reference set** they're authored against. Theme is
+applied through a `[data-theme]` attribute on `<html>`, resolved before first paint by a tiny
+inline script, so there is no flash (with JavaScript disabled it falls back to Latte). A
+header toggle cycles **system → light → dark** and persists an explicit choice to
 `localStorage`; in system mode it tracks the OS setting live.
 
 ## Colors
