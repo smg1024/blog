@@ -105,9 +105,11 @@ The default theme is **`system`**: the site follows the visitor's OS preference,
 Catppuccin **Latte** (light) or **Macchiato** (dark) to match. The two themes mirror each
 other token-for-token; **Latte is the reference set** they're authored against. Theme is
 applied through a `[data-theme]` attribute on `<html>`, resolved before first paint by a tiny
-inline script, so there is no flash (with JavaScript disabled it falls back to Latte). A
-header toggle cycles **system → light → dark** and persists an explicit choice to
-`localStorage`; in system mode it tracks the OS setting live.
+inline script, so there is no flash. The server-rendered `<html>` ships with
+`data-theme="dark"`, which the script overrides for JS visitors — so with **JavaScript
+disabled the site falls back to the dark (Macchiato) theme**. A header toggle cycles
+**system → light → dark** and persists an explicit choice to `localStorage`; in system mode
+it tracks the OS setting live.
 
 ## Colors
 
@@ -191,8 +193,8 @@ for legibility as content scrolls under it.
 ## Components
 
 - **themeToggle** — 2.3rem square button in the header. Cycles system → light → dark; shows a
-  monitor / sun / moon icon for the active preference. Default (or no JS) shows the monitor
-  icon and follows the OS.
+  monitor / sun / moon icon for the active preference. Default shows the monitor icon and
+  follows the OS; without JavaScript the page falls back to the dark theme.
 - **card** — post/section/project cards: `{colors.surface}` fill, `{colors.line}` border,
   `{rounded.md}`. Hover promotes the border to `{colors.lineStrong}` (no shadow).
 - **callout** — MDX callouts share one shape; the left border and marker take a per-type hue

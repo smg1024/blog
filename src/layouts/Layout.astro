@@ -32,7 +32,9 @@ const socialImageUrl = new URL(image, SITE.url).toString();
 ---
 
 <!doctype html>
-<html lang="en">
+<!-- data-theme defaults to dark so no-JS visitors get the dark theme; the inline
+     script below overrides it (from stored preference or the system setting) before paint. -->
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
