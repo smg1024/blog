@@ -12,15 +12,19 @@
     ];
 
     forAllSystems = nixpkgs.lib.genAttrs systems;
+
+    pkgsFor = system:
+      import nixpkgs {
+        inherit system;
+        overlays = [(import ./overlays.nix)];
+      };
   in {
-    packages = forAllSystems (system: let
-      pkgs = import nixpkgs {inherit system;};
-    in {
-      default = pkgs.callPackage ./package.nix {};
+    packages = forAllSystems (system: {
+      default = (pkgsFor system).callPackage ./package.nix {};
     });
 
     formatter = forAllSystems (system: let
-      pkgs = import nixpkgs {inherit system;};
+      pkgs = pkgsFor system;
     in
       pkgs.writeShellApplication {
         name = "alejandra-format";
@@ -35,7 +39,7 @@
       });
 
     devShells = forAllSystems (system: let
-      pkgs = import nixpkgs {inherit system;};
+      pkgs = pkgsFor system;
     in {
       default = pkgs.mkShell {
         packages = [
