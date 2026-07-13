@@ -7,20 +7,20 @@ description: A minimalist software-engineer blog — Catppuccin palette, bilingu
 # reference set the two themes are authored against; Macchiato mirrors every token 1:1
 # via [data-theme="dark"]. See the Colors section for the full light/dark mapping.
 colors:
-  accent: "#8839ef"       # Mauve — the single accent
-  accentWarm: "#fe640b"   # Peach — drafts / warnings
-  background: "#eff1f5"   # Base — page / reading surface
-  surface: "#e6e9ef"      # Mantle — cards, header, panels
-  surfaceAlt: "#dce0e8"   # Crust — insets, hover fills
-  ink: "#4c4f69"          # Text — primary reading text
-  muted: "#5c5f77"        # Subtext1 — descriptions
-  soft: "#6c6f85"         # Subtext0 — secondary meta
-  line: "#ccd0da"         # Surface0 — borders
-  lineStrong: "#bcc0cc"   # Surface1 — hover / stronger borders
-  infoBlue: "#1e66f5"     # Decision callouts, links
+  accent: "#8839ef" # Mauve — the single accent
+  accentWarm: "#fe640b" # Peach — drafts / warnings
+  background: "#eff1f5" # Base — page / reading surface
+  surface: "#e6e9ef" # Mantle — cards, header, panels
+  surfaceAlt: "#dce0e8" # Crust — insets, hover fills
+  ink: "#4c4f69" # Text — primary reading text
+  muted: "#5c5f77" # Subtext1 — descriptions
+  soft: "#6c6f85" # Subtext0 — secondary meta
+  line: "#ccd0da" # Surface0 — borders
+  lineStrong: "#bcc0cc" # Surface1 — hover / stronger borders
+  infoBlue: "#1e66f5" # Decision callouts, links
   successGreen: "#40a02b" # Tip callouts
-  dangerRed: "#d20f39"    # Danger callouts
-  sky: "#04a5e5"          # Todo callouts
+  dangerRed: "#d20f39" # Danger callouts
+  sky: "#04a5e5" # Todo callouts
 typography:
   display:
     fontFamily: Pretendard
@@ -129,18 +129,18 @@ at the AA line by design.
 
 Every token has a Latte (light) and Macchiato (dark) value:
 
-| Token | Role | Latte (light) | Macchiato (dark) |
-|---|---|---|---|
-| `accent` | single accent (Mauve) | `#8839ef` | `#c6a0f6` |
-| `accentWarm` | drafts / warnings (Peach) | `#fe640b` | `#f5a97f` |
-| `background` | page / reading surface (Base) | `#eff1f5` | `#24273a` |
-| `surface` | cards, header, panels (Mantle) | `#e6e9ef` | `#1e2030` |
-| `surfaceAlt` | insets, hover fills (Crust) | `#dce0e8` | `#181926` |
-| `ink` | primary text (Text) | `#4c4f69` | `#cad3f5` |
-| `muted` | descriptions (Subtext1) | `#5c5f77` | `#b8c0e0` |
-| `soft` | secondary meta (Subtext0) | `#6c6f85` | `#a5adcb` |
-| `line` | borders (Surface0) | `#ccd0da` | `#363a4f` |
-| `lineStrong` | hover / stronger borders (Surface1) | `#bcc0cc` | `#494d64` |
+| Token        | Role                                | Latte (light) | Macchiato (dark) |
+| ------------ | ----------------------------------- | ------------- | ---------------- |
+| `accent`     | single accent (Mauve)               | `#8839ef`     | `#c6a0f6`        |
+| `accentWarm` | drafts / warnings (Peach)           | `#fe640b`     | `#f5a97f`        |
+| `background` | page / reading surface (Base)       | `#eff1f5`     | `#24273a`        |
+| `surface`    | cards, header, panels (Mantle)      | `#e6e9ef`     | `#1e2030`        |
+| `surfaceAlt` | insets, hover fills (Crust)         | `#dce0e8`     | `#181926`        |
+| `ink`        | primary text (Text)                 | `#4c4f69`     | `#cad3f5`        |
+| `muted`      | descriptions (Subtext1)             | `#5c5f77`     | `#b8c0e0`        |
+| `soft`       | secondary meta (Subtext0)           | `#6c6f85`     | `#a5adcb`        |
+| `line`       | borders (Surface0)                  | `#ccd0da`     | `#363a4f`        |
+| `lineStrong` | hover / stronger borders (Surface1) | `#bcc0cc`     | `#494d64`        |
 
 ## Typography
 
@@ -215,6 +215,7 @@ for legibility as content scrolls under it.
 ## Do's and Don'ts
 
 **Do**
+
 - Use Pretendard for prose and headings; D2Coding for code and structural accents.
 - Keep exactly one accent (Mauve). Add color only through the functional callout hues.
 - Separate surfaces with borders; promote the border on hover.
@@ -223,6 +224,7 @@ for legibility as content scrolls under it.
   both modes).
 
 **Don't**
+
 - Don't introduce drop shadows, gradients, glows, 3D, or motion — that's the identity we
   reject.
 - Don't use Overlay or Surface colors for text (they fail contrast).
