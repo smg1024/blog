@@ -12,19 +12,19 @@ export const SITE = {
 // Disabled section pages are also prefixed with "_" in src/pages so Astro does not publish them.
 export const sectionVisibility = {
   blog: true,
+  resume: true,
   projects: false,
   timeline: false,
   profile: false,
-  cv: false,
   uses: false,
 } as const;
 
 export const mainNav = [
   { label: "Blog", href: "/blog", visible: sectionVisibility.blog },
+  { label: "Résumé", href: "/resume", visible: sectionVisibility.resume },
   { label: "Projects", href: "/projects", visible: sectionVisibility.projects },
   { label: "Timeline", href: "/timeline", visible: sectionVisibility.timeline },
   { label: "Profile", href: "/profile", visible: sectionVisibility.profile },
-  { label: "CV", href: "/cv", visible: sectionVisibility.cv },
   { label: "Uses", href: "/uses", visible: sectionVisibility.uses },
 ] as const;
 
@@ -58,12 +58,6 @@ export const identitySections = [
     href: "/profile",
     visible: sectionVisibility.profile,
     description: "Interests, values, direction, focus.",
-  },
-  {
-    title: "CV",
-    href: "/cv",
-    visible: sectionVisibility.cv,
-    description: "Career, skills, roles, professional context.",
   },
   {
     title: "Timeline",

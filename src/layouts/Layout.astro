@@ -42,13 +42,15 @@ const socialImageUrl = new URL(image, SITE.url).toString();
     <script is:inline>
       (function () {
         try {
-          var pref = localStorage.getItem("theme-preference") || "system";
-          var systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-          var resolved = pref === "system" ? (systemDark ? "dark" : "light") : pref;
-          var root = document.documentElement;
+          const pref = localStorage.getItem("theme-preference") || "system";
+          const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+          const resolved = pref === "system" ? (systemDark ? "dark" : "light") : pref;
+          const root = document.documentElement;
           root.dataset.theme = resolved;
           root.dataset.themePref = pref;
-        } catch (e) {}
+        } catch {
+          /* localStorage unavailable — keep the no-JS default theme */
+        }
       })();
     </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
