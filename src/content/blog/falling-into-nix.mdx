@@ -32,19 +32,19 @@ I already knew the benefits of Docker --- how it solves the "it works on my mach
 
 Then I came across Nix and nix-darwin, and the two habits converged: a package manager, compatible with macOS, that could lock in my preferences as code --- just like the IaC trend, but for my own machine.
 
-## <GitHubRepo repo="smg1024/nix-darwin" /> : fenrir, then huginn
+## <GitHubRepo repo="smg1024/nix-darwin">nix-darwin</GitHubRepo> : fenrir, then huginn
 
 First, it was a fight. Learning the Nix language, and how it actually works under the hood, took real effort.
 
 Once that was figured out, I began freezing my config files and declaring them as Nix. It started with only my personal MacBook, `fenrir`. Then, after introducing flake-parts and the dendritic pattern, I migrated my work MacBook `huginn` into the same declaration as well.
 
-## <GitHubRepo repo="smg1024/homelab" /> : Proxmox out, NixOS in
+## <GitHubRepo repo="smg1024/homelab">homelab</GitHubRepo> : Proxmox out, NixOS in
 
 I started my homelab with Proxmox VE, but it felt overcomplicated for a personal homelab --- the hardware isn't very strong, and honestly kind of old. So I looked into NixOS as the homelab OS, searched for examples and references, and decided to move.
 
 Two things made the decision. First, the nixpkgs ecosystem is enormous --- it supports pretty much everything I wanted to run as a service. Second, I was planning to transition my career toward Infra/DevOps engineering, and I needed a safe environment where I could break my homelab and learn from it. NixOS made this possible: a broken configuration breaks at build time, before the rebuild switch --- not after.
 
-## <GitHubRepo repo="smg1024/blog" /> : my own custom flake module
+## <GitHubRepo repo="smg1024/blog">blog</GitHubRepo> : my own custom flake module
 
 This blog is an Astro project in TypeScript, running on Bun. Local development is just `bun dev`, like many other projects.
 

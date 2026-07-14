@@ -10,7 +10,7 @@ const { repo } = Astro.props;
 
 <a class="github-repo" href={`https://github.com/${repo}`} target="_blank" rel="noopener noreferrer">
   <Github aria-hidden="true" />
-  <span>{repo}</span>
+  <span><slot>{repo}</slot></span>
 </a>
 
 <style>
