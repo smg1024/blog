@@ -1,0 +1,131 @@
+---
+title: "Two Repos, One Push"
+description: "One push to master, and GitHub Actions carries the post to the homelab."
+publishedAt: 2026-07-14T16:06:16+0900
+tags:
+  - interview
+  - ci-cd
+  - github-actions
+  - homelab
+draft: false
+---
+
+import Decision from "../../components/blog/Decision.astro";
+import GitHubRepo from "../../components/blog/GitHubRepo.astro";
+import Mermaid from "../../components/blog/Mermaid.astro";
+import Note from "../../components/blog/Note.astro";
+import Question from "../../components/blog/Question.astro";
+import Reference from "../../components/blog/Reference.astro";
+
+This post is about the pipeline that publishes it. It is the first post to ride the new
+blog-to-homelab deploy workflow --- so if you are reading this on the live site, the maiden
+voyage worked.
+
+<Reference title="Background">
+  [Falling into Nix](/blog/falling-into-nix) covers how this blog became a flake module that the
+  homelab imports as a flake input.
+</Reference>
+
+## Two repos, two pushes
+
+This blog lives in its own repository, and my homelab consumes it as a pinned flake input.
+That pin is exact --- the homelab deploys the specific commit recorded in its `flake.lock`,
+not whatever happens to be on master.
+
+Which meant publishing a post used to take two trips. Push the post to the blog repo. Then
+walk over to the <GitHubRepo repo="smg1024/homelab" /> repo, run `nix flake update blog`,
+commit, and push again. Two repos, two pushes, for one blog post.
+
+I wasn't happy with that flow. And I had a second motive: I wanted to practice CI/CD
+plumbing across repositories --- the kind of cross-repo wiring that real infrastructure work
+is full of.
+
+## Cron or dispatch
+
+I considered two designs. One was a nightly cronjob at 03:00 KST in the homelab repo:
+check the blog's master branch for new commits, re-pin if it moved, every day. The other
+was event-driven: the blog repo tells the homelab the moment master changes.
+
+<Decision title="Event-driven dispatch">
+  Latency and learning value tipped it. A post should be live minutes after I push, not the next
+  morning --- and building the dispatch mechanism was the more interesting thing to learn.
+</Decision>
+
+## The trigger
+
+The blog's side is one small workflow: every push to master sends a `repository_dispatch`
+event to the homelab repo.
+
+```yaml title=".github/workflows/trigger-homelab-deploy.yml"
+name: Trigger homelab deploy
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send repository_dispatch to smg1024/homelab
+        env:
+          GH_TOKEN: ${{ secrets.HOMELAB_PAT }}
+        run: gh api repos/smg1024/homelab/dispatches -f event_type=blog-updated
+```
+
+<Note title="Github PAT (Personal Access Token)">
+  Cross-repo dispatch needs a credential. I minted a fine-grained personal access token scoped to
+  only the homelab repository, with only contents and pull-request permissions, and stored it as an
+  Actions secret in the blog repo. I didn't set an expiration date --- I'm relying on GitHub's
+  security around secret management here.
+</Note>
+
+## The receiving end
+
+When the `blog-updated` event lands, the homelab's `update-blog` workflow takes over. It
+runs `nix flake update blog` and checks the git diff first --- if nothing changed, the
+workflow ends right away. If `flake.lock` did move, it commits the change to a separate
+branch on my behalf, opens a PR, and auto-merges it to main once all CI checks pass. From
+there it's the same deploy action every other homelab change goes through.
+
+<Mermaid
+  title="One push, end to end"
+  chart={`
+flowchart TD
+  subgraph blog [blog repo]
+    P[push to master] --> W[trigger workflow]
+  end
+  W -->|repository_dispatch| U
+  subgraph lab [homelab repo]
+    U[update-blog workflow] --> F[nix flake update blog]
+    F --> D{lock file changed?}
+    D -->|no| E[end]
+    D -->|yes| PR[branch + PR]
+    PR -->|CI green| M[auto-merge to main]
+  end
+  M --> DEP[deploy action] --> N[homelab node]
+`}
+/>
+
+## Guardrails for an audience of one
+
+Even the bot's one-line `flake.lock` bump goes through a branch, a PR, and CI before it
+touches main. Branch protection rules enforce that --- no exceptions, not even for my own
+automation. The gate is there in case the blog fails to deploy, especially when a
+dependency changes in the blog project: CI catches the broken build before any node
+rebuilds.
+
+This might look somewhat overcomplicated for a simple blog project. But if I assume this
+was a non-personal, team project, this is the standard move.
+
+<Question title="Rigor for an audience of one?">
+  Is the homelab a rehearsal stage for the Infra/DevOps career I'm moving toward, or is this just
+  how I'd build things anyway? Both, honestly --- the career gives the rigor its justification, but
+  the rigor is who I am.
+</Question>
+
+## Refresh the site
+
+There are no notifications and no deploy dashboards at the end of this chain. The way I'll
+know the maiden voyage worked is the way you know: refresh the site, and see this post
+appear. One push.
