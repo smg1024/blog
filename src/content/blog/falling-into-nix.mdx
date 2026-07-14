@@ -1,0 +1,91 @@
+---
+title: "Falling into Nix"
+description: "From Docker and macOS defaults tinkering to nix-darwin, a NixOS homelab, and this blog."
+publishedAt: 2026-07-14
+series: "Nix"
+tags:
+  - nix
+  - nix-darwin
+  - nixos
+  - homelab
+draft: true
+---
+
+import GitHubRepo from "../../components/blog/GitHubRepo.astro";
+import Mermaid from "../../components/blog/Mermaid.astro";
+import Reference from "../../components/blog/Reference.astro";
+import Todo from "../../components/blog/Todo.astro";
+
+<Reference title="Previous in this series">
+  [Introduction to Nix and its philosophy](/blog/introduction-to-nix-and-its-philosophy)
+</Reference>
+
+The [previous post](/blog/introduction-to-nix-and-its-philosophy) was about what I think Nix is. This one is
+about how I fell into it, and how it spread through my machines --- nix-darwin first, then the
+homelab, then this blog.
+
+## Before Nix: Docker and `defaults`
+
+Two habits set this up.
+
+I already knew the benefits of Docker --- how it solves the "it works on my machine" problem --- and I used it on most of my projects. And I liked tinkering with my MacBook, configuring everything to my own settings, down to the level of `defaults` commands in the terminal.
+
+Then I came across Nix and nix-darwin, and the two habits converged: a package manager, compatible with macOS, that could lock in my preferences as code --- just like the IaC trend, but for my own machine.
+
+## <GitHubRepo repo="smg1024/nix-darwin" /> : fenrir, then huginn
+
+First, it was a fight. Learning the Nix language, and how it actually works under the hood, took real effort.
+
+Once that was figured out, I began freezing my config files and declaring them as Nix. It started with only my personal MacBook, `fenrir`. Then, after introducing flake-parts and the dendritic pattern, I migrated my work MacBook `huginn` into the same declaration as well.
+
+## <GitHubRepo repo="smg1024/homelab" /> : Proxmox out, NixOS in
+
+I started my homelab with Proxmox VE, but it felt overcomplicated for a personal homelab --- the hardware isn't very strong, and honestly kind of old. So I looked into NixOS as the homelab OS, searched for examples and references, and decided to move.
+
+Two things made the decision. First, the nixpkgs ecosystem is enormous --- it supports pretty much everything I wanted to run as a service. Second, I was planning to transition my career toward Infra/DevOps engineering, and I needed a safe environment where I could break my homelab and learn from it. NixOS made this possible: a broken configuration breaks at build time, before the rebuild switch --- not after.
+
+## <GitHubRepo repo="smg1024/blog" /> : my own custom flake module
+
+This blog is an Astro project in TypeScript, running on Bun. Local development is just `bun dev`, like many other projects.
+
+But I wanted to deploy it on one of my homelab nodes, and that made it a good experimental use case: declare a dedicated flake module in this repo, and import it as a flake input from the homelab repo.
+
+<Mermaid
+  title="How the blog reaches the homelab"
+  chart={`
+flowchart LR
+  subgraph blog [blog repo]
+    M[flake module]
+  end
+  subgraph lab [homelab repo]
+    I[flake input] --> C[node configuration]
+  end
+  M --> I
+  C -->|rebuild switch| N[homelab node]
+`}
+/>
+
+The best lesson came from a failure. Bun's default x86_64-linux binary requires AVX2, and my old homelab CPUs don't have it --- so the declared module could not run there. The fix was an overlay swapping in Bun's baseline build:
+
+```nix title="overlays.nix"
+bun =
+  if prev.stdenv.hostPlatform.system != "x86_64-linux"
+  then prev.bun
+  else
+    # swap the source archive for bun's baseline (non-AVX2) release build
+    prev.bun.overrideAttrs (old: {
+      # ...
+    });
+```
+
+This was "breaking the homelab before applying" in action: the system showed me in advance that it would not be able to run the declared module. Along the way I got to understand the relationship between hardware limitations and the binaries you deploy onto them.
+
+## What it left me with
+
+Nix taught me how declared code gets applied as real results. That led me to architectural judgment --- the pros and cons of various patterns --- and to my own taste. It also grew my ability to dig through unpolished documentation and scattered references from the open source community.
+
+Nix is not the mainstream of the software world. But it is certainly of my taste and preference. And to pursue a career as an Infra/DevOps engineer, I need to learn and get familiar with the mainstream languages, frameworks, and tools --- I feel Nix played a crucial part in building the foundation layer for me to step forward into that path.
+
+<Todo title="Next steps">
+  Build on this foundation: get familiar with the mainstream Infra/DevOps toolchain.
+</Todo>

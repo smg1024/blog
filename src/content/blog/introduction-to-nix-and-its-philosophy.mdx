@@ -1,0 +1,79 @@
+---
+title: "Introduction to Nix and its philosophy"
+description: "What Nix is, what it aims to do, and why taste is the real price of the philosophy."
+publishedAt: 2026-07-14
+series: "Nix"
+tags:
+  - nix
+  - philosophy
+  - declarative
+draft: true
+---
+
+import Decision from "../../components/blog/Decision.astro";
+import Mermaid from "../../components/blog/Mermaid.astro";
+import Reference from "../../components/blog/Reference.astro";
+import Warning from "../../components/blog/Warning.astro";
+
+If a friend asked me over coffee what Nix is, I would start the same way most people do: it's a package manager. The interesting part is everything after the "but".
+
+## A package manager, but
+
+Unlike apt or brew, Nix doesn't mutate the machine. You declare the whole environment in a file, and the machine converges to it — instead of accumulating install commands that nobody wrote down.
+
+```bash title="The usual way"
+brew install bun
+brew install alejandra
+# ...months of commands, remembered by no one
+```
+
+```nix title="The Nix way"
+packages = [
+  pkgs.bun
+  pkgs.alejandra
+];
+```
+
+The first one is a history. The second one is a description. That difference sounds small until you have to rebuild a machine from the history.
+
+## The end of mutable state
+
+If Nix is trying to kill one disease in software, it's this: systems rot because we mutate them in place. Every install, every tweak, every hotfix edits the machine directly, and the sum of those edits is config drift — a snowflake machine nobody can reproduce.
+
+The cure Nix proposes is to end mutable state. Nothing gets edited in place; builds land in immutable store paths, and the system moves between them with atomic switches.
+
+<Mermaid
+  title="Mutation vs Convergence"
+  chart={`
+flowchart LR
+  subgraph imperative [Mutating in place]
+    A[install] --> B[tweak] --> C[hotfix] --> D[snowflake machine]
+  end
+  subgraph declarative [Declaring and converging]
+    E[declaration] --> F[build] --> G[immutable store path] --> H[atomic switch]
+  end
+`}
+/>
+
+## Ahead of its time
+
+How much impact has Nix had on the software world? Honestly — less than it deserves, so far. The learning curve keeps it fringe today. But I think it's the direction everything is slowly heading.
+
+<Decision title="My opinion">
+  Nix adoption is a when, not an if. The industry keeps rediscovering what it already solved.
+</Decision>
+
+## The real price is taste
+
+When I recommend Nix to someone, the price tag I warn about first is the learning cliff — the language, and the mental flip from imperative to declarative.
+
+<Warning title="The learning cliff">The first stretch is genuinely hard. Budget for it.</Warning>
+
+But the deeper cost is finding your own optimized architecture. There is no bible for how a Nix configuration must look. Anyone can create and manipulate modules and options to their preference, and the ecosystem won't tell you which way is right.
+
+Declarativeness is guaranteed by the source code. Stability is guaranteed by version locks. What is not guaranteed is your architecture — discovering and refining that taste is the ultimate cost of the philosophy.
+
+<Reference title="Next in this series">
+  [Falling into Nix](/blog/falling-into-nix) — how I actually got here: nix-darwin, a homelab, and
+  this blog.
+</Reference>
