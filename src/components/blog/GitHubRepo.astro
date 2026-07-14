@@ -1,0 +1,40 @@
+---
+import { Github } from "lucide-astro";
+
+interface Props {
+  repo: string;
+}
+
+const { repo } = Astro.props;
+---
+
+<a class="github-repo" href={`https://github.com/${repo}`} target="_blank" rel="noopener noreferrer">
+  <Github aria-hidden="true" />
+  <span>{repo}</span>
+</a>
+
+<style>
+  .github-repo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    padding: 0.15em 0.6em;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface);
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    text-decoration: none;
+    vertical-align: middle;
+  }
+
+  .github-repo:hover {
+    border-color: var(--accent-strong);
+    color: var(--accent-strong);
+  }
+
+  .github-repo :global(svg) {
+    width: 1em;
+    height: 1em;
+  }
+</style>
