@@ -21,34 +21,34 @@ import Todo from "../../components/blog/Todo.astro";
 </Reference>
 
 The [previous post](/blog/introduction-to-nix-and-its-philosophy) was about what I think Nix is. This one is
-about how I fell into it, and how it spread through my machines --- nix-darwin first, then the
-homelab, then this blog.
+about how I ended up using it everywhere. I started with nix-darwin, moved the homelab to NixOS,
+and eventually pulled this blog into the same setup.
 
 ## Before Nix: Docker and `defaults`
 
-Two habits set this up.
+I was already doing two things that made Nix appealing.
 
-I already knew the benefits of Docker --- how it solves the "it works on my machine" problem --- and I used it on most of my projects. And I liked tinkering with my MacBook, configuring everything to my own settings, down to the level of `defaults` commands in the terminal.
+I used Docker for most projects because it gave me a repeatable environment instead of another "it works on my machine" problem. I also spent too much time tinkering with my MacBook, right down to changing settings with `defaults` commands in the terminal.
 
-Then I came across Nix and nix-darwin, and the two habits converged: a package manager, compatible with macOS, that could lock in my preferences as code --- just like the IaC trend, but for my own machine.
+Then I found Nix and nix-darwin. They gave me a macOS package manager that could keep those preferences in code. It felt like applying infrastructure as code to the laptop in front of me.
 
 ## <GitHubRepo repo="smg1024/nix-darwin">nix-darwin</GitHubRepo> : fenrir, then huginn
 
-First, it was a fight. Learning the Nix language, and how it actually works under the hood, took real effort.
+At first, it was a fight. Learning the language was hard enough; understanding what Nix was doing under the hood took longer.
 
-Once that was figured out, I began freezing my config files and declaring them as Nix. It started with only my personal MacBook, `fenrir`. Then, after introducing flake-parts and the dendritic pattern, I migrated my work MacBook `huginn` into the same declaration as well.
+Once the model started to click, I moved my config files into Nix. My personal MacBook, `fenrir`, came first. After I adopted flake-parts and the dendritic pattern, I brought my work MacBook, `huginn`, into the same declaration.
 
 ## <GitHubRepo repo="smg1024/homelab">homelab</GitHubRepo> : Proxmox out, NixOS in
 
-I started my homelab with Proxmox VE, but it felt overcomplicated for a personal homelab --- the hardware isn't very strong, and honestly kind of old. So I looked into NixOS as the homelab OS, searched for examples and references, and decided to move.
+I started the homelab on Proxmox VE, but it felt heavy for a small personal setup running on old hardware. I began reading other people's NixOS configurations and decided to replace it.
 
-Two things made the decision. First, the nixpkgs ecosystem is enormous --- it supports pretty much everything I wanted to run as a service. Second, I was planning to transition my career toward Infra/DevOps engineering, and I needed a safe environment where I could break my homelab and learn from it. NixOS made this possible: a broken configuration breaks at build time, before the rebuild switch --- not after.
+The nixpkgs ecosystem already supported almost every service I wanted to run. More importantly, I was trying to move my career toward infrastructure and DevOps work, and I wanted a place where breaking things was part of the exercise. With NixOS, a bad configuration usually fails during the build, before `nixos-rebuild switch` touches the running system. That made the homelab a much safer place to experiment.
 
 ## <GitHubRepo repo="smg1024/blog">blog</GitHubRepo> : my own custom flake module
 
-This blog is an Astro project in TypeScript, running on Bun. Local development is just `bun dev`, like many other projects.
+This blog is an Astro project in TypeScript and runs on Bun. Local development is the ordinary `bun dev`.
 
-But I wanted to deploy it on one of my homelab nodes, and that made it a good experimental use case: declare a dedicated flake module in this repo, and import it as a flake input from the homelab repo.
+Deployment was the interesting part. I wanted the site on one of my homelab nodes, so I wrote a flake module in the blog repository and imported it into the homelab as a flake input.
 
 <Mermaid
   title="How the blog reaches the homelab"
@@ -65,7 +65,22 @@ flowchart LR
 `}
 />
 
-The best lesson came from a failure. Bun's default x86_64-linux binary requires AVX2, and my old homelab CPUs don't have it --- so the declared module could not run there. The fix was an overlay swapping in Bun's baseline build:
+The first build failed for a useful reason. Bun's default x86_64-linux binary requires AVX2, which my old homelab CPU does not support. I fixed it with an overlay that swaps in Bun's baseline build:
+
+```log title="dev-with-min-node-modules-0.1.0.drv"
+error: Cannot build '/nix/store/in3ydhnl8x791vndixidwkr8yinqniiv-dev-with-min-node-modules-0.1.0.drv'.
+       Reason: builder failed with exit code 132.
+       Output paths:
+         /nix/store/ivmcaavvmy4nm2qixkvkmgv0apd0fkmg-dev-with-min-node-modules-0.1.0
+       Last 7 log lines:
+       > Running phase: unpackPhase
+       > unpacking source archive /nix/store/d4bf9lrp9qgjzjy6xw8r4gpbj7nvrqid-source
+       > source root is source
+       > Running phase: patchPhase
+       > Running phase: updateAutotoolsGnuConfigScriptsPhase
+       > Running phase: buildPhase
+       > /nix/store/pr27j8nm0xl52pq4ylncj9kwjw3b84mk-stdenv-linux/setup: line 1776:    31 Illegal instruction        (core dumped) bun install --frozen-lockfile --ignore-scripts --no-progress --backend=copyfile --os=linux --cpu=x64
+```
 
 ```nix title="overlays.nix"
 bun =
@@ -78,14 +93,14 @@ bun =
     });
 ```
 
-This was "breaking the homelab before applying" in action: the system showed me in advance that it would not be able to run the declared module. Along the way I got to understand the relationship between hardware limitations and the binaries you deploy onto them.
+This was exactly the kind of failure I wanted from NixOS. The build told me that the declared system could not run on the target CPU before anything was applied. It also forced me to learn why the binary itself mattered, not just whether a package named `bun` existed.
 
-## What it left me with
+## What I learned
 
-Nix taught me how declared code gets applied as real results. That led me to architectural judgment --- the pros and cons of various patterns --- and to my own taste. It also grew my ability to dig through unpolished documentation and scattered references from the open source community.
+Nix made declarative configuration concrete for me. I had to compare different module patterns, live with my choices, and work out which ones I could still understand later. I also got much better at finding answers in unfinished documentation and old discussions scattered across open source repositories.
 
-Nix is not the mainstream of the software world. But it is certainly of my taste and preference. And to pursue a career as an Infra/DevOps engineer, I need to learn and get familiar with the mainstream languages, frameworks, and tools --- I feel Nix played a crucial part in building the foundation layer for me to step forward into that path.
+Nix is not mainstream, and I cannot build an infrastructure career around it alone. I still need time with the languages and tools that show up in ordinary DevOps jobs. Even so, Nix suits the way I like to work. It is also the reason I now have a homelab where I can practice the rest.
 
 <Todo title="Next steps">
-  Build on this foundation: get familiar with the mainstream Infra/DevOps toolchain.
+  Spend more time with the infrastructure and DevOps tools I am likely to use at work.
 </Todo>

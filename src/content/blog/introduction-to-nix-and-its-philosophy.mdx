@@ -19,7 +19,7 @@ If a friend asked me over coffee what Nix is, I would start the same way most pe
 
 ## A package manager, but
 
-Unlike apt or brew, Nix doesn't mutate the machine. You declare the whole environment in a file, and the machine converges to it — instead of accumulating install commands that nobody wrote down.
+Unlike apt or brew, Nix doesn't mutate the machine one install at a time. You describe the environment in a file, and Nix makes the machine match it. There is no trail of half-remembered terminal commands to reconstruct later.
 
 ```bash title="The usual way"
 brew install bun
@@ -34,13 +34,13 @@ packages = [
 ];
 ```
 
-The first one is a history. The second one is a description. That difference sounds small until you have to rebuild a machine from the history.
+The shell commands record what happened. The Nix file says what should be there. That distinction did not mean much to me until I had to rebuild a machine.
 
-## The end of mutable state
+## Why mutation causes trouble
 
-If Nix is trying to kill one disease in software, it's this: systems rot because we mutate them in place. Every install, every tweak, every hotfix edits the machine directly, and the sum of those edits is config drift — a snowflake machine nobody can reproduce.
+Systems drift when we keep editing them in place. An install here and a quick fix there eventually produce a machine whose state exists only on disk and in someone's memory.
 
-The cure Nix proposes is to end mutable state. Nothing gets edited in place; builds land in immutable store paths, and the system moves between them with atomic switches.
+Nix takes a different approach. Builds go into immutable store paths, and the system switches between those paths atomically. If I want a different result, I change the declaration and build again.
 
 <Mermaid
   title="Mutation vs Convergence"
@@ -55,25 +55,26 @@ flowchart LR
 `}
 />
 
-## Ahead of its time
+## Why Nix is still fringe
 
-How much impact has Nix had on the software world? Honestly — less than it deserves, so far. The learning curve keeps it fringe today. But I think it's the direction everything is slowly heading.
+Nix still feels oddly obscure for a tool that has been around this long. The learning curve is a large part of that. I also keep seeing other tools rediscover ideas that Nix has treated as normal for years, which makes me think wider adoption is mostly a matter of time.
 
 <Decision title="My opinion">
-  Nix adoption is a when, not an if. The industry keeps rediscovering what it already solved.
+  I expect Nix adoption to grow, although its ideas may spread faster than Nix itself. Other tools
+  keep arriving at many of the same conclusions.
 </Decision>
 
-## The real price is taste
+## The harder part is choosing a structure
 
-When I recommend Nix to someone, the price tag I warn about first is the learning cliff — the language, and the mental flip from imperative to declarative.
+When I recommend Nix, I warn people about the learning cliff first. You have to learn the language and get used to describing a result instead of writing a sequence of commands.
 
 <Warning title="The learning cliff">The first stretch is genuinely hard. Budget for it.</Warning>
 
-But the deeper cost is finding your own optimized architecture. There is no bible for how a Nix configuration must look. Anyone can create and manipulate modules and options to their preference, and the ecosystem won't tell you which way is right.
+That is only the first difficulty. The next one is deciding how to organize your own configuration. Nix lets you create modules and options almost however you like, but the ecosystem cannot tell you which structure will suit you six months later.
 
-Declarativeness is guaranteed by the source code. Stability is guaranteed by version locks. What is not guaranteed is your architecture — discovering and refining that taste is the ultimate cost of the philosophy.
+The source code gives you a declarative system, and version locks make builds predictable. Neither one chooses the architecture for you. I only found a structure I liked after using my configuration long enough to notice which parts kept getting in my way.
 
 <Reference title="Next in this series">
-  [Falling into Nix](/blog/falling-into-nix) — how I actually got here: nix-darwin, a homelab, and
-  this blog.
+  [Falling into Nix](/blog/falling-into-nix) explains how I got here through nix-darwin, a homelab,
+  and this blog.
 </Reference>

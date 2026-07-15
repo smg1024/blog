@@ -17,9 +17,8 @@ import Note from "../../components/blog/Note.astro";
 import Question from "../../components/blog/Question.astro";
 import Reference from "../../components/blog/Reference.astro";
 
-This post is about the pipeline that publishes it. It is the first post to ride the new
-blog-to-homelab deploy workflow --- so if you are reading this on the live site, the maiden
-voyage worked.
+This post is about the pipeline that publishes it. It is also the first post sent through the new
+blog-to-homelab workflow. If you are reading it on the live site, the deployment worked.
 
 <Reference title="Background">
   [Falling into Nix](/blog/falling-into-nix) covers how this blog became a flake module that the
@@ -29,26 +28,25 @@ voyage worked.
 ## Two repos, two pushes
 
 This blog lives in its own repository, and my homelab consumes it as a pinned flake input.
-That pin is exact --- the homelab deploys the specific commit recorded in its `flake.lock`,
+That pin is exact. The homelab deploys the specific commit recorded in its `flake.lock`,
 not whatever happens to be on master.
 
 Which meant publishing a post used to take two trips. Push the post to the blog repo. Then
-walk over to the <GitHubRepo repo="smg1024/homelab" /> repo, run `nix flake update blog`,
+walk over to the <GitHubRepo repo="smg1024/homelab">homelab</GitHubRepo> repo, run `nix flake update blog`,
 commit, and push again. Two repos, two pushes, for one blog post.
 
-I wasn't happy with that flow. And I had a second motive: I wanted to practice CI/CD
-plumbing across repositories --- the kind of cross-repo wiring that real infrastructure work
-is full of.
+I got tired of that flow. I also wanted some practice with CI/CD across repositories, because
+that sort of wiring comes up often in infrastructure work.
 
 ## Cron or dispatch
 
-I considered two designs. One was a nightly cronjob at 03:00 KST in the homelab repo:
-check the blog's master branch for new commits, re-pin if it moved, every day. The other
-was event-driven: the blog repo tells the homelab the moment master changes.
+I considered a nightly cron job in the homelab repository. At 03:00 KST it would check the
+blog's master branch and update the pin if it had moved. The other option was event-driven:
+the blog repository would tell the homelab whenever master changed.
 
 <Decision title="Event-driven dispatch">
-  Latency and learning value tipped it. A post should be live minutes after I push, not the next
-  morning --- and building the dispatch mechanism was the more interesting thing to learn.
+  I preferred publishing each post immediately instead of waiting for the next daily update. I had
+  also never wired up a `repository_dispatch`, so that was the option I wanted to learn.
 </Decision>
 
 ## The trigger
@@ -76,17 +74,16 @@ jobs:
 <Note title="Github PAT (Personal Access Token)">
   Cross-repo dispatch needs a credential. I minted a fine-grained personal access token scoped to
   only the homelab repository, with only contents and pull-request permissions, and stored it as an
-  Actions secret in the blog repo. I didn't set an expiration date --- I'm relying on GitHub's
-  security around secret management here.
+  Actions secret in the blog repo. I didn't set an expiration date. I'm relying on GitHub's security
+  around secret management here.
 </Note>
 
 ## The receiving end
 
 When the `blog-updated` event lands, the homelab's `update-blog` workflow takes over. It
-runs `nix flake update blog` and checks the git diff first --- if nothing changed, the
-workflow ends right away. If `flake.lock` did move, it commits the change to a separate
-branch on my behalf, opens a PR, and auto-merges it to main once all CI checks pass. From
-there it's the same deploy action every other homelab change goes through.
+runs `nix flake update blog` and checks the git diff. If nothing changed, the workflow stops.
+If `flake.lock` moved, the workflow commits the change to a separate branch, opens a PR,
+and merges it into main after CI passes. The normal homelab deployment then takes over.
 
 <Mermaid
   title="One push, end to end"
@@ -109,23 +106,22 @@ flowchart TD
 
 ## Guardrails for an audience of one
 
-Even the bot's one-line `flake.lock` bump goes through a branch, a PR, and CI before it
-touches main. Branch protection rules enforce that --- no exceptions, not even for my own
-automation. The gate is there in case the blog fails to deploy, especially when a
-dependency changes in the blog project: CI catches the broken build before any node
-rebuilds.
+Even the bot's one-line `flake.lock` update goes through a branch and PR, with CI running
+before it reaches main branch. Branch protection applies to my automation too. A dependency change
+in the blog can still break the build, so I want CI to catch it before a homelab node tries to
+rebuild.
 
-This might look somewhat overcomplicated for a simple blog project. But if I assume this
-was a non-personal, team project, this is the standard move.
+This is more machinery than a personal blog needs, but the excess is intentional. I wanted to
+practice the workflow I would use on a team project, and the homelab is where I can do that
+without making coworkers endure my experiments.
 
 <Question title="Rigor for an audience of one?">
-  Is the homelab a rehearsal stage for the Infra/DevOps career I'm moving toward, or is this just
-  how I'd build things anyway? Both, honestly --- the career gives the rigor its justification, but
-  the rigor is who I am.
+  Is the homelab practice for the infrastructure and DevOps career I'm moving toward, or would I
+  build it this way anyway? Probably both. The career gives me an excuse, but I enjoy the rigor.
 </Question>
 
 ## Refresh the site
 
-There are no notifications and no deploy dashboards at the end of this chain. The way I'll
-know the maiden voyage worked is the way you know: refresh the site, and see this post
-appear. One push.
+There are no notifications or deployment dashboards at the end of the chain. I will know it
+worked the same way a reader will: refresh the site and see the post. If it appears, the single
+push made it through both repositories.
