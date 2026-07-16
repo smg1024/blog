@@ -1,6 +1,7 @@
 ---
 import { Github, Linkedin, Mail } from "lucide-astro";
 
+import { resumeKo } from "../data/resume.ko";
 import Layout from "../layouts/Layout.astro";
 
 const contacts = [
@@ -9,169 +10,7 @@ const contacts = [
   { label: "LinkedIn", href: "https://www.linkedin.com/in/sangmin-poby/", icon: Linkedin },
 ] as const;
 
-const skills = [
-  { category: "Cloud / Infra / Ops", items: ["Linux", "NixOS", "GitHub Actions", "Docker"] },
-  { category: "Backend", items: ["Java", "Spring Boot"] },
-  { category: "Database", items: ["PostgreSQL", "Oracle"] },
-  { category: "Frontend", items: ["TypeScript", "React"] },
-] as const;
-
-const experiences = [
-  {
-    period: "2025.04 ~",
-    role: "Data Engineer / AX Engineer",
-    org: "케이미트",
-    points: [
-      "ERP Modernization · Traceability Platform · Data Modeling · Full-stack Development",
-      "축산도매유통 DX 및 Data Pipeline 설계 및 구현",
-    ],
-  },
-  {
-    period: "2024.07 - 2024.12",
-    role: "개발팀 총괄",
-    org: "Unpeil",
-    points: [
-      "SPETTRUM 어플리케이션 총괄 - 신규 기능 도입 및 유지보수",
-      "Generative AI (Stable Diffusion) 신기술 데모 및 테스트 환경 구축 - GPU 서버 관리",
-      "개발팀 HR 관리",
-    ],
-  },
-  {
-    period: "2023.06 - 2024.06",
-    role: "백엔드 개발",
-    org: "Unpeil",
-    points: [
-      "SPETTRUM 어플리케이션 백엔드 개발 - 초기 기능 구현",
-      "Serverless API Endpoint를 활용한 비동기 AI 이미지 생성 파이프라인 구축",
-      "회원, 주문, 이미지/모델 생성 기능 담당",
-    ],
-  },
-  {
-    period: "2018.04 - 2020.01",
-    role: "통역병",
-    org: "대한민국 해군",
-    points: ["2018년 해군 순항훈련 통역병 - 13개국 해외순방", "2019년 청해부대 29진 통역병"],
-  },
-] as const;
-
-interface Project {
-  name: string;
-  period: string;
-  stack: string[];
-  tagline: string;
-  points: string[];
-  github?: string;
-}
-
-const projects: Project[] = [
-  {
-    name: "Homelab",
-    period: "2026.05 ~",
-    stack: ["Nix", "NixOS", "Bash", "Caddy", "Tailscale", "Beszel", "VictoriaLogs", "Uptime Kuma"],
-    tagline: "NixOS 기반 개인 인프라 플랫폼 구축/운영",
-    github: "https://github.com/smg1024/homelab",
-    points: [
-      "Nix Flake를 단일 source of truth로 사용해 3개 호스트의 OS 설정, 서비스, 사용자 환경, 암호화 secrets를 선언적으로 관리",
-      "GitHub Actions, Tailscale, SSH를 활용해 merge 이후 각 노드에 nixos-rebuild switch를 수행하는 CD 파이프라인 구성",
-      "Cloudflare Tunnel, Caddy, Tailscale 기반 ingress 구조를 설계하고 public traffic과 internal backend traffic을 분리",
-      "Beszel, VictoriaLogs, Uptime Kuma 기반 모니터링 및 상태 확인 체계 운영",
-    ],
-  },
-  {
-    name: "jamye-plz",
-    period: "2026.06 ~",
-    stack: ["Python", "FastAPI", "Alembic", "Uvicorn", "Svelte", "Bun", "PWA"],
-    tagline: "폐쇄형 그룹 내 토픽 기반 썰 풀기 웹앱",
-    github: "https://github.com/jamye-plz/jamye-plz",
-    points: [
-      "FastAPI backend와 SvelteKit PWA frontend를 Nix Flake로 패키징",
-      "NixOS module을 작성해 PostgreSQL, Alembic migration, Uvicorn backend, Caddy reverse proxy를 systemd 서비스로 선언적 배포",
-      "Homelab의 aarch cloud node에 배포하고, public ingress는 별도 edge node의 Cloudflare Tunnel/Caddy 구조에 위임",
-    ],
-  },
-  {
-    name: "SPETTRUM",
-    period: "2023.06 - 2024.12",
-    stack: [
-      "Spring Boot",
-      "Java 17",
-      "Python",
-      "Runpod Serverless API",
-      "Docker",
-      "Nginx",
-      "GitHub Actions",
-    ],
-    tagline:
-      "나의 반려동물의 모습으로 프롬프트 기반 AI 이미지를 생성하는 반려동물 AI 온라인 스튜디오 어플",
-    points: [
-      "Stable Diffusion 기반 반려동물 AI 이미지 생성 파이프라인 구축",
-      "비동기 이미지 생성 요청 처리 구조 설계 및 Spring Boot 백엔드 연동",
-      "GPU Serverless API의 Dockerize로 온프레미스 GPU 서버 운영 대비 비용 절감",
-      "GitHub Actions, Docker Compose, Nginx 기반 CI/CD 및 무중단 Blue/Green 배포 구성",
-    ],
-  },
-];
-
-interface Activity {
-  period: string;
-  title: string;
-  detail: string;
-  link?: { label: string; href: string };
-}
-
-const activities: Activity[] = [
-  {
-    period: "2024.06 - 2025.01",
-    title: "CES 2025 Eureka Park 참여",
-    detail: "컴퓨터 비전 기반의 개별 반려동물 디지털화 파인튜닝 모델 및 코딩 시스템, Pawframe",
-    link: { label: "기술 소개 페이지", href: "https://unpeil.github.io/" },
-  },
-  {
-    period: "2024.03 - 2024.11",
-    title: "학생창업유망 300+ 성장트랙 장려상",
-    detail: "AI 펫로스 미술치료 프로그램",
-    link: {
-      label: "팀 소개 페이지",
-      href: "http://www.u300.kr/cms/process/team/view.asp?c_show_no=144&c_check_no=97&c_relation=996&c_relation2=1014&c_no=25401&s_field=team_name&s_text=%EC%96%B8%ED%8E%98%EC%9D%BC&page=1",
-    },
-  },
-  {
-    period: "2023.11.28",
-    title: "X-corps+ 페스티벌 과기부장관상",
-    detail:
-      "Block Chain 기반 Battery Management System Data 관리 및 배포를 통한 IoT 연계 확장 Business Model 연구",
-    link: {
-      label: "교내 기사 링크",
-      href: "http://isrc.cau.ac.kr/2023-%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD-%EB%AF%B8%EB%9E%98%EC%9D%B8%EC%9E%AC-%ED%8E%98%EC%8A%A4%ED%8B%B0%EB%B2%8C-2023-x-corps-plus-festival/",
-    },
-  },
-  {
-    period: "2023.03 - 2023.11",
-    title: "학생창업유망 300+ 예비트랙 인기상",
-    detail: "반려동물 AI 온라인 스튜디오 SPETTRUM",
-  },
-  {
-    period: "2022.10 - 2023.02",
-    title: "멀티캠퍼스 백엔드 개발자 취업캠프 수료",
-    detail: "KDT 훈련과정 - Java Spring 백엔드 과정 수강",
-  },
-  {
-    period: "2021.08.13",
-    title: "중앙대-두산인프라코어 캡스톤 디자인 대회 우수상",
-    detail: "중앙대학교 100주년 기념관 지도 키오스크",
-  },
-];
-
-const languages = [
-  { name: "Korean", level: "Native speaker" },
-  { name: "English", level: "Native speaker" },
-  { name: "Chinese", level: "Proficient speaker" },
-] as const;
-
-const certificates = [
-  { name: "OPIc AL", date: "2026.07.16 취득" },
-  { name: "HSK 6급", date: "2015.01.10 취득" },
-] as const;
+const resume = resumeKo;
 ---
 
 <Layout
@@ -179,14 +18,10 @@ const certificates = [
   description="Résumé of Sangmin (Poby) Kim — platform engineering, backend development, and data engineering."
 >
   <header class="page-header">
-    <p class="eyebrow">Résumé</p>
-    <h1>Sangmin Kim</h1>
-    <p>
-      내가 만든 프로그램/서비스가 사람들에게 널리 사용되길 바라는 개발자 김상민입니다. 레거시 업무
-      시스템을 웹 기반 플랫폼으로 전환하고, Linux/NixOS 기반 인프라를 선언적으로 운영하며, 자동화와
-      모니터링 중심의 Platform Engineering 역량을 쌓아온 엔지니어입니다.
-    </p>
-    <p class="resume-motto">“확실한 근거를 바탕으로 후회없는 결정을 내리자”</p>
+    <p class="eyebrow">{resume.header.eyebrow}</p>
+    <h1>{resume.header.name}</h1>
+    <p>{resume.header.summary}</p>
+    <p class="resume-motto">{resume.header.motto}</p>
     <ul class="resume-contacts">
       {
         contacts.map(({ label, href, icon: Icon }) => (
@@ -203,15 +38,15 @@ const certificates = [
   <section class="page-section" aria-labelledby="resume-skills-title">
     <div class="section-heading">
       <div>
-        <h2 id="resume-skills-title">Skills</h2>
+        <h2 id="resume-skills-title">{resume.sections.skills}</h2>
       </div>
     </div>
     <div class="card-grid card-grid--two">
       {
-        skills.map((group) => (
+        resume.skills.map((group) => (
           <article class="section-card">
             <h3>{group.category}</h3>
-            <ul class="tag-list" aria-label={`${group.category} skills`}>
+            <ul class="tag-list" aria-label={`${group.category} ${resume.labels.skillsSuffix}`}>
               {group.items.map((item) => (
                 <li>{item}</li>
               ))}
@@ -225,12 +60,12 @@ const certificates = [
   <section class="page-section" aria-labelledby="resume-experience-title">
     <div class="section-heading">
       <div>
-        <h2 id="resume-experience-title">Experience</h2>
+        <h2 id="resume-experience-title">{resume.sections.experience}</h2>
       </div>
     </div>
     <ol class="resume-entries">
       {
-        experiences.map((experience) => (
+        resume.experiences.map((experience) => (
           <li class="resume-entry">
             <span class="resume-entry__period">{experience.period}</span>
             <div class="resume-entry__body">
@@ -252,12 +87,12 @@ const certificates = [
   <section class="page-section" aria-labelledby="resume-projects-title">
     <div class="section-heading">
       <div>
-        <h2 id="resume-projects-title">Projects</h2>
+        <h2 id="resume-projects-title">{resume.sections.projects}</h2>
       </div>
     </div>
     <div class="resume-projects">
       {
-        projects.map((project) => (
+        resume.projects.map((project) => (
           <article class="resume-project">
             <div class="resume-project__head">
               <h3>
@@ -265,7 +100,7 @@ const certificates = [
                 {project.github && (
                   <a
                     href={project.github}
-                    aria-label={`${project.name} GitHub repository`}
+                    aria-label={`${project.name} ${resume.labels.githubRepository}`}
                     title="GitHub"
                   >
                     <Github size={18} aria-hidden="true" />
@@ -290,31 +125,37 @@ const certificates = [
   <section class="page-section" aria-labelledby="resume-education-title">
     <div class="section-heading">
       <div>
-        <h2 id="resume-education-title">Education</h2>
+        <h2 id="resume-education-title">{resume.sections.education}</h2>
       </div>
     </div>
     <ol class="resume-entries">
-      <li class="resume-entry">
-        <span class="resume-entry__period">2017.03 - 2025.02</span>
-        <div class="resume-entry__body">
-          <h3>중앙대학교</h3>
-          <ul>
-            <li>전자전기공학 학사 졸업</li>
-          </ul>
-        </div>
-      </li>
+      {
+        resume.education.map((education) => (
+          <li class="resume-entry">
+            <span class="resume-entry__period">{education.period}</span>
+            <div class="resume-entry__body">
+              <h3>{education.institution}</h3>
+              <ul>
+                {education.points.map((point) => (
+                  <li>{point}</li>
+                ))}
+              </ul>
+            </div>
+          </li>
+        ))
+      }
     </ol>
   </section>
 
   <section class="page-section" aria-labelledby="resume-activities-title">
     <div class="section-heading">
       <div>
-        <h2 id="resume-activities-title">Academic Activities</h2>
+        <h2 id="resume-activities-title">{resume.sections.activities}</h2>
       </div>
     </div>
     <ol class="resume-entries">
       {
-        activities.map((activity) => (
+        resume.activities.map((activity) => (
           <li class="resume-entry">
             <span class="resume-entry__period">{activity.period}</span>
             <div class="resume-entry__body">
@@ -340,27 +181,27 @@ const certificates = [
   <section class="page-section" aria-labelledby="resume-language-title">
     <div class="section-heading">
       <div>
-        <h2 id="resume-language-title">Languages &amp; Certificates</h2>
+        <h2 id="resume-language-title">{resume.sections.languagesAndCertificates}</h2>
       </div>
     </div>
     <div class="card-grid card-grid--two">
       <article class="section-card">
-        <h3>Languages</h3>
+        <h3>{resume.sections.languages}</h3>
         <ul class="resume-facts">
           {
-            languages.map((language) => (
+            resume.languages.map((language) => (
               <li>
-                <strong>{language.name}</strong> — {language.level}
+                <strong>{language.name}</strong> - {language.level}
               </li>
             ))
           }
         </ul>
       </article>
       <article class="section-card">
-        <h3>Certificates</h3>
+        <h3>{resume.sections.certificates}</h3>
         <ul class="resume-facts">
           {
-            certificates.map((certificate) => (
+            resume.certificates.map((certificate) => (
               <li>
                 <strong>{certificate.name}</strong> <small>{certificate.date}</small>
               </li>
