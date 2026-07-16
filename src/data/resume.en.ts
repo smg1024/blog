@@ -24,7 +24,7 @@ export const resumeEn: ResumeContent = {
     githubRepository: "GitHub repository",
   },
   skills: [
-    { category: "Cloud / Infra / Ops", items: ["Linux", "NixOS", "GitHub Actions", "Docker"] },
+    { category: "Cloud / Infra / Ops", items: ["Linux", "GitHub Actions", "Docker", "NixOS"] },
     { category: "Backend", items: ["Java", "Spring Boot"] },
     { category: "Database", items: ["PostgreSQL", "Oracle"] },
     { category: "Frontend", items: ["TypeScript", "React"] },

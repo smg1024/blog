@@ -1,0 +1,429 @@
+---
+import { Github, Linkedin, Mail } from "lucide-astro";
+
+import type { ResumeContent } from "../data/resume.types";
+
+interface Props {
+  resume: ResumeContent;
+  showLanguageSwitcher?: boolean;
+}
+
+const { resume, showLanguageSwitcher = true } = Astro.props;
+
+const contacts = [
+  { label: "Email", href: "mailto:smg981024@gmail.com", icon: Mail },
+  { label: "GitHub", href: "https://github.com/smg1024", icon: Github },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/sangmin-poby/", icon: Linkedin },
+] as const;
+---
+
+<header class="page-header">
+  {
+    showLanguageSwitcher && (
+      <div class="resume-language-switcher" role="group" aria-label="이력서 언어 / Résumé language">
+        <button
+          type="button"
+          class="resume-language-button"
+          data-resume-locale-button="ko"
+          aria-controls="resume-content"
+          aria-pressed={resume.locale === "ko" ? "true" : "false"}
+          lang="ko"
+        >
+          KO
+        </button>
+        <button
+          type="button"
+          class="resume-language-button"
+          data-resume-locale-button="en"
+          aria-controls="resume-content"
+          aria-pressed={resume.locale === "en" ? "true" : "false"}
+          lang="en"
+        >
+          EN
+        </button>
+      </div>
+    )
+  }
+  <p class="eyebrow">{resume.header.eyebrow}</p>
+  <h1>{resume.header.name}</h1>
+  <p>{resume.header.summary}</p>
+  <p class="resume-motto">{resume.header.motto}</p>
+  <ul class="resume-contacts">
+    {
+      contacts.map(({ label, href, icon: Icon }) => (
+        <li>
+          <a href={href} aria-label={label} title={label}>
+            <Icon size={20} aria-hidden="true" />
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</header>
+
+<section class="page-section" aria-labelledby="resume-skills-title">
+  <div class="section-heading">
+    <div>
+      <h2 id="resume-skills-title">{resume.sections.skills}</h2>
+    </div>
+  </div>
+  <div class="card-grid card-grid--two">
+    {
+      resume.skills.map((group) => (
+        <article class="section-card">
+          <h3>{group.category}</h3>
+          <ul class="tag-list" aria-label={`${group.category} ${resume.labels.skillsSuffix}`}>
+            {group.items.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<section class="page-section" aria-labelledby="resume-experience-title">
+  <div class="section-heading">
+    <div>
+      <h2 id="resume-experience-title">{resume.sections.experience}</h2>
+    </div>
+  </div>
+  <ol class="resume-entries">
+    {
+      resume.experiences.map((experience) => (
+        <li class="resume-entry">
+          <span class="resume-entry__period">{experience.period}</span>
+          <div class="resume-entry__body">
+            <h3>
+              {experience.role} <span class="resume-entry__org">@ {experience.org}</span>
+            </h3>
+            <ul>
+              {experience.points.map((point) => (
+                <li>{point}</li>
+              ))}
+            </ul>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<section class="page-section" aria-labelledby="resume-projects-title">
+  <div class="section-heading">
+    <div>
+      <h2 id="resume-projects-title">{resume.sections.projects}</h2>
+    </div>
+  </div>
+  <div class="resume-projects">
+    {
+      resume.projects.map((project) => (
+        <article class="resume-project">
+          <div class="resume-project__head">
+            <h3>
+              {project.name}
+              {project.github && (
+                <a
+                  href={project.github}
+                  aria-label={`${project.name} ${resume.labels.githubRepository}`}
+                  title="GitHub"
+                >
+                  <Github size={18} aria-hidden="true" />
+                </a>
+              )}
+            </h3>
+            <span class="resume-entry__period">{project.period}</span>
+          </div>
+          <p class="resume-project__stack">{project.stack.join(" · ")}</p>
+          <p class="resume-project__tagline">{project.tagline}</p>
+          <ul>
+            {project.points.map((point) => (
+              <li>{point}</li>
+            ))}
+          </ul>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<section class="page-section" aria-labelledby="resume-education-title">
+  <div class="section-heading">
+    <div>
+      <h2 id="resume-education-title">{resume.sections.education}</h2>
+    </div>
+  </div>
+  <ol class="resume-entries">
+    {
+      resume.education.map((education) => (
+        <li class="resume-entry">
+          <span class="resume-entry__period">{education.period}</span>
+          <div class="resume-entry__body">
+            <h3>{education.institution}</h3>
+            <ul>
+              {education.points.map((point) => (
+                <li>{point}</li>
+              ))}
+            </ul>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<section class="page-section" aria-labelledby="resume-activities-title">
+  <div class="section-heading">
+    <div>
+      <h2 id="resume-activities-title">{resume.sections.activities}</h2>
+    </div>
+  </div>
+  <ol class="resume-entries">
+    {
+      resume.activities.map((activity) => (
+        <li class="resume-entry">
+          <span class="resume-entry__period">{activity.period}</span>
+          <div class="resume-entry__body">
+            <h3>{activity.title}</h3>
+            <ul>
+              <li>
+                {activity.detail}
+                {activity.link && (
+                  <>
+                    {" - "}
+                    <a href={activity.link.href}>{activity.link.label}</a>
+                  </>
+                )}
+              </li>
+            </ul>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<section class="page-section" aria-labelledby="resume-language-title">
+  <div class="section-heading">
+    <div>
+      <h2 id="resume-language-title">{resume.sections.languagesAndCertificates}</h2>
+    </div>
+  </div>
+  <div class="card-grid card-grid--two">
+    <article class="section-card">
+      <h3>{resume.sections.languages}</h3>
+      <ul class="resume-facts">
+        {
+          resume.languages.map((language) => (
+            <li>
+              <strong>{language.name}</strong> - {language.level}
+            </li>
+          ))
+        }
+      </ul>
+    </article>
+    <article class="section-card">
+      <h3>{resume.sections.certificates}</h3>
+      <ul class="resume-facts">
+        {
+          resume.certificates.map((certificate) => (
+            <li>
+              <strong>{certificate.name}</strong> <small>{certificate.date}</small>
+            </li>
+          ))
+        }
+      </ul>
+    </article>
+  </div>
+</section>
+
+<style>
+  .resume-language-switcher {
+    display: flex;
+    width: fit-content;
+    margin: 0 0 0.75rem;
+    padding: 0.2rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+
+  .resume-language-button {
+    min-width: 2.75rem;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    font-weight: 700;
+    line-height: 1;
+    padding: 0.55rem 0.7rem;
+    cursor: pointer;
+  }
+
+  .resume-language-button:hover {
+    color: var(--ink);
+  }
+
+  .resume-language-button[aria-pressed="true"] {
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+  }
+
+  .resume-language-button:focus-visible {
+    outline: 2px solid var(--accent-strong);
+    outline-offset: 2px;
+  }
+
+  .resume-motto {
+    font-family: var(--font-mono);
+    color: var(--accent-strong);
+    font-weight: 700;
+  }
+
+  .resume-contacts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 1.35rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .resume-contacts a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--muted);
+  }
+
+  .resume-contacts a:hover {
+    border-color: var(--line-strong);
+    color: var(--accent-strong);
+  }
+
+  .resume-entries {
+    display: grid;
+    gap: 1.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .resume-entry {
+    display: grid;
+    grid-template-columns: 11rem 1fr;
+    gap: 1rem;
+  }
+
+  .resume-entry__period {
+    padding-top: 0.2rem;
+    color: var(--soft);
+    font-family: var(--font-mono);
+    font-size: 0.86rem;
+    font-weight: 680;
+  }
+
+  .resume-entry__body h3 {
+    margin: 0;
+    font-size: 1.15rem;
+    line-height: 1.3;
+  }
+
+  .resume-entry__org {
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  .resume-entry__body ul,
+  .resume-project ul {
+    display: grid;
+    gap: 0.3rem;
+    margin: 0.55rem 0 0;
+    padding-left: 1.1rem;
+    color: var(--muted);
+  }
+
+  .resume-projects {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .resume-project {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--surface);
+    padding: 1.3rem 1.4rem;
+  }
+
+  .resume-project__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.35rem 1rem;
+  }
+
+  .resume-project__head h3 {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    font-size: 1.2rem;
+  }
+
+  .resume-project__head h3 a {
+    display: inline-flex;
+    color: var(--muted);
+  }
+
+  .resume-project__head h3 a:hover {
+    color: var(--accent-strong);
+  }
+
+  .resume-project__stack {
+    margin: 0.45rem 0 0;
+    color: var(--soft);
+    font-family: var(--font-mono);
+    font-size: 0.86rem;
+    font-weight: 680;
+  }
+
+  .resume-project__tagline {
+    margin: 0.8rem 0 0;
+    font-weight: 640;
+  }
+
+  .resume-facts {
+    display: grid;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--muted);
+  }
+
+  .resume-facts strong {
+    color: var(--ink);
+    font-weight: 680;
+  }
+
+  .resume-facts small {
+    color: var(--soft);
+    font-family: var(--font-mono);
+  }
+
+  @media (max-width: 720px) {
+    .resume-entry {
+      grid-template-columns: 1fr;
+      gap: 0.35rem;
+    }
+  }
+</style>
