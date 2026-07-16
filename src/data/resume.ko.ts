@@ -174,7 +174,7 @@ export const resumeKo: ResumeContent = {
     { name: "중국어", level: "능숙" },
   ],
   certificates: [
-    { name: "OPIc AL", date: "2026.07.16 취득" },
-    { name: "HSK 6급", date: "2015.01.10 취득" },
+    { name: "OPIc AL", date: "2026.07.16" },
+    { name: "HSK 6급", date: "2015.01.10" },
   ],
 };
