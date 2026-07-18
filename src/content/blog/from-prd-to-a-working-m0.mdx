@@ -1,0 +1,116 @@
+---
+title: "From PRD to a Working M0"
+description: "Turning a detailed PRD into a usable M0 with Claude Code and Codex"
+publishedAt: 2026-07-18T13:23:16+09:00
+series: "jamye-plz"
+tags:
+  - jamye-plz
+  - svelte
+  - fastapi
+  - ai-agents
+draft: true
+---
+
+import Decision from "../../components/blog/Decision.astro";
+import GitHubPullRequest from "../../components/blog/GitHubPullRequest.astro";
+import Mermaid from "../../components/blog/Mermaid.astro";
+import Reference from "../../components/blog/Reference.astro";
+
+<Reference title="Previous in this series">
+  [Before the Stories Disappear](/blog/before-the-stories-disappear) is about the forgotten episodes
+  and the PRD that started jamye-plz.
+</Reference>
+
+<GitHubPullRequest repo="jamye-plz/jamye-plz" number={2} /> was never supposed to produce an app I
+would hand to my partner. I wanted enough working structure in the empty repository that I could
+start adding real features.
+
+## Getting the repository ready
+
+<GitHubPullRequest repo="jamye-plz/jamye-plz" number={2} /> added more than 8,000 lines across 104
+files. It established a FastAPI backend, a SvelteKit frontend, PostgreSQL models, REST routes,
+WebSocket chat, authentication scaffolding, and the first set of screens.
+
+A bare project gives you some folders and conventions. There is still a lot of setup between that
+and everyday development. With <GitHubPullRequest repo="jamye-plz/jamye-plz" number={2} />, I wanted
+to reach the point where a new request could be about jamye-plz itself instead of basic project
+wiring.
+
+Some routes and screens existed at the end of the pull request, but I did not expect them to feel
+finished. <GitHubPullRequest repo="jamye-plz/jamye-plz" number={2} /> gave me an active development
+environment. I would deal with complete user flows in <GitHubPullRequest repo="jamye-plz/jamye-plz" number={3} />.
+
+## Letting agents argue in the pull request
+
+I delegated almost all of the implementation and code review to Claude Code and Codex.
+
+One agent polled <GitHubPullRequest repo="jamye-plz/jamye-plz" number={2} /> every 30 seconds. When a
+review thread appeared, it checked the comment, changed the code if the finding made sense, then
+committed and pushed. The push triggered another review. I kept that loop running until the review
+agent had nothing else to report.
+
+<Mermaid
+  title="The PR #2 review loop"
+  chart={`
+flowchart LR
+  I[Claude Code implements] --> P[push to PR #2]
+  P --> R[Codex reviews]
+  R --> D{actionable thread?}
+  D -->|yes| I
+  D -->|no| G[review loop is green]
+  V[my dev-server assessment] --> Q[new ideas and requirements]
+  Q --> I
+`}
+/>
+
+I did not sit between the agents and translate every review comment into an edit. While they worked
+through the threads, I used the app on the development server. I also added new requirements and
+ideas between review rounds.
+
+The dev server mattered because reviewers can be confidently wrong. One
+
+<GitHubPullRequest repo="jamye-plz/jamye-plz" number={2} /> review claimed that a quoted Svelte
+attribute would not interpolate its braces. I opened the app and checked the navigation. It worked,
+so I rejected the comment and left the correct code alone.
+
+<Decision title="My role in the loop">
+  Claude Code and Codex can handle most of the implementation and review. I decide what the app
+  should do, and I check their conclusions against the running application.
+</Decision>
+
+## The first M0 we could use
+
+<GitHubPullRequest repo="jamye-plz/jamye-plz" number={3} /> had a different job. This time I wanted
+the main social flow to work from beginning to end:
+
+- real Kakao and Google OAuth
+- invitation links that survive the login round trip
+- topic chatrooms with visible sender identity
+- an installable PWA
+- topic enrichment, notifications, settings, and a daily timeline connected to screens
+- Alembic migrations instead of an implicit `create_all` setup
+
+The full pull request covered more than I needed for the first trial. OAuth, invitations,
+topic-chat flows, visible chat identity, and PWA installation were the parts that made me
+comfortable putting M0 in front of my partner. She could install the app, sign in, join through an
+invitation, and talk with me inside a topic. That was enough for me to call it usable.
+
+## Learning Svelte and FastAPI on a real app
+
+I had wanted to use a JavaScript framework other than React in a real project, so I chose Svelte. I
+am proud that I got a working application into production with it instead of stopping after a
+small experiment.
+
+FastAPI was new to me too. I work mainly with Java and Spring on the backend. jamye-plz gave me a
+reason to learn the Python side through an application I cared about enough to finish.
+
+The agent loop helped me move quickly, but a clean review was only one checkpoint. I still ran the
+app myself and put it in front of my partner. Later, I deployed the same code. By then I had what
+
+<GitHubPullRequest repo="jamye-plz/jamye-plz" number={2} /> was meant to prepare: an app I could
+keep using and developing.
+
+<Reference title="Next in this series">
+  [A Social App Inside a Nix Flake](/blog/a-social-app-inside-a-nix-flake) covers the Nix package,
+  my homelab, and the deployment path I built around them.
+</Reference>

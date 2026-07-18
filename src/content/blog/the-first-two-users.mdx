@@ -1,0 +1,112 @@
+---
+title: "The First Two Users"
+description: "Partner-led UX, Korean IME fixes, and the date dial"
+publishedAt: 2026-07-18T17:06:26+09:00
+series: "jamye-plz"
+tags:
+  - jamye-plz
+  - ux
+  - chat
+  - dogfooding
+draft: true
+---
+
+import Decision from "../../components/blog/Decision.astro";
+import GitHubPullRequest from "../../components/blog/GitHubPullRequest.astro";
+import Reference from "../../components/blog/Reference.astro";
+
+<Reference title="Previous in this series">
+  [A Social App Inside a Nix Flake](/blog/a-social-app-inside-a-nix-flake) covers the Nix and
+  homelab setup where my partner and I started using jamye-plz.
+</Reference>
+
+For the first few weeks, jamye-plz had two users: my partner and me. That was enough. Once she used
+it, vague UX ideas became specific things I could fix.
+
+## She left feedback as topics
+
+My partner liked the idea and was impressed by how quickly I had built it. She also found things
+that bothered her.
+
+She left that feedback as topics inside jamye-plz. I would open one, work out what she meant, and
+turn it into a change. We did not need a separate issue tracker for those early UX comments. The
+app already gave us a place to remember and discuss them.
+
+One of her early topics said the list was not organized. She wanted to find topics by the date they
+had been uploaded.
+
+## Why I built a date dial
+
+I could have added a normal calendar picker. It did not feel right for jamye-plz. I wanted the app
+to feel niche and cool, although I still cannot define either word precisely. I am not a UI/UX
+designer. For this personal project, my partner's taste and mine are enough.
+
+I chose a horizontal date dial. You drag it until a date reaches the center, the date snaps into
+place, and the app loads that day's topics. I wanted the same interaction to work smoothly on
+desktop and mobile.
+
+Her request was only to organize the list by date. The interaction added more decisions. I put the
+selected date in the URL so it survives navigation into a topic. A notification can open the day
+where its topic belongs, and creating a topic takes the view back to today.
+
+The first custom scroll-snap implementation was good enough on desktop but unreliable under iOS
+momentum. The dial could still be moving after its 110 ms settle timer fired, which committed the
+wrong index. <GitHubPullRequest repo="jamye-plz/jamye-plz" number={13} /> replaced the timer with
+Embla's selection event and kept the component's public API unchanged.
+
+<Decision title="Who decides if it feels right">
+  There is no formal UX system behind jamye-plz yet. I choose an interaction, try it with my partner
+  on real devices, and change it when one of us dislikes it.
+</Decision>
+
+## Fixing chat through daily use
+
+Chat is the reason each topic has its own room. While we used it, two problems kept getting in the
+way.
+
+The first was older-message pagination. The room only loaded the newest messages, so earlier parts
+of a conversation were hard to reach. I added cursor-based history loading when the user scrolls
+upward and kept the current scroll position in place.
+
+The second was Korean IME input. I could type `안녕` and get `안안녕` or `안ㄴ녕`. Pressing Enter
+during composition committed the Korean text and triggered the send handler at the same time. The
+completed word was sent with part of the composition duplicated.
+
+The actual fix landed in commit
+[`b0c6f81`](https://github.com/jamye-plz/jamye-plz/commit/b0c6f81) during
+
+<GitHubPullRequest repo="jamye-plz/jamye-plz" number={3} /> and was later recorded in the
+<GitHubPullRequest repo="jamye-plz/jamye-plz" number={6} /> stabilization summary:
+
+```ts title="frontend/src/lib/components/ChatRoom.svelte"
+if (e.isComposing || e.keyCode === 229) return;
+
+if (e.key === "Enter" && !e.shiftKey) {
+  e.preventDefault();
+  sendMessage();
+}
+```
+
+The first Enter now finishes the Korean composition. The next Enter sends the message.
+
+<GitHubPullRequest repo="jamye-plz/jamye-plz" number={6} /> also made a room fetch fresh messages
+when I re-entered it, removed the initial jump from the top of the chat to the bottom, grouped
+sender headers by minute, and kept date separators visible inside long histories.
+
+I wanted these parts of chat to become unremarkable. We should be able to type Korean, scroll back,
+leave a room, and return without wondering whether the app lost or changed something.
+
+## Building for us first
+
+I am building jamye-plz for my partner, a few close friends, and myself before anyone else. Revenue
+is not the priority. Her experience does not need to represent a million future users. If an
+interaction bothers either of us, that is enough reason to look at it again.
+
+The date dial started with one request to organize topics. I kept working until the selected date
+survived navigation, old notifications opened the right day, and the control behaved on iOS. That
+is what early product feedback looked like for us.
+
+<Reference title="Next in this series">
+  [What Unread Really Means](/blog/what-unread-really-means) covers read receipts, notification
+  recycling, and the WebSocket races behind the unread dot.
+</Reference>

@@ -1,0 +1,138 @@
+---
+title: "Where the PWA Stops"
+description: "iOS PWA limits, the v1 boundary, and the v2 roadmap"
+publishedAt: 2026-07-18T20:04:35+09:00
+series: "jamye-plz"
+tags:
+  - jamye-plz
+  - pwa
+  - ios
+  - on-device-ai
+draft: true
+---
+
+import Decision from "../../components/blog/Decision.astro";
+import GitHubPullRequest from "../../components/blog/GitHubPullRequest.astro";
+import Note from "../../components/blog/Note.astro";
+import Reference from "../../components/blog/Reference.astro";
+import Todo from "../../components/blog/Todo.astro";
+import Warning from "../../components/blog/Warning.astro";
+
+<Reference title="Previous in this series">
+  [What Unread Really Means](/blog/what-unread-really-means) covers the read receipts,
+  notifications, and WebSocket behavior behind the current text-only product.
+</Reference>
+
+I wanted jamye-plz to feel like a native app when installed as a PWA. The iOS keyboard was the part
+that made me accept that some behavior belongs to the browser, not my code.
+
+## Using daisyUI for the common parts
+
+Building every component by hand with Tailwind was taking too much time. daisyUI already had chat
+bubbles I liked, and chat is the screen I care about most in jamye-plz.
+
+<GitHubPullRequest repo="jamye-plz/jamye-plz" number={11} /> moved the frontend to daisyUI
+components and semantic colors for the light and dark themes.
+
+I use the library as a collection of parts. I still choose what belongs in jamye-plz and customize
+it when I need to. The date dial stayed custom, and the unread state got its own treatment.
+
+<GitHubPullRequest repo="jamye-plz/jamye-plz" number={13} /> later extracted a shared `AppHeader` so
+I did not have to repeat safe-area handling and header dimensions on every screen.
+
+## The iOS keyboard problem
+
+Opening the keyboard in topic chat moved the whole page. I wanted the header to stay put while the
+message list and composer resized above the keyboard.
+
+<GitHubPullRequest repo="jamye-plz/jamye-plz" number={13} /> records what I tried on a real device.
+I locked the document, set the root height from `visualViewport`, tried a fixed root, tracked
+`offsetTop`, and compensated with transforms. I could correct the page once the keyboard was fully
+open or closed. I could not keep the header still during the animation.
+
+iOS pans the visual viewport while the keyboard animates, and WebKit does not provide the
+per-frame viewport events I would need to cancel that movement in JavaScript. It also lacks the
+keyboard inset environment variable available in Chromium. A native shell can resize its view with
+the keyboard. A PWA does not get the same control.
+
+I settled for a best-effort fix. The header and composer end up in the right place after the motion
+stops. During the transition, the header can slide with iOS and then return. I still dislike the
+movement, but another round of CSS would not give the browser an event it does not expose.
+
+<Warning title="Pinch zoom is still an edge case">
+  A review after <GitHubPullRequest repo="jamye-plz/jamye-plz" number={13} /> found that pinch zoom
+  can look like an open keyboard to the current viewport-height heuristic. No later user-facing pull
+  request changed that code before this draft, so I still need to revisit it.
+</Warning>
+
+Accepting that took longer than I expected. I kept looking for one more CSS trick, then had to admit
+that the browser did not expose enough information for the motion I wanted.
+
+## Where I cut v1
+
+The original PRD put media uploads, VAPID Web Push, and on-device AI in v1. PWA work became much
+larger than I expected, so I cut the release at the text episode and chat loop that works today.
+
+<Note title="The v1 product">
+  v1 supports group creation, member invitations, topic creation, topic descriptions, topic-specific
+  chat, an installable PWA, and the persistent in-app notification page.
+</Note>
+
+That is a complete v1 for me. Real MinIO presigning and VAPID sending still raise an explicit
+not-implemented path when configured. <GitHubPullRequest repo="jamye-plz/jamye-plz" number={14} />
+removed the unused Transformers.js dependency instead of leaving it in the repository before an AI
+feature existed.
+
+The same pull request cleared the old baseline of eight Svelte errors.
+
+<GitHubPullRequest repo="jamye-plz/jamye-plz" number={15} /> removed the remaining bulk lint
+suppressions and fixed the Python editor configuration and typing issues. Svelte checks, frontend
+ESLint, backend Pyright, Ruff, formatting, imports, and the production build now pass without the
+old diagnostic noise.
+
+<Decision title="v1 is complete">
+  Completion means the core text episode and chat loop is dependable. It does not mean every idea
+  from the first PRD must be pulled into the first release.
+</Decision>
+
+## What I left for v2
+
+I moved these features into v2:
+
+- voice transcription for topics, descriptions, and chat
+- VAPID Web Push, beginning with new-topic notifications
+- image and video support inside chats
+- optional on-device AI
+
+My on-device AI plan is limited to smaller local tasks. Lightweight models could tag and index a
+group's topics, or build a glossary of recurring people and episodes. Short speech transcription is
+another option. A model could also turn rough input into a topic description that is ready to
+share.
+
+I have not chosen the runtime. I could use browser technologies such as WASM, WebGPU, and
+Transformers.js, or wait until the need for a native application becomes clear.
+
+jamye-plz will remain a PWA until native development becomes unavoidable. I do not plan to use
+Ionic, Flutter, or React Native. If the on-device features I need arrive in native APIs first, I
+would rather build native apps than add another cross-platform layer.
+
+<Todo title="The next technical decision">
+  Decide whether the first local indexing and speech experiments belong in the browser, or whether
+  they should wait for a native application whose platform support justifies the additional work.
+</Todo>
+
+## What I learned from v1
+
+jamye-plz began with a phrase my partner used when she wanted to hear something interesting.
+Finishing v1 also gave me room to try several things I had wanted to learn through a real project.
+
+I had wanted to use a JavaScript framework other than React, and I shipped the app in Svelte.
+FastAPI let me work in the Python backend ecosystem after spending most of my backend career with
+Java and Spring.
+
+Packaging the service as a Nix flake was just as important to me. It connected the application to
+the deployment process I want to understand as I move toward infrastructure and DevOps work.
+
+The app is still a personal project for my partner and me. That also means I can call v1 complete
+when the product works for us. We can use the text episode loop now. The rest can wait until I know
+why it belongs.

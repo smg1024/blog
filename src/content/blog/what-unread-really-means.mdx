@@ -1,0 +1,122 @@
+---
+title: "What Unread Really Means"
+description: "Unread semantics across read receipts, notifications, and WebSockets"
+publishedAt: 2026-07-18T19:36:04+09:00
+series: "jamye-plz"
+tags:
+  - jamye-plz
+  - notifications
+  - websocket
+  - postgresql
+draft: true
+---
+
+import GitHubPullRequest from "../../components/blog/GitHubPullRequest.astro";
+import Mermaid from "../../components/blog/Mermaid.astro";
+import Note from "../../components/blog/Note.astro";
+import Reference from "../../components/blog/Reference.astro";
+
+<Reference title="Previous in this series">
+  [The First Two Users](/blog/the-first-two-users) covers my partner's feedback and the chat bugs we
+  found while using jamye-plz.
+</Reference>
+
+The blue dot in the topic list needed more than a CSS class. jamye-plz had to compare each topic and
+its newest message with the user's last read receipt. The client also had to know whether the user
+could have seen a message that arrived over the WebSocket.
+
+## Why unread matters
+
+jamye-plz is for sharing daily episodes, then talking about them. If nobody returns to a topic, the
+conversation never happens. The unread dot and notification page give people a reason to open it
+again.
+
+<GitHubPullRequest repo="jamye-plz/jamye-plz" number={8} /> replaced the old `enriched` badge with a
+blue unread dot. A topic is unread when the user has no read receipt, or when the receipt is older
+than the topic or its newest chat message.
+
+The backend computes that state for a whole page with batched queries. It stores one
+`chatroom_reads` row for each user and chatroom.
+
+## Keeping receipts from moving backward
+
+Two tabs or devices can create the first receipt at the same time. Network timing can also make an
+older receipt reach the backend after a newer one. The repository handles both cases with
+PostgreSQL `INSERT ... ON CONFLICT DO UPDATE` and `GREATEST`.
+
+```py title="backend/app/repositories/chatroom_read_repository.py"
+set_={
+    "last_read_at": func.greatest(
+        ChatroomRead.last_read_at,
+        insert_stmt.excluded.last_read_at,
+    )
+}
+```
+
+`GREATEST` keeps the later timestamp. A delayed request cannot overwrite it with an older value and
+make a conversation appear unread again.
+
+## Reusing one notification row
+
+A separate notification row for every message would repeat the same chat alert. jamye-plz reuses
+one `chat_unread:{topic_id}` slot for each user and topic.
+
+The upsert compares message timestamps. A late older message cannot replace the time of a newer
+unseen message. The existing row becomes unread again only when the incoming message is newer.
+
+When the user marks a chat as read, the backend clears alerts only up to the receipt's timestamp. A
+newer message keeps its alert. The `new_topic` notification is different: opening the topic clears
+it even when the chatroom is empty.
+
+<Mermaid
+  title="How a chatroom is marked read"
+  chart={`
+sequenceDiagram
+  participant C as Chat client
+  participant W as WebSocket
+  participant A as FastAPI
+  participant P as PostgreSQL
+  C->>A: fetch recent history
+  C->>W: join room
+  C->>A: catch-up fetch after join
+  A-->>C: any messages from the join gap
+  C->>C: render a contiguous message stream
+  C->>A: mark read up_to latest visible message
+  A->>P: monotonic receipt upsert
+  A->>P: clear alerts at or before up_to
+`}
+/>
+
+## A rendered message can still be out of view
+
+If a user has scrolled upward, a live message can render below the viewport. A hidden browser tab
+can receive messages too. There is also a short gap between fetching chat history and joining the
+WebSocket where a message could otherwise be missed.
+
+Review led to the following behavior:
+
+- read calls are coalesced so a burst still records the last visible message
+- returning to a visible tab triggers another read attempt
+- the client sends `up_to`, the timestamp of the latest visible message
+- a catch-up fetch after the WebSocket join closes the history/join gap
+- notifications are created before broadcast, so a fast read cannot arrive before the alert exists
+
+These rules keep hidden messages from being marked as read and stop late requests from moving a
+receipt backward. The catch-up fetch makes the history response and WebSocket stream meet without
+a hole.
+
+<Note title="Notification status in v1">
+  v1 has the persistent in-app notification page. VAPID Web Push is not active: the backend's real
+  send path is still explicitly unimplemented, and the service worker handler is waiting for that
+  integration.
+</Note>
+
+The in-app page only helps after someone opens jamye-plz. It cannot notify them from outside the
+app. I plan to add VAPID Web Push in v2, starting with new-topic notifications. A new topic is the
+most important notification and likely the most frequent one. It means someone has remembered an
+episode and wants the group to talk.
+
+<Reference title="Next in this series">
+  [Where the PWA Stops](/blog/where-the-pwa-stops) covers the iOS keyboard limit, the daisyUI
+  migration, and the features I moved into v2.
+</Reference>

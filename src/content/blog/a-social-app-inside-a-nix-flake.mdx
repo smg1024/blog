@@ -1,0 +1,113 @@
+---
+title: "A Social App Inside a Nix Flake"
+description: "Packaging jamye-plz as a Nix flake for homelab deployment"
+publishedAt: 2026-07-18T16:49:23+09:00
+series: "jamye-plz"
+tags:
+  - jamye-plz
+  - nix
+  - nixos
+  - ci-cd
+  - homelab
+draft: true
+---
+
+import Decision from "../../components/blog/Decision.astro";
+import GitHubRepo from "../../components/blog/GitHubRepo.astro";
+import Mermaid from "../../components/blog/Mermaid.astro";
+import Reference from "../../components/blog/Reference.astro";
+
+<Reference title="Previous in this series">
+  [From PRD to a Working M0](/blog/from-prd-to-a-working-m0) covers the first usable Svelte and
+  FastAPI version that I then had to package and deploy.
+</Reference>
+
+Deployment was one of the three résumé requirements I wrote down for jamye-plz. I wanted a source
+change to reach the running service within 30 minutes. I also wanted my homelab to consume the
+whole application as a Nix flake.
+
+## Deciding when to deploy
+
+My milestone document said deployment should wait until "usability testing" passed. That sounded
+reasonable until I had to decide what the testing setup should be. For a side project used by my
+partner and me, I did not have a useful answer.
+
+I changed the requirement to something I could do. I ran the local development server, tested the
+M0 flow in a desktop browser and on my phone, and moved on when both worked well enough.
+
+The Nix deployment pull request followed soon after M0. I did not need the product to be finished
+before deploying it. I wanted the real environment to expose its own problems while I was still
+building the app.
+
+## Where jamye-plz runs
+
+The deployment lives in my <GitHubRepo repo="smg1024/homelab">homelab</GitHubRepo> repository. My
+physical server at home is the ingress node, `yggdrasil`. The application runs on an Oracle Cloud
+VPC node called `alfheim`. This is still the topology I use today.
+
+A public request enters through Cloudflare Tunnel and Caddy on the homelab side. It crosses the
+private network and reaches another Caddy instance beside the application. That Caddy serves the
+static SvelteKit frontend and sends `/api` and WebSocket traffic to FastAPI. PostgreSQL runs on the
+same node and connects through a Unix socket with peer authentication.
+
+The flake exposes three application packages and an importable NixOS module:
+
+- the uv2nix-built backend environment
+- the Alembic migration source
+- the statically built SvelteKit frontend
+- `nixosModules.jamye-plz`, which wires the service, migration, database, and local Caddy together
+
+## The `node_modules` hash problem
+
+The first thing that broke during deployment was the frontend `node_modules` fixed-output hash. It
+had been generated for a different dependency state or architecture, so Nix rejected the build.
+
+I had not understood that adding or removing a dependency can change the installed `node_modules`
+tree. A lockfile update can do the same. When that tree changes, I also have to update the hash in
+`infra/frontend.nix`. The frontend package only exposes `aarch64-linux`, so I generate the hash on
+that target.
+
+Once I understood what the hash represented, the fix became routine: change the dependencies,
+build on the aarch64 machine, and record the new hash. That is how the homelab server gets the exact
+dependency tree I approved.
+
+I had to do it again when PR #14 removed the unused Transformers.js dependency and updated
+SvelteKit. The lockfile and installed tree changed, so I regenerated the frontend hash on the
+aarch64 builder in the same change.
+
+## Connecting `main` to the homelab pipeline
+
+The homelab repository needed a signal whenever a new version was available. PR #11 added it.
+Every push to `main` sends a `jamye-plz-updated` repository dispatch, then the homelab workflow
+repins its jamye-plz flake input and runs the normal CI/CD path.
+
+<Mermaid
+  title="From source change to the running node"
+  chart={`
+flowchart LR
+  P[push to jamye-plz main] --> D[repository_dispatch]
+  D --> H[homelab repo]
+  H --> F[repin jamye-plz flake input]
+  F --> C[normal CI/CD checks]
+  C --> N[NixOS deployment node]
+`}
+/>
+
+I picked 30 minutes because it felt reasonable for a project this size. When I merge a feature,
+bug fix, or UI change, the homelab node should update without making me log in and deploy it by
+hand.
+
+<Decision title="When I call an update deployed">
+  I count an update as deployed after the homelab workflow repins the flake and applies the new
+  system state. Merging the application repository only starts that process.
+</Decision>
+
+I am a backend developer, and I want to move toward infrastructure and DevOps. Packaging jamye-plz
+made me own what happens after the application code is ready: build the dependencies, run the
+migrations, wire the services to Caddy and PostgreSQL, and get the new version onto the server.
+That was the hands-on experience I wanted from this project.
+
+<Reference title="Next in this series">
+  [The First Two Users](/blog/the-first-two-users) is about my partner's early feedback, the date
+  dial, and the chat problems we found through daily use.
+</Reference>

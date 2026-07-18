@@ -1,0 +1,97 @@
+---
+title: "Before the Stories Disappear"
+description: "Forgotten daily stories, Setlog, and the idea behind jamye-plz"
+publishedAt: 2026-07-18T12:30:35+09:00
+series: "jamye-plz"
+tags:
+  - jamye-plz
+  - side-project
+  - product
+draft: true
+---
+
+import Decision from "../../components/blog/Decision.astro";
+import GitHubPullRequest from "../../components/blog/GitHubPullRequest.astro";
+import GitHubRepo from "../../components/blog/GitHubRepo.astro";
+import Reference from "../../components/blog/Reference.astro";
+
+I'm writing this series now that jamye-plz has reached a v1 I am comfortable calling complete. It
+started much smaller: I needed somewhere to save an episode before I forgot to tell my partner
+about it.
+
+<GitHubRepo repo="jamye-plz/jamye-plz" />
+
+## "Got anything funny?"
+
+`잼얘좀` is short for `재밌는 얘기 좀`. In English, it is roughly "got anything funny?" or "tell
+me something interesting."
+
+My partner asks me this fairly often. I usually go blank.
+
+That was the frustrating part. Something funny or strange had happened that day, and I had meant
+to tell her about it. By the time she asked, I could not remember what it was.
+
+jamye-plz began as a way to catch those episodes while I still had them in my head. I can leave a
+short topic, and the app opens a chatroom for it. We can come back when we both have time and pick
+up the conversation from there.
+
+I still use ordinary chat for ordinary chat. jamye-plz is where I park the things I do not want to
+forget.
+
+## Starting with Setlog
+
+I used Setlog as the benchmark. It is a social app based on short video logs, and I liked its
+casual, closed feel. For jamye-plz, I replaced the video log with a text topic and gave each topic
+its own chatroom.
+
+A Setlog post is content by itself. A jamye-plz topic can be a single unfinished sentence. It only
+needs to remind people who already know each other what they wanted to talk about. Most of the
+interesting part can happen afterward in chat.
+
+At first, "people" meant my partner and me. If the app worked for us, I would invite a few close
+friends. I may open it to the public after the features and UX settle, but I am not building toward
+monetization right now. I mostly want to see whether other people enjoy using it the way we do.
+
+<Decision title="Personal before public">
+  My partner and I are the users I care about right now. I will think about public growth after the
+  app feels good to us and a few close friends.
+</Decision>
+
+## A personal project I could put on my résumé
+
+The forgotten episodes gave me the idea, but I also wanted a serious side project. If I was going
+to make a Setlog-inspired app, I wanted to do it properly and end up with something I could honestly
+include on my résumé.
+
+I wrote down three requirements:
+
+- a stable full-stack application that satisfies its users
+- a complete CI/CD workflow that deploys updates within 30 minutes
+- the whole project packaged as a Nix flake
+
+A two-person app does not need all of that. I knew it was more infrastructure than the product
+needed, but that was also what I wanted to learn. A local demo would only show that I could build
+the screens and APIs. I wanted responsibility for the running service too, including what happens
+after I push an update.
+
+## The PRD came before the code
+
+<GitHubPullRequest repo="jamye-plz/jamye-plz" number={1} /> contained documentation, not application
+code. Before development, I wrote a PRD with seven epics, eleven database tables, twenty-four REST
+endpoints, a WebSocket contract, plans for on-device AI, and a NixOS deployment design.
+
+The app needed the sections about closed groups, invitations, topics, and chatrooms. I added the
+NixOS deployment and on-device AI plans because I wanted hands-on experience with them.
+
+I already had a physical server running at home, so I planned to deploy jamye-plz through it. I was
+also interested in small models that could run on phones. I thought more AI work would move onto
+devices over time, and I wanted to leave room for it even if I could not ship it in v1.
+
+The PRD was bigger than the v1 I eventually shipped. I am fine with that. Writing it first forced
+me to make the full idea concrete. Using the app with my partner then showed me which parts had to
+work now and which ones could wait.
+
+<Reference title="Next in this series">
+  [From PRD to a Working M0](/blog/from-prd-to-a-working-m0) is about PR #2, the review loop I ran
+  with AI agents, and the changes that turned a scaffold into something we could use.
+</Reference>
