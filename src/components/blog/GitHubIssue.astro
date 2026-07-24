@@ -1,0 +1,46 @@
+---
+import { CircleDot } from "lucide-astro";
+
+interface Props {
+  repo: string;
+  number: number;
+}
+
+const { repo, number } = Astro.props;
+---
+
+<a
+  class="github-issue"
+  href={`https://github.com/${repo}/issues/${number}`}
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  <CircleDot aria-hidden="true" />
+  <span><slot>{`Issue #${number}`}</slot></span>
+</a>
+
+<style>
+  .github-issue {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    padding: 0.15em 0.6em;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface);
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    text-decoration: none;
+    vertical-align: middle;
+  }
+
+  .github-issue:hover {
+    border-color: var(--accent-strong);
+    color: var(--accent-strong);
+  }
+
+  .github-issue :global(svg) {
+    width: 1em;
+    height: 1em;
+  }
+</style>

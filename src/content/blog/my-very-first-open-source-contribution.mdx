@@ -1,0 +1,89 @@
+---
+title: "My Very First Open Source Contribution"
+description: "Adding NVF support to mcp-nixos and getting my first open source pull request merged."
+publishedAt: 2026-07-24
+tags:
+  - open-source
+  - nix
+  - mcp
+  - nvf
+draft: false
+---
+
+import GitHubIssue from "../../components/blog/GitHubIssue.astro";
+import GitHubPullRequest from "../../components/blog/GitHubPullRequest.astro";
+import GitHubRepo from "../../components/blog/GitHubRepo.astro";
+
+Until this PR, <GitHubRepo repo="utensils/mcp-nixos" /> could search most of the Nix documentation I use, but not NVF. That was
+annoying because my Neovim configuration uses NVF, and coding agents kept searching for the same
+documentation. That annoyance is why I made my first open source contribution.
+
+## I wanted one more source
+
+mcp-nixos was already part of how I worked with coding agents. It could search nixpkgs, Home
+Manager, and nix-darwin options. It even supported NixVim. The agent could ask the MCP instead of
+finding and reading each project's documentation from scratch.
+
+My Neovim configuration uses NVF inside my nix-darwin configuration. Whenever I asked an agent to
+change it, the agent had to find the NVF documentation again. It worked, but it spent tokens
+finding the same documentation every time. I wanted mcp-nixos to serve those options directly.
+
+Switching to NixVim would have solved the mismatch, but I did not want to switch. NVF feels like
+the more Nix-native way to declare Neovim to me, and I already had a working configuration.
+
+There was already another MCP server <GitHubRepo repo="lukasl-dev/rime" /> with
+NVF support. It did not seem actively maintained, and its purpose overlapped with mcp-nixos. I read
+its implementation as a reference, but adding NVF to the tool I already used made more sense.
+
+## Checking the architecture first
+
+I normally adapt myself to the tools I use. If something is missing, I change my setup or work
+around it. Sending a change back to an open source project had never seriously crossed my mind.
+
+This time I forked mcp-nixos and looked through the architecture. Each source had a clear place,
+and I could see where NVF would fit without rewriting the project. It looked manageable.
+
+I opened <GitHubIssue repo="utensils/mcp-nixos" number={188} />, explained why I wanted NVF support,
+and said I would create the pull request myself.
+
+## More than the source
+
+I expected most of the work to be the source implementation. It had to search, inspect, browse,
+and report statistics for NVF options. It also needed to normalize wrapper paths and cache the
+parsed documentation.
+
+The tests and documentation caught me off guard. I had not overlooked them on purpose; I simply
+had not expected how much work they would add. I wrote unit, router, and live integration tests,
+then updated the project documentation.
+
+While trying to get the whole test suite to pass, I found a problem in the Home Manager
+documentation parser. It had nothing to do with NVF. I fixed it anyway because I wanted to see
+every test pass, then kept the fix in the same <GitHubPullRequest repo="utensils/mcp-nixos" number={189} />.
+
+I also had another reason for keeping the Home Manager fix. This was my first contribution
+attempt, and I wanted to appeal to the maintainer. I wanted them to see that I actively used
+mcp-nixos and cared about improving it for other users, not only about getting my own feature
+merged.
+
+## The maintainer merged it without a comment
+
+All the review comments came from AI agents, including CodeRabbit. Some comments seemed valid, so
+I made the changes and added a few more commits. The maintainer did not say anything.
+
+I kept expecting a comment from them. This was my first contribution, and I doubted that I had
+completed the feature correctly on the first try.
+
+The maintainer merged the PR right away and opened two related follow-up issues. I was relieved,
+but my other reaction was simply, "For real?"
+
+## What I count as a contribution
+
+The quick merge did not change what I think counts as contributing. Documentation revisions and
+translations count too, and I do not see them as lesser work.
+
+NVF support was not a critical feature for the project. It happened to be the first change I saw
+that I could make.
+
+I am writing this down for my future self and for whoever else reads this blog. Before this, I
+would have worked around the missing source and carried on. This time I opened the project and
+tried to add it myself.
