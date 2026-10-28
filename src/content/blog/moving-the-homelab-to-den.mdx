@@ -1,0 +1,143 @@
+---
+title: "Moving the homelab to Den"
+description: "Replacing my homelab's custom host assembly with Den, moving to nixos-unstable, and waiting for midgard to come back online."
+publishedAt: 2026-10-28T18:41:00+09:00
+series: "Nix"
+tags:
+  - nix
+  - den
+  - nixos
+  - homelab
+draft: false
+---
+
+import GitHubRepo from "../../components/blog/GitHubRepo.astro";
+import Reference from "../../components/blog/Reference.astro";
+import Todo from "../../components/blog/Todo.astro";
+
+After using Den on my Macs, I moved my existing NixOS homelab configuration to the same framework.
+I also switched the homelab's nixpkgs input from `nixos-26.05` to `nixos-unstable`.
+
+<Reference title="Previous in this series">
+  [Why I moved my Nix configuration to Den](/blog/why-i-moved-my-nix-configuration-to-den) explains
+  what I liked about the structure before bringing it to the homelab.
+</Reference>
+
+## Replacing the host assembly
+
+The <GitHubRepo repo="smg1024/homelab">homelab repository</GitHubRepo> used to assemble its hosts
+in `flake.nix`. A custom `mkHost` function called `nixpkgs.lib.nixosSystem`, added the common
+modules, wired up Home Manager, and accepted a host-specific module. It produced configurations
+for `yggdrasil`, `midgard`, and `alfheim`.
+
+The [Den migration](https://github.com/smg1024/homelab/commit/e6793bed2592293b7bf17f246fcd9695cad93801)
+moved that composition into `modules/`. The flake's outputs now start with flake-parts and
+import-tree:
+
+```nix title="flake.nix (outputs)"
+outputs = inputs:
+  inputs.flake-parts.lib.mkFlake {inherit inputs;} {
+    imports = [(inputs.import-tree ./modules)];
+  };
+```
+
+`modules/den.nix` imports Den's flake module. Host declarations live under `modules/hosts/`, and
+the shared configuration and services live under `modules/aspects/`.
+
+For example, the SSH aspect contains an ordinary NixOS configuration:
+
+```nix title="modules/aspects/ssh.nix"
+{
+  den.aspects.ssh.nixos = {
+    services.openssh = {
+      enable = true;
+
+      settings = {
+        PasswordAuthentication = false;
+        KbdInteractiveAuthentication = false;
+        PermitRootLogin = "no";
+      };
+    };
+  };
+}
+```
+
+The common `homelab-base` aspect includes SSH along with the other shared settings. A host then
+selects that base and its own service aspects. This is the includes list in `midgard`'s aspect:
+
+```nix title="modules/hosts/midgard.nix (aspect includes)"
+includes = [
+  den.aspects.homelab-base
+  den.aspects.podman
+  den.aspects.homepage
+  den.aspects.forgejo
+  den.aspects.vaultwarden
+];
+```
+
+Import-tree discovers the aspect definitions; the includes lists determine which ones a host
+uses. `jamye-plz`, for example, still has an aspect file, but none of the hosts selects it.
+
+The hardware and Disko files remain ordinary NixOS modules. They sit in underscore-prefixed
+directories such as `modules/hosts/_midgard/`, outside import-tree's automatic discovery, and
+the host imports them inside its `nixos` configuration. Host-specific Home Manager settings
+use `provides.poby`; on midgard, that includes the shell aliases for its services.
+
+## Choosing unstable at the same time
+
+I had a few reasons to update nixpkgs during the migration. I was already thinking ahead to
+26.11 and wanted to prepare for the next release. The Den project I used as a reference also
+used unstable, and I wanted to follow the same choice.
+
+Around the same time, I received a warning email asking me to update `cloudflared` to
+[2026.10.3](https://github.com/cloudflare/cloudflared/releases/tag/2026.10.3) or later. That gave
+me another reason to revisit the packages I was running. The change also moved Home Manager
+off its `release-26.05` branch. The exact input revisions remain recorded in `flake.lock`.
+
+I was willing to spend time fixing settings if the update broke them. Finding the
+cause of a problem and understanding the configuration better is something I enjoy about this
+setup.
+
+## Checking before deployment
+
+The chance to check a change before deploying it reminds me of the role `terraform plan` plays
+in a Terraform workflow. With this Nix configuration, I can evaluate the declarations and build
+the system before activation.
+
+[`nix flake check --no-build`](https://nix.dev/manual/nix/2.35/command-ref/new-cli/nix3-flake-check)
+performs evaluation checks without building the check derivations. The homelab's
+[CI workflow](https://github.com/smg1024/homelab/blob/e6793bed2592293b7bf17f246fcd9695cad93801/.github/workflows/ci.yml)
+goes further and builds each host's system closure. It uses an ARM runner for `alfheim` and x86
+runners for the other two hosts. Those are evaluation and build checks; service startup and
+host reachability still need to be checked during deployment.
+
+## Waiting for midgard from work
+
+The deployment problem I remember most was midgard being down for long enough that the
+pipeline failed. The homelab runs at my house, and I was at work. I could not physically check
+whether the machine had power, which was frustrating.
+
+Then an email from Beszel arrived saying midgard was back online. I had not done anything to
+bring it back. After the notification, I reran the CD job in GitHub Actions, and it succeeded
+straight away. I still do not know why midgard went down or why it recovered.
+
+## Cleaning up the previous host move
+
+There is still some configuration left from an earlier migration: moving `jamye-server` from
+midgard to alfheim. The repository contains snapshot and restore scripts for that move, plus a
+test of the restore script.
+
+The `jamye-host-swap` aspect is still selected on alfheim. It makes the Jamye services wait for
+the restore unit, whose script exits early once it finds `RESTORE_COMPLETE`. CI still runs the
+restore check as well. Retiring this code means removing those references along with the
+scripts and test.
+
+<Todo title="Retire the host-move scaffolding">
+  I want to verify the completed migration and remove the one-time restore machinery safely,
+  including its service dependencies and CI check.
+</Todo>
+
+Podman needs a separate review. Both midgard and alfheim currently include its aspect, but the
+host-move scripts and restore test do not call it. `jamye-plz` has officially closed, and I
+suspect midgard no longer needs Podman. Its selected service aspects do not declare any OCI
+containers. I still need to check what is actually running on the machine before removing it.

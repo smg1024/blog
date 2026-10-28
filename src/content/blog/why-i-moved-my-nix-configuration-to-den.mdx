@@ -1,0 +1,77 @@
+---
+title: "Why I moved my Nix configuration to Den"
+description: "Den matched the way I already wanted to organize my Nix configuration, so I tried it on my Macs and then brought it to the homelab."
+publishedAt: 2026-10-28T18:40:00+09:00
+series: "Nix"
+tags:
+  - nix
+  - den
+  - nix-darwin
+draft: false
+---
+
+import GitHubRepo from "../../components/blog/GitHubRepo.astro";
+import Reference from "../../components/blog/Reference.astro";
+
+I recently moved my macOS configuration to Den, then did the same with my NixOS homelab.
+The appeal was how closely Den matched the structure I had already been trying to build.
+
+<Reference title="Earlier in this series">
+  [Falling into Nix](/blog/falling-into-nix) covers how I started with nix-darwin and brought my
+  homelab into NixOS.
+</Reference>
+
+## A familiar way to organize things
+
+My old <GitHubRepo repo="smg1024/nix-darwin">nix-darwin configuration</GitHubRepo> already used
+aspect-based modules. I wanted to define a feature or service once, then choose where to use it.
+When I came across <GitHubRepo repo="denful/den">Den</GitHubRepo>, its approach felt close to what I
+had in mind.
+
+[Den organizes configuration into aspects](https://den.denful.dev/), which can contain settings
+for NixOS, nix-darwin, and Home Manager. In my configuration, a host selects aspects through
+an `includes` list.
+
+I moved my Darwin configuration first. After using it to manage my Macs, I was happy enough with
+the result that I wanted the homelab to use the same framework. My
+
+<GitHubRepo repo="smg1024/den">Darwin configuration</GitHubRepo> and
+<GitHubRepo repo="smg1024/homelab">homelab</GitHubRepo> still live in separate repositories.
+
+## Seeing what belongs on each machine
+
+I want to open a host's declaration and see which applications and services it has.
+
+In my Darwin configuration, `fenrir` and `huginn` both include `darwin-base`. That shared aspect
+brings in the macOS defaults and common packages. The host files contain their own additions:
+`fenrir` has Xcode and Android Studio, while `huginn` has work applications such as DataGrip and
+Slack. I can read those choices in the
+[host declarations](https://github.com/smg1024/den/tree/0491f5d10ab81ee54659c5250e780e4cc94a4008/modules/hosts).
+
+My user environment has its own `poby` aspect, which includes my shell, editor, terminal, and
+other tools. Their settings stay in their own aspects, so the list is readable
+without expanding every tool's configuration into the same file.
+
+On the homelab, a host's includes list names services such as Forgejo or Vaultwarden. I can
+follow a service name to its definition when I need the details.
+
+## Room to try something else
+
+I think of this as plug and play for configuration. I want to try a service on one host or swap
+out a tool while keeping the existing aspects intact. Having a place to define the new thing
+and a separate place to select it makes those
+experiments easier for me to manage.
+
+Nix's checks are part of why I enjoy working this way. I can evaluate a changed configuration and
+build it before applying it to a machine. That gives me a chance to catch mistakes while the
+running system is still on its previous configuration.
+
+I also enjoy finding out why something broke. Tracing the cause tends to leave me with a better
+understanding of the structure I am working with. That is a large part of the fun of maintaining
+these configurations for me, and it influenced my decision to try `nixos-unstable` during the
+homelab migration.
+
+<Reference title="Next in this series">
+  [Moving the homelab to Den](/blog/moving-the-homelab-to-den) covers the configuration changes, the
+  move to `nixos-unstable`, and a deployment that had to wait for a node to come back online.
+</Reference>
