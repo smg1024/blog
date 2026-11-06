@@ -6,8 +6,8 @@ export const resumeEn: ResumeContent = {
     eyebrow: "Résumé",
     name: "Sangmin Kim",
     summary:
-      "I want the softwares and services I build to be widely used. I have modernized legacy business systems by moving them to web platforms and managed Linux/NixOS infrastructure through declarative configuration. My platform engineering work focuses on automation and monitoring.",
-    motto: '"Make decisions based on solid evidence, without regret."',
+      "I analyze business workflows and turn them into web systems and data flows. At KMEAT, I clarify business rules across departments and handle system design, development, and feedback from adoption. I use AI and external APIs where they help build practical tools for the people doing the work.",
+    motto: "Business systems development · Data integration · Applied AI",
   },
   sections: {
     skills: "Skills",
@@ -24,10 +24,22 @@ export const resumeEn: ResumeContent = {
     githubRepository: "GitHub repository",
   },
   skills: [
-    { category: "Cloud / Infra / Ops", items: ["Linux", "GitHub Actions", "Docker", "NixOS"] },
-    { category: "Backend", items: ["Java", "Spring Boot"] },
-    { category: "Database", items: ["PostgreSQL", "Oracle"] },
-    { category: "Frontend", items: ["TypeScript", "React"] },
+    {
+      category: "Backend",
+      items: ["Primary: Java, Spring Boot, Python", "Project experience: Rust, Axum"],
+    },
+    {
+      category: "Database / Data",
+      items: ["PostgreSQL", "Oracle", "Data modeling", "API integration"],
+    },
+    {
+      category: "Frontend / Mobile",
+      items: ["Working experience: React, TypeScript", "Project experience: React Native, Expo"],
+    },
+    {
+      category: "Infra / Ops",
+      items: ["Linux", "NixOS", "Docker", "GitHub Actions"],
+    },
   ],
   experiences: [
     {
@@ -35,28 +47,46 @@ export const resumeEn: ResumeContent = {
       role: "Data Engineer / AX Engineer",
       org: "KMEAT",
       points: [
-        "ERP modernization · Traceability platform development · Data modeling · Full-stack development",
-        "Designed and implemented data pipelines to support the digital transformation of livestock wholesale distribution",
+        "Handle seven concurrent initiatives spanning finance, purchasing, receivables, logistics, imports, field data, and internal training, from stakeholder interviews through system design, development, deployment, and adoption feedback.",
+        "Work with business stakeholders and legacy ERP experts to clarify rules and exceptions, align scope, responsibilities, and schedules, and lead sprints.",
       ],
-    },
-    {
-      period: "Jul 2024 - Dec 2024",
-      role: "Development Team Lead",
-      org: "Unpeil",
-      points: [
-        "Led development and maintenance of SPETTRUM, including the rollout of new features",
-        "Built a Stable Diffusion demo and test environment and managed the GPU servers",
-        "Managed HR for the development team",
-      ],
-    },
-    {
-      period: "Jun 2023 - Jun 2024",
-      role: "Backend Developer",
-      org: "Unpeil",
-      points: [
-        "Implemented SPETTRUM's initial backend features",
-        "Built an asynchronous AI image generation pipeline using a serverless API endpoint",
-        "Developed account, order, and image/model generation features",
+      initiatives: [
+        {
+          title: "Unstructured shipping requests and ERP inventory matching",
+          status: "Pilot operation and improvement with the logistics team",
+          points: [
+            "Independently handled requirements discovery, design, development, deployment, and the pilot with the logistics team.",
+            "Analyzed how logistics staff interpret unstructured Slack shipping requests from sales and find ERP inventory, then designed the flow from request interpretation to reviewing inventory candidates.",
+            "Built a Slack app combining AI-based message classification with ERP candidate comparison to handle product and customer aliases that regular expressions and rules alone could not reliably cover.",
+            "Designed automatic confirmation and staff review paths based on matching scores and candidate counts, and refined the workflow using pilot feedback from logistics.",
+          ],
+        },
+        {
+          title: "ERP-connected finance portal",
+          status: "Built and in operation",
+          points: [
+            "Implemented portal queries and Excel exports for payment processing and monthly customer receivables reports previously downloaded from the ERP by the finance team.",
+            "Replaced three per-row subqueries in the monthly customer receivables query with CTEs and joins, improving query performance while preserving the existing ERP calculation rules.",
+            "Provided query tools used by employees and the finance team in their daily work, incorporating adoption feedback.",
+          ],
+        },
+        {
+          title: "Legacy ERP migration to the web",
+          status:
+            "Preparing the import screens for their first production release, planned for the week of Nov 9, 2026",
+          points: [
+            "Designed SKU/Lot-based inventory traceability and validated an MVP in the initial Backbone effort, but identified constraints that made changing the existing database structure impractical with the current staffing and environment.",
+            "Established a phased approach: preserve the existing database while moving the PowerBuilder ERP to the web and defining each department’s actual business logic, then pursue larger database changes including SKU/Lot adoption.",
+            "Proposed the web migration and obtained approval from my mentor and management. Aligned scope and designed and implemented the import screens using the legacy ERP expert’s screen and SQL analysis and the trade team’s business rules.",
+          ],
+        },
+        {
+          title: "Other work",
+          points: [
+            "Develop and improve receivables management and implement collection and queries for market, customs, inventory, and profit-and-loss data to support purchasing decisions.",
+            "Develop field temperature data collection and a Slack-based job-training system while preparing field validation and pilot operation.",
+          ],
+        },
       ],
     },
     {
@@ -70,6 +100,30 @@ export const resumeEn: ResumeContent = {
     },
   ],
   projects: [
+    {
+      name: "Unpeil / SPETTRUM",
+      period: "Jun 2023 - Dec 2024",
+      stack: [
+        "Spring Boot",
+        "Java 17",
+        "Python",
+        "Runpod Serverless API",
+        "Docker",
+        "Nginx",
+        "GitHub Actions",
+      ],
+      tagline:
+        "A startup project I joined during university: an online studio app for AI-generated pet images",
+      points: [
+        "Backend Developer (Jun 2023–Jun 2024) → Development Team Lead (Jul 2024–Dec 2024)",
+        "Built SPETTRUM’s initial backend and account, order, and image/model generation features, then led new feature development and maintenance.",
+        "Built a Stable Diffusion pipeline for AI-generated pet images.",
+        "Designed asynchronous image-generation request handling using a serverless API endpoint and integrated it with the Spring Boot backend.",
+        "Dockerized the GPU serverless API to reduce costs compared with operating an on-premises GPU server.",
+        "Implemented CI/CD and zero-downtime blue-green deployment with GitHub Actions, Docker Compose, and Nginx.",
+        "Built demos and test environments for new generative AI technologies and managed GPU servers and development team staffing.",
+      ],
+    },
     {
       name: "Homelab",
       period: "May 2026 - Present",
@@ -95,34 +149,22 @@ export const resumeEn: ResumeContent = {
     {
       name: "jamye-plz",
       period: "Jun 2026 - Present",
-      stack: ["Python", "FastAPI", "Alembic", "Uvicorn", "Svelte", "Bun", "PWA"],
-      tagline: "Web app for sharing topic-based stories within private groups",
+      stack: [
+        "Rust",
+        "Axum",
+        "React Native",
+        "Expo",
+        "TypeScript",
+        "PostgreSQL",
+        "SQLite",
+        "WebSocket",
+      ],
+      tagline: "A service for sharing topic-based stories within private groups",
       github: "https://github.com/jamye-plz/jamye-plz",
       points: [
-        "Packaged FastAPI backend and SvelteKit PWA frontend with a Nix Flake",
-        "Wrote a NixOS flake module that declares and deploys PostgreSQL, Alembic migrations, the Uvicorn backend, and the Caddy reverse proxy as systemd services",
-        "Deployed the app to Homelab's aarch cloud node and routed public traffic through Cloudflare Tunnel and Caddy on a separate edge node",
-      ],
-    },
-    {
-      name: "SPETTRUM",
-      period: "Jun 2023 - Dec 2024",
-      stack: [
-        "Spring Boot",
-        "Java 17",
-        "Python",
-        "Runpod Serverless API",
-        "Docker",
-        "Nginx",
-        "GitHub Actions",
-      ],
-      tagline:
-        "Online AI studio that generates images of a user's pet and train custom lightweight models from photos and text prompt",
-      points: [
-        "Built a Stable Diffusion pipeline for generating LoRA models and AI images of users' pets",
-        "Designed an asynchronous request flow for image generation and integrated it with the Spring Boot backend",
-        "Dockerized the GPU serverless API and reduced costs compared with running an on-premises GPU server",
-        "Implemented CI/CD and zero-downtime blue-green deployments with GitHub Actions, Docker Compose, and Nginx",
+        "Migrating the existing FastAPI/SvelteKit web PWA to a separate Rust/Axum backend and React Native/Expo mobile app.",
+        "Implemented a SQLite-backed outgoing queue, WebSocket communication, and synchronization to recover missed events after mobile disconnections and restarts.",
+        "Manage app/server integration against the server API contract, implementing and validating core features incrementally while preparing for app store release.",
       ],
     },
   ],
@@ -139,16 +181,24 @@ export const resumeEn: ResumeContent = {
       title: "Participated in CES 2025 Eureka Park",
       detail:
         "Pawframe: a fine-tuning model and coding system that uses computer vision to digitize individual pets",
-      link: { label: "Overview", href: "https://unpeil.github.io/" },
+      link: {
+        label: "Overview",
+        href: "https://unpeil.github.io/",
+      },
     },
     {
-      period: "Mar 2024 - Nov 2024",
-      title: "Encouragement Award, Promising Student Startup 300+ Growth Track",
+      period: "Mar 2024 - Nov 8, 2024",
+      title:
+        "Encouragement Award, Promising Student Startup 300+ Growth Track (Korea Entrepreneurship Foundation)",
       detail: "AI art therapy program for pet loss",
+      link: {
+        label: "Team overview",
+        href: "http://www.u300.kr/cms/process/team/view.asp?c_show_no=144&c_check_no=97&c_relation=996&c_relation2=1014&c_no=25401&s_field=team_name&s_text=%EC%96%B8%ED%8E%98%EC%9D%BC&page=1",
+      },
     },
     {
       period: "Nov 28, 2023",
-      title: "Minister of Science and ICT Award, X-corps+ Festival",
+      title: "Grand Prize, X-corps+ Festival (Ministry of Science and ICT)",
       detail:
         "Researched a business model that uses blockchain to manage and distribute BMS data and extend IoT integration",
       link: {
@@ -164,7 +214,7 @@ export const resumeEn: ResumeContent = {
     {
       period: "Oct 2022 - Feb 2023",
       title: "Completed the Multicampus Backend Developer Bootcamp",
-      detail: "KDT course in Java and Spring backend development",
+      detail: "KDT course in Java and Spring backend development (784 hours)",
     },
     {
       period: "Aug 13, 2021",
@@ -174,12 +224,27 @@ export const resumeEn: ResumeContent = {
     },
   ],
   languages: [
-    { name: "Korean", level: "Native" },
-    { name: "English", level: "Native" },
-    { name: "Chinese", level: "Proficient" },
+    {
+      name: "Korean",
+      level: "Native",
+    },
+    {
+      name: "English",
+      level: "Native",
+    },
+    {
+      name: "Chinese",
+      level: "Proficient",
+    },
   ],
   certificates: [
-    { name: "OPIc AL", date: "Jul 16, 2026" },
-    { name: "HSK Level 6", date: "Jan 10, 2015" },
+    {
+      name: "OPIc AL",
+      date: "Jul 11, 2026",
+    },
+    {
+      name: "HSK Level 6",
+      date: "Jan 10, 2015",
+    },
   ],
 };

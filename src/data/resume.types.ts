@@ -10,11 +10,18 @@ interface ResumeSkillGroup {
   items: readonly string[];
 }
 
+interface ResumeInitiative {
+  title: string;
+  status?: string;
+  points: readonly string[];
+}
+
 interface ResumeExperience {
   period: string;
   role: string;
   org: string;
   points: readonly string[];
+  initiatives?: readonly ResumeInitiative[];
 }
 
 interface ResumeProject {
