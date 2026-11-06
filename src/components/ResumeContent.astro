@@ -103,6 +103,17 @@ const contacts = [
                 <li>{point}</li>
               ))}
             </ul>
+            {experience.initiatives?.map((initiative) => (
+              <div class="resume-initiative">
+                <h4>{initiative.title}</h4>
+                {initiative.status && <p class="resume-initiative__status">{initiative.status}</p>}
+                <ul>
+                  {initiative.points.map((point) => (
+                    <li>{point}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </li>
       ))
@@ -349,6 +360,21 @@ const contacts = [
     margin: 0.55rem 0 0;
     padding-left: 1.1rem;
     color: var(--muted);
+  }
+
+  .resume-initiative {
+    margin-top: 1.25rem;
+  }
+
+  .resume-initiative h4 {
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  .resume-initiative__status {
+    margin: 0.35rem 0 0;
+    color: var(--accent-strong);
+    font-size: 0.9rem;
   }
 
   .resume-projects {
